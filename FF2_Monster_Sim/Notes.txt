@@ -1,0 +1,28 @@
+Naming Issues {
+    Spells:
+        Scourge = Cloud
+        Self-Destruct = Suicidal Exploision
+        Gaze = Glare
+        Thunderbolt = Lightning
+        Warp = Degeon
+        Heal = Recovery
+        Swap = Change
+        Blaze = Flame
+        Starfall = Meteorite
+        Boulders = Rock
+        Mini = Minimize
+        Imbibe = Sake
+        Bad Breath = Stinking Breath
+        Poison Cloud = Poison Gas
+        Osmose = Aspel
+        Icestorm = Snowstorm
+        Charm = Possession Circle
+    
+    Items:
+        //
+    
+    Monsters:
+        //
+}
+
+    

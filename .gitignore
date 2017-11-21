@@ -57,9 +57,11 @@ monodroid*.msi
 *.dll
 
 # Project-specific ignores
-/.vs/
 /packages/
+/.vs/
 
+/FF2_Monster_Sim/.vs/
+/FF2_Monster_Sim/packages/
 /FF2_Monster_Sim/Content/Graphics/
 /FF2_Monster_Sim/Content/Sounds/
 /FF2_Monster_Sim/Content/Music/
