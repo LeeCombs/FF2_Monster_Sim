@@ -324,9 +324,9 @@ namespace FF2_Monster_Sim
             return "";
         }
 
-        ///////////////////////////
-        // (De)Buffs and Statues //
-        ///////////////////////////
+        ////////////////////////////
+        // (De)Buffs and Statuses //
+        ////////////////////////////
 
         /// <summary>
         /// Attempt to add a Buff to the Monster
