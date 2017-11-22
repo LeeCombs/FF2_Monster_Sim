@@ -185,6 +185,39 @@ namespace SimTests
         ///////////
 
         [TestMethod]
+        public void AddRemoveBuffTest()
+        {
+            Monster monster = new Monster();
+            AddRemoveBuff(monster, Buff.Aura);
+            AddRemoveBuff(monster, Buff.Barrier);
+            AddRemoveBuff(monster, Buff.Berserk);
+            AddRemoveBuff(monster, Buff.Blink);
+            AddRemoveBuff(monster, Buff.Haste);
+            AddRemoveBuff(monster, Buff.Imbibe);
+            AddRemoveBuff(monster, Buff.Protect);
+            AddRemoveBuff(monster, Buff.Shell);
+            AddRemoveBuff(monster, Buff.Wall);
+
+            // Skip below for now as they may be irrelevant
+            // AddRemoveBuff(monster, Buff.Spirit);
+            // AddRemoveBuff(monster, Buff.Intelligence);
+        }
+        
+        /// <summary>
+        /// Helper. Adds and removes one buff stack from the monster.
+        /// </summary>
+        /// <param name="monster"></param>
+        /// <param name="buff"></param>
+        private void AddRemoveBuff(Monster monster, Buff buff)
+        {
+            // Test that buff can be added and removed
+            monster.AddBuff(buff, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(buff));
+            monster.RemoveBuff(buff);
+            Assert.AreEqual(0, monster.GetBuffStacks(buff));
+        }
+
+        [TestMethod]
         public void GeneralBuffTest()
         {
             // Ensure invalid inputs don't add the buff
@@ -199,10 +232,23 @@ namespace SimTests
         [TestMethod]
         public void AuraTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
 
-            // Ensure stacks are highest-value and remove properly
+            // Ensure stacks are highest-value
+            monster.AddBuff(Buff.Aura, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Aura));
+            monster.AddBuff(Buff.Aura, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Aura));
+            monster.AddBuff(Buff.Aura, 5);
+            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Aura));
+            monster.AddBuff(Buff.Aura, 1);
+            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Aura));
+            monster.RemoveBuff(Buff.Aura);
+
+            // Ensure stacks have intended effect: 
+            // TODO: That ^
 
             // Ensure buff doesn't exceed 7 (8 with fix)
         }
@@ -210,10 +256,33 @@ namespace SimTests
         [TestMethod]
         public void BarrierTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Barrier));
 
-            // Ensure stacks are highest-value and remove properly
+            // Ensure stacks are highest-value
+            monster.AddBuff(Buff.Barrier, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Barrier));
+            monster.AddBuff(Buff.Barrier, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Barrier));
+            monster.AddBuff(Buff.Barrier, 5);
+            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Barrier));
+            monster.AddBuff(Buff.Barrier, 1);
+            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Barrier));
+            monster.RemoveBuff(Buff.Barrier);
+
+            // Ensure stacks have intended effect: Elemental resistance bsaed on stack level
+            /**
+             * 1 - Matter
+             * 2 - Fire
+             * 3 - Mind
+             * 4 - Lighting
+             * 5 - Death
+             * 6 - Poison
+             * 7 - Body
+             * 8+ - Ice (Doesn't work)
+             */
+            // TODO: That ^
 
             // Ensure buff doesn't exceed 7 (8 with fix)
         }
@@ -221,21 +290,19 @@ namespace SimTests
         [TestMethod]
         public void BerserkTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(4, monster.Strength);
             int baseStr = monster.Strength;
-
-            // Ensure stacks are cumulative and remove properly
-            monster.AddBuff(Buff.Berserk, 1); // 1 stack total, + 5 buff
+            
+            // Ensure stacks are cumulative and have intended effect (+5 str per stack)
+            monster.AddBuff(Buff.Berserk, 1);
             Assert.AreEqual(1, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(baseStr + 5, monster.Strength);
-
-            monster.AddBuff(Buff.Berserk, 2); // 3 stacks total, + 15 buff
+            monster.AddBuff(Buff.Berserk, 2);
             Assert.AreEqual(3, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(baseStr + (3 * 5), monster.Strength);
-
             monster.RemoveBuff(Buff.Berserk);
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(baseStr, monster.Strength);
@@ -255,21 +322,19 @@ namespace SimTests
         [TestMethod]
         public void BlinkTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(0, monster.Blocks);
             int baseBlocks = monster.Blocks;
 
-            // Ensure stacks are cumulative and remove properly
+            // Ensure stacks are cumulative and have intended effect (+1 block per stack)
             monster.AddBuff(Buff.Blink, 1);
             Assert.AreEqual(1, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(baseBlocks + 1, monster.Blocks);
-
             monster.AddBuff(Buff.Blink, 2);
             Assert.AreEqual(3, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(baseBlocks + 3, monster.Blocks);
-
             monster.RemoveBuff(Buff.Blink);
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(baseBlocks, monster.Blocks);
@@ -280,67 +345,64 @@ namespace SimTests
         [TestMethod]
         public void HasteTest()
         {
-            // Haste cannot exceed 16 since it is not cumulative, and can't be set above 16
-
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(1, monster.Hits);
             int baseHits = monster.Hits;
-
-            // Ensure stacks are highest-value and remove properly
+            
+            // Ensure stacks are highest-value and have intended effect (+1 hit per stack)
             monster.AddBuff(Buff.Haste, 1);
             Assert.AreEqual(1, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(baseHits + 1, monster.Hits);
-
             monster.AddBuff(Buff.Haste, 1);
             Assert.AreEqual(1, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(baseHits + 1, monster.Hits);
-
             monster.AddBuff(Buff.Haste, 5);
             Assert.AreEqual(5, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(baseHits + 5, monster.Hits);
-
             monster.AddBuff(Buff.Haste, 1);
             Assert.AreEqual(5, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(baseHits + 5, monster.Hits);
-
             monster.RemoveBuff(Buff.Haste);
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(1, monster.Hits);
+
+            // Haste cannot exceed 16 since it is not cumulative, and can't be set above 16
         }
 
         [TestMethod]
         public void ProtectTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Protect));
+            Assert.AreEqual(0, monster.Defense);
+            int baseDefense = monster.Defense;
 
-            // Ensure stacks are cumulative and remove properly
+            // Ensure stacks are cumulative and have intended effect (+__ defense per stack)
 
             // Ensure Stat + Buff doesn't exceed 255
 
-            // Check Buff Overflow
+            // Check buff Overflow
         }
 
         [TestMethod]
         public void ShellTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(1, monster.MagicBlocks);
             int baseBlocks = monster.MagicBlocks;
-
-            // Ensure stacks are cumulative and remove properly
+            
+            // Ensure stacks are cumulative and have intended effect (+1 mBlock per stack)
             monster.AddBuff(Buff.Shell, 1);
             Assert.AreEqual(1, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(baseBlocks + 1, monster.MagicBlocks);
-
             monster.AddBuff(Buff.Shell, 2);
             Assert.AreEqual(3, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(baseBlocks + 3, monster.MagicBlocks);
-
             monster.RemoveBuff(Buff.Shell);
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(baseBlocks, monster.MagicBlocks);
@@ -351,12 +413,27 @@ namespace SimTests
         [TestMethod]
         public void WallTest()
         {
-            // Test that Buffs can be added and have intended effects
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Wall));
 
-            // Ensure stacks are highest-value and remove properly
+            // Ensure stacks are highest-value
+            monster.AddBuff(Buff.Wall, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Wall));
+            monster.AddBuff(Buff.Wall, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Wall));
+            monster.AddBuff(Buff.Wall, 5);
+            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Wall));
+            monster.AddBuff(Buff.Wall, 1);
+            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Wall));
+            monster.RemoveBuff(Buff.Wall);
 
-            // Ensure buff doesn't exceed 16 (max spell level)
+            // Ensure stacks have intended effect: Negates ALL spells up to it's level
+            // TODO: That ^
+
+            // If wall exists and an instant KO spell is used, it succeeds
+
+            // Wall cannot exceed 16 since it is not cumulative, and can't be set above 16
         }
 
         [TestMethod]
@@ -368,15 +445,13 @@ namespace SimTests
             Assert.AreEqual(4, monster.Strength);
             int baseStr = monster.Strength;
 
-            // Ensure stacks are cumulative and remove properly
-            monster.AddBuff(Buff.Imbibe, 1); // 1 stack total, + 5 buff
+            // Ensure stacks are cumulative and remove properly (+10 str per stack)
+            monster.AddBuff(Buff.Imbibe, 1);
             Assert.AreEqual(1, monster.GetBuffStacks(Buff.Imbibe));
             Assert.AreEqual(baseStr + 10, monster.Strength);
-
-            monster.AddBuff(Buff.Imbibe, 2); // 3 stacks total, + 15 buff
+            monster.AddBuff(Buff.Imbibe, 2);
             Assert.AreEqual(3, monster.GetBuffStacks(Buff.Imbibe));
             Assert.AreEqual(baseStr + (3 * 10), monster.Strength);
-
             monster.RemoveBuff(Buff.Imbibe);
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Imbibe));
             Assert.AreEqual(baseStr, monster.Strength);
@@ -449,16 +524,13 @@ namespace SimTests
         [TestMethod]
         public void AmnesiaTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Amnesia));
 
+            // Test that the status can be applied and removed
             monster.AddPermStatus(PermStatus.Amnesia);
             Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Amnesia));
-
-            monster.AddPermStatus(PermStatus.Amnesia);
-            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Amnesia));
-
             monster.RemovePermStatus(PermStatus.Amnesia);
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Amnesia));
 
@@ -475,34 +547,31 @@ namespace SimTests
         [TestMethod]
         public void CurseTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Curse));
-
+            Assert.AreEqual(4, monster.Strength);
+            Assert.AreEqual(0, monster.Defense);
+            // TODO: Spell power
+            
+            // Test that the status can be applied and removed
             monster.AddPermStatus(PermStatus.Curse);
             Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Curse));
-
-            monster.AddPermStatus(PermStatus.Curse);
-            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Curse));
-
             monster.RemovePermStatus(PermStatus.Curse);
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Curse));
 
             // Test intended effects: Halve Offense and defense
             // TODO: Spell power reduction check
-            // TODO: Stat reductions take the floor of divison (5/2 = 2). Check this?
-
-            monster.Defense = 4; // Temp stat adjustment
-            Assert.AreEqual(4, monster.Strength);
-            Assert.AreEqual(4, monster.Defense);
+            monster.Defense = 5; // Temp stat adjustment
+            Assert.AreEqual(5, monster.Defense);
 
             monster.AddPermStatus(PermStatus.Curse);
             Assert.AreEqual(2, monster.Strength);
-            Assert.AreEqual(2, monster.Defense);
+            Assert.AreEqual(2, monster.Defense); // Stat reductions round down
 
             monster.RemovePermStatus(PermStatus.Curse);
             Assert.AreEqual(4, monster.Strength);
-            Assert.AreEqual(4, monster.Defense);
+            Assert.AreEqual(5, monster.Defense);
             monster.Defense = 0; // Set it back
 
             // TODO: Esuna 3, Cross removes status check
@@ -511,10 +580,31 @@ namespace SimTests
         [TestMethod]
         public void DarknessTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Darkness));
+            Assert.AreEqual(60, monster.Accuracy);
+
+            // Test that the status can be applied and removed
+            monster.AddPermStatus(PermStatus.Darkness);
+            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Darkness));
+            monster.RemovePermStatus(PermStatus.Darkness);
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Darkness));
 
             // Test intended effects
+            monster.AddPermStatus(PermStatus.Darkness);
+            Assert.AreEqual(30, monster.Accuracy);
+            monster.RemovePermStatus(PermStatus.Darkness);
+            Assert.AreEqual(60, monster.Accuracy);
+
+            // Ensure values are rounded down
+            monster.Accuracy = 61; // Temp stat adjustment
+            Assert.AreEqual(61, monster.Accuracy);
+            monster.AddPermStatus(PermStatus.Darkness);
+            Assert.AreEqual(30, monster.Accuracy);
+            monster.RemovePermStatus(PermStatus.Darkness);
+            Assert.AreEqual(61, monster.Accuracy);
+            monster.Accuracy = 60; // Set it back
             
             // TODO: Esuna 1, Eyedrops removes status check
         }
@@ -522,30 +612,56 @@ namespace SimTests
         [TestMethod]
         public void PoisonTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Poison));
+            Assert.AreEqual(6, monster.HP);
+
+            // Test that the status can be applied and removed
+            monster.AddPermStatus(PermStatus.Poison);
+            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Poison));
+            monster.RemovePermStatus(PermStatus.Poison);
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Poison));
 
             // Test intended effects
-            
+
             // TODO: Esuna 2, Antidote removes status check
         }
 
         [TestMethod]
         public void KOTest()
         {
-            // Removes monster from fight
+            // Ensure normal base stats
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.KO));
+
+            // Test that the status can be applied and the monster is removed from battle
+            monster.AddPermStatus(PermStatus.KO);
+            // TODO: Check for death
         }
 
         [TestMethod]
         public void StoneTest()
         {
-            // Removes monster from fight
+            // Ensure normal base stats
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Stone));
+
+            // Test that the status can be applied and the monster is removed from battle
+            monster.AddPermStatus(PermStatus.Stone);
+            // TODO: Check for death
         }
 
         [TestMethod]
         public void ToadTest()
         {
-            // Removes monster from fight
+            // Ensure normal base stats
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Toad));
+
+            // Test that the status can be applied and the monster is removed from battle
+            monster.AddPermStatus(PermStatus.Toad);
+            // TODO: Check for death
         }
 
         ////////////////
@@ -555,10 +671,22 @@ namespace SimTests
         [TestMethod]
         public void ConfuseTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Confuse));
+
+            // Test that the status can be applied and removed
+            monster.AddTempStatus(TempStatus.Confuse);
+            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Confuse));
+            monster.RemoveTempStatus(TempStatus.Confuse);
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Confuse));
 
             // Test intended effects
+            // TODO: Monster targets enemy as usual
+            monster.AddTempStatus(TempStatus.Confuse);
+            // TODO: Monster targets ally
+            monster.RemoveTempStatus(TempStatus.Confuse);
+            // TODO: Monster targets enemy
 
             // TODO: Basuna 5 removes status check
             // TODO: Chance to cure self after turn check
@@ -567,14 +695,21 @@ namespace SimTests
         [TestMethod]
         public void MuteTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Mute));
+
+            // Test that the status can be applied and removed
+            monster.AddTempStatus(TempStatus.Mute);
+            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Mute));
+            monster.RemoveTempStatus(TempStatus.Mute);
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Mute));
 
             // Test intended effects
             // TODO: Get monster who can only cast spells (Wizard) to cast a spell
-            monster.AddPermStatus(PermStatus.Amnesia);
+            monster.AddTempStatus(TempStatus.Mute);
             // TODO: Cast a spell again and get Attack instead
-            monster.RemovePermStatus(PermStatus.Amnesia);
+            monster.RemoveTempStatus(TempStatus.Mute);
             // TODO: Cast a spell again and get a spell
 
             // TODO: Basuna 2 removes status check
@@ -584,12 +719,28 @@ namespace SimTests
         [TestMethod]
         public void ParalysisTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Paralysis));
+            Assert.AreEqual(0, monster.Evasion);
 
-            // Test intended effects
-            // No actions
-            // No evasion
+            // Test that the status can be applied and removed
+            monster.AddTempStatus(TempStatus.Paralysis);
+            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Paralysis));
+            monster.RemoveTempStatus(TempStatus.Paralysis);
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Paralysis));
+
+            // Test intended effects: No actions, no Evasion
+            monster.Evasion = 10; // Temp stat change
+            Assert.AreEqual(10, monster.Evasion);
+            // TODO: Get action from monster
+            monster.AddTempStatus(TempStatus.Paralysis);
+            Assert.AreEqual(0, monster.Evasion);
+            // TODO: Ensure no action from monster
+            monster.RemoveTempStatus(TempStatus.Paralysis);
+            Assert.AreEqual(10, monster.Evasion);
+            // TODO: Get action from monster
+            monster.Evasion = 0; // Set stat back
 
             // TODO: Basuna 4 removes status check
             // TODO: Chance to cure self after turn check
@@ -598,12 +749,28 @@ namespace SimTests
         [TestMethod]
         public void SleepTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Sleep));
+            Assert.AreEqual(0, monster.Evasion);
 
-            // Test intended effects
-            // No actions
-            // No evasion
+            // Test that the status can be applied and removed
+            monster.AddTempStatus(TempStatus.Sleep);
+            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Sleep));
+            monster.RemoveTempStatus(TempStatus.Sleep);
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Sleep));
+
+            // Test intended effects: No actions, no Evasion
+            monster.Evasion = 10; // Temp stat change
+            Assert.AreEqual(10, monster.Evasion);
+            // TODO: Get action from monster
+            monster.AddTempStatus(TempStatus.Sleep);
+            Assert.AreEqual(0, monster.Evasion);
+            // TODO: Ensure no action from monster
+            monster.RemoveTempStatus(TempStatus.Sleep);
+            Assert.AreEqual(10, monster.Evasion);
+            // TODO: Get action from monster
+            monster.Evasion = 0; // Set stat back
 
             // TODO: Basuna 1 removes status check
             // TODO: Chance to cure self after turn check
@@ -612,10 +779,20 @@ namespace SimTests
         [TestMethod]
         public void VenomTest()
         {
-            // Test that the status can be applied and removed
+            // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Venom));
+            Assert.AreEqual(6, monster.HP);
 
-            // Test intended effects
+            // Test that the status can be applied and removed
+            monster.AddTempStatus(TempStatus.Venom);
+            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Venom));
+            monster.RemoveTempStatus(TempStatus.Venom);
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Venom));
+
+            // Test intended effects: HP reduction
+            monster.AddTempStatus(TempStatus.Venom);
+            // TODO: Progress a turn and check HP reduction
 
             // TODO: Basuna 1 removes status check
             // TODO: Chance to cure self after turn check
@@ -624,7 +801,13 @@ namespace SimTests
         [TestMethod]
         public void MiniTest()
         {
-            // Removes monster from fight
+            // Ensure normal base stats
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Mini));
+
+            // Test that the status can be applied and the monster is removed from battle
+            monster.AddTempStatus(TempStatus.Mini);
+            // TODO: Check for death
         }
     }
 }
