@@ -394,6 +394,9 @@ namespace FF2_Monster_Sim
                 // Haste clears the Slow debuff
                 if (buff == Buff.Haste) RemoveDebuff(Debuff.Slow);
 
+                // Enforce max stacks of 8 for Aura and Barrier
+                if ((buff == Buff.Aura || buff == Buff.Barrier) && Buffs[buff] > 8) Buffs[buff] = 8;
+
                 // TODO: Determine what bool should be given if stacks is lower than the current value
                 return true;
             }

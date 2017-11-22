@@ -183,6 +183,19 @@ namespace SimTests
         ///////////
         // Buffs //
         ///////////
+        
+        [TestMethod]
+        public void GeneralBuffTest()
+        {
+            // Ensure invalid inputs don't add the buff (specific buff does not matter)
+            Monster monster = new Monster();
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
+            Assert.AreEqual(false, monster.AddBuff(Buff.Aura, -1));
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
+            Assert.AreEqual(false, monster.AddBuff(Buff.Berserk, 17));
+            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
+        }
 
         [TestMethod]
         public void AddRemoveBuffTest()
@@ -216,17 +229,73 @@ namespace SimTests
             monster.RemoveBuff(buff);
             Assert.AreEqual(0, monster.GetBuffStacks(buff));
         }
+        
+        [TestMethod]
+        public void StackingBuffTest()
+        {
+            Monster monster = new Monster();
+            AddRemoveStackingBuff(monster, Buff.Berserk);
+            AddRemoveStackingBuff(monster, Buff.Blink);
+            AddRemoveStackingBuff(monster, Buff.Imbibe);
+            AddRemoveStackingBuff(monster, Buff.Protect);
+            AddRemoveStackingBuff(monster, Buff.Shell);
+        }
+
+        /// <summary>
+        /// Helper. Add and removes stacks from cumulative buffs
+        /// </summary>
+        /// <param name="monster"></param>
+        /// <param name="buff"></param>
+        private void AddRemoveStackingBuff(Monster monster, Buff buff)
+        {
+            // Ensure buff stacks are cumulative and remove properly
+            Assert.AreEqual(0, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 1);
+            Assert.AreEqual(2, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 2);
+            Assert.AreEqual(4, monster.GetBuffStacks(buff));
+            monster.RemoveBuff(buff);
+            Assert.AreEqual(0, monster.GetBuffStacks(buff));
+
+            // TODO: Ensure buff cannot exceed max stacks (255)?
+        }
 
         [TestMethod]
-        public void GeneralBuffTest()
+        public void HighestStackBuffTest()
         {
-            // Ensure invalid inputs don't add the buff
             Monster monster = new Monster();
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
-            Assert.AreEqual(false, monster.AddBuff(Buff.Aura, -1));
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
-            Assert.AreEqual(false, monster.AddBuff(Buff.Aura, 17));
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
+            AddRemoveHighestStackBuff(monster, Buff.Aura, 8);
+            AddRemoveHighestStackBuff(monster, Buff.Barrier, 8);
+            AddRemoveHighestStackBuff(monster, Buff.Haste, 16);
+            AddRemoveHighestStackBuff(monster, Buff.Wall, 16);
+        }
+
+        /// <summary>
+        /// Helper. Add and remove highest-stacking buffs and check maxStack is enforced
+        /// </summary>
+        /// <param name="monster"></param>
+        /// <param name="buff"></param>
+        /// <param name="maxStack">How high the buff can stack</param>
+        private void AddRemoveHighestStackBuff(Monster monster, Buff buff, int maxStack)
+        {
+            // Ensure only the highest stack value is active
+            Assert.AreEqual(0, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 1);
+            Assert.AreEqual(1, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 5);
+            Assert.AreEqual(5, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 1);
+            Assert.AreEqual(5, monster.GetBuffStacks(buff));
+            monster.RemoveBuff(buff);
+            Assert.AreEqual(0, monster.GetBuffStacks(buff));
+
+            // Ensure buff cannot exceed max stacks
+            monster.AddBuff(buff, 16);
+            Assert.AreEqual(maxStack, monster.GetBuffStacks(buff));
         }
 
         [TestMethod]
@@ -236,21 +305,17 @@ namespace SimTests
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
 
-            // Ensure stacks are highest-value
-            monster.AddBuff(Buff.Aura, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Aura));
-            monster.AddBuff(Buff.Aura, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Aura));
-            monster.AddBuff(Buff.Aura, 5);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Aura));
-            monster.AddBuff(Buff.Aura, 1);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Aura));
-            monster.RemoveBuff(Buff.Aura);
+            // TODO: Ensure stacks have intended effect: Grants family-killing properties to main weapon
+            // 1 - Magic Beast
+            // 2 - Aquatic
+            // 3 - Earth
+            // 4 - Giants
+            // 5 - Spellcaster
+            // 6 - Dragons
+            // 7 - Were
+            // 8 - Undead(Doesn't work)
 
-            // Ensure stacks have intended effect: 
-            // TODO: That ^
-
-            // Ensure buff doesn't exceed 7 (8 with fix)
+            // TODO: Ensure 8th stack doesn't work unless fix is selected
         }
 
         [TestMethod]
@@ -260,31 +325,17 @@ namespace SimTests
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Barrier));
 
-            // Ensure stacks are highest-value
-            monster.AddBuff(Buff.Barrier, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Barrier));
-            monster.AddBuff(Buff.Barrier, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Barrier));
-            monster.AddBuff(Buff.Barrier, 5);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Barrier));
-            monster.AddBuff(Buff.Barrier, 1);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Barrier));
-            monster.RemoveBuff(Buff.Barrier);
+            // TODO: Ensure stacks have intended effect: Elemental resistance bsaed on stack level
+            // 1 - Matter
+            // 2 - Fire
+            // 3 - Mind
+            // 4 - Lighting
+            // 5 - Death
+            // 6 - Poison
+            // 7 - Body
+            // 8 - Ice (Doesn't work)
 
-            // Ensure stacks have intended effect: Elemental resistance bsaed on stack level
-            /**
-             * 1 - Matter
-             * 2 - Fire
-             * 3 - Mind
-             * 4 - Lighting
-             * 5 - Death
-             * 6 - Poison
-             * 7 - Body
-             * 8+ - Ice (Doesn't work)
-             */
-            // TODO: That ^
-
-            // Ensure buff doesn't exceed 7 (8 with fix)
+            // TODO: Ensure 8th stack doesn't work unless fix is selected
         }
 
         [TestMethod]
@@ -296,15 +347,12 @@ namespace SimTests
             Assert.AreEqual(4, monster.Strength);
             int baseStr = monster.Strength;
             
-            // Ensure stacks are cumulative and have intended effect (+5 str per stack)
+            // Ensure stacks have intended effect (+5 str per stack)
             monster.AddBuff(Buff.Berserk, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(baseStr + 5, monster.Strength);
             monster.AddBuff(Buff.Berserk, 2);
-            Assert.AreEqual(3, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(baseStr + (3 * 5), monster.Strength);
             monster.RemoveBuff(Buff.Berserk);
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
             Assert.AreEqual(baseStr, monster.Strength);
 
             // Ensure Str + Buff doesn't exceed 255
@@ -328,15 +376,12 @@ namespace SimTests
             Assert.AreEqual(0, monster.Blocks);
             int baseBlocks = monster.Blocks;
 
-            // Ensure stacks are cumulative and have intended effect (+1 block per stack)
+            // Ensure stacks have intended effect (+1 block per stack)
             monster.AddBuff(Buff.Blink, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(baseBlocks + 1, monster.Blocks);
             monster.AddBuff(Buff.Blink, 2);
-            Assert.AreEqual(3, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(baseBlocks + 3, monster.Blocks);
             monster.RemoveBuff(Buff.Blink);
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Blink));
             Assert.AreEqual(baseBlocks, monster.Blocks);
 
             // TODO: Overflow check?
@@ -351,24 +396,15 @@ namespace SimTests
             Assert.AreEqual(1, monster.Hits);
             int baseHits = monster.Hits;
             
-            // Ensure stacks are highest-value and have intended effect (+1 hit per stack)
+            // Ensure stacks have intended effect (+1 hit per stack)
             monster.AddBuff(Buff.Haste, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Haste));
-            Assert.AreEqual(baseHits + 1, monster.Hits);
-            monster.AddBuff(Buff.Haste, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(baseHits + 1, monster.Hits);
             monster.AddBuff(Buff.Haste, 5);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(baseHits + 5, monster.Hits);
-            monster.AddBuff(Buff.Haste, 1);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Haste));
+            monster.AddBuff(Buff.Haste, 1); // Ensure lower-level Haste doesn't change hits
             Assert.AreEqual(baseHits + 5, monster.Hits);
             monster.RemoveBuff(Buff.Haste);
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Haste));
             Assert.AreEqual(1, monster.Hits);
-
-            // Haste cannot exceed 16 since it is not cumulative, and can't be set above 16
         }
 
         [TestMethod]
@@ -396,15 +432,12 @@ namespace SimTests
             Assert.AreEqual(1, monster.MagicBlocks);
             int baseBlocks = monster.MagicBlocks;
             
-            // Ensure stacks are cumulative and have intended effect (+1 mBlock per stack)
+            // Ensure stacks have intended effect (+1 mBlock per stack)
             monster.AddBuff(Buff.Shell, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(baseBlocks + 1, monster.MagicBlocks);
             monster.AddBuff(Buff.Shell, 2);
-            Assert.AreEqual(3, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(baseBlocks + 3, monster.MagicBlocks);
             monster.RemoveBuff(Buff.Shell);
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Shell));
             Assert.AreEqual(baseBlocks, monster.MagicBlocks);
 
             // TODO: Overflow check?
@@ -417,23 +450,9 @@ namespace SimTests
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Wall));
 
-            // Ensure stacks are highest-value
-            monster.AddBuff(Buff.Wall, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Wall));
-            monster.AddBuff(Buff.Wall, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Wall));
-            monster.AddBuff(Buff.Wall, 5);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Wall));
-            monster.AddBuff(Buff.Wall, 1);
-            Assert.AreEqual(5, monster.GetBuffStacks(Buff.Wall));
-            monster.RemoveBuff(Buff.Wall);
+            // TODO: Ensure stacks have intended effect: Negates ALL spells up to it's level
 
-            // Ensure stacks have intended effect: Negates ALL spells up to it's level
-            // TODO: That ^
-
-            // If wall exists and an instant KO spell is used, it succeeds
-
-            // Wall cannot exceed 16 since it is not cumulative, and can't be set above 16
+            // TODO: If wall exists and an instant KO spell is used, it succeeds?
         }
 
         [TestMethod]
@@ -445,15 +464,12 @@ namespace SimTests
             Assert.AreEqual(4, monster.Strength);
             int baseStr = monster.Strength;
 
-            // Ensure stacks are cumulative and remove properly (+10 str per stack)
+            // Ensure stacks have intended effects (+10 str per stack)
             monster.AddBuff(Buff.Imbibe, 1);
-            Assert.AreEqual(1, monster.GetBuffStacks(Buff.Imbibe));
             Assert.AreEqual(baseStr + 10, monster.Strength);
             monster.AddBuff(Buff.Imbibe, 2);
-            Assert.AreEqual(3, monster.GetBuffStacks(Buff.Imbibe));
             Assert.AreEqual(baseStr + (3 * 10), monster.Strength);
             monster.RemoveBuff(Buff.Imbibe);
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Imbibe));
             Assert.AreEqual(baseStr, monster.Strength);
 
             // Ensure Str + Buff doesn't exceed 255
