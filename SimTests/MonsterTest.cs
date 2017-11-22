@@ -231,7 +231,7 @@ namespace SimTests
         }
         
         [TestMethod]
-        public void StackingBuffTest()
+        public void AddRemoveStackingBuffTest()
         {
             Monster monster = new Monster();
             AddRemoveStackingBuff(monster, Buff.Berserk);
@@ -267,7 +267,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void HighestStackBuffTest()
+        public void HAddRemoveighestStackBuffTest()
         {
             Monster monster = new Monster();
             AddRemoveHighestStackBuff(monster, Buff.Aura, 8);
@@ -548,18 +548,37 @@ namespace SimTests
         ////////////////
 
         [TestMethod]
+        public void AddRemovePermStatusTest()
+        {
+            Monster monster = new Monster();
+            AddRemovePermStatus(monster, PermStatus.Amnesia);
+            AddRemovePermStatus(monster, PermStatus.Curse);
+            AddRemovePermStatus(monster, PermStatus.Darkness);
+            AddRemovePermStatus(monster, PermStatus.Poison);
+            // KO, Stone, Toad all kill on success
+        }
+
+        /// <summary>
+        /// Helper. Add and remove a PermStatus from a monster.
+        /// </summary>
+        /// <param name="monster"></param>
+        /// <param name="permStatus"></param>
+        private void AddRemovePermStatus(Monster monster, PermStatus permStatus)
+        {
+            // Test that the status can be applied and removed
+            monster.AddPermStatus(permStatus);
+            Assert.AreEqual(true, monster.HasPermStatus(permStatus));
+            monster.RemovePermStatus(permStatus);
+            Assert.AreEqual(false, monster.HasPermStatus(permStatus));
+        }
+
+        [TestMethod]
         public void AmnesiaTest()
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Amnesia));
-
-            // Test that the status can be applied and removed
-            monster.AddPermStatus(PermStatus.Amnesia);
-            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Amnesia));
-            monster.RemovePermStatus(PermStatus.Amnesia);
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Amnesia));
-
+            
             // Test intended effects
             // TODO: Get monster who can only cast spells (Wizard) to cast a spell
             monster.AddPermStatus(PermStatus.Amnesia);
@@ -579,12 +598,6 @@ namespace SimTests
             Assert.AreEqual(4, monster.Strength);
             Assert.AreEqual(0, monster.Defense);
             // TODO: Spell power
-            
-            // Test that the status can be applied and removed
-            monster.AddPermStatus(PermStatus.Curse);
-            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Curse));
-            monster.RemovePermStatus(PermStatus.Curse);
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Curse));
 
             // Test intended effects: Halve Offense and defense
             // TODO: Spell power reduction check
@@ -611,13 +624,7 @@ namespace SimTests
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Darkness));
             Assert.AreEqual(60, monster.Accuracy);
 
-            // Test that the status can be applied and removed
-            monster.AddPermStatus(PermStatus.Darkness);
-            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Darkness));
-            monster.RemovePermStatus(PermStatus.Darkness);
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Darkness));
-
-            // Test intended effects
+            // Test intended effects: Halves accuracy
             monster.AddPermStatus(PermStatus.Darkness);
             Assert.AreEqual(30, monster.Accuracy);
             monster.RemovePermStatus(PermStatus.Darkness);
@@ -643,13 +650,8 @@ namespace SimTests
             Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Poison));
             Assert.AreEqual(6, monster.HP);
 
-            // Test that the status can be applied and removed
-            monster.AddPermStatus(PermStatus.Poison);
-            Assert.AreEqual(true, monster.HasPermStatus(PermStatus.Poison));
-            monster.RemovePermStatus(PermStatus.Poison);
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Poison));
-
-            // Test intended effects
+            // TODO: Test intended effects
+            // Progress a turn and check HP reduction
 
             // TODO: Esuna 2, Antidote removes status check
         }
@@ -693,6 +695,32 @@ namespace SimTests
         ////////////////
         // TempStatus //
         ////////////////
+
+        [TestMethod]
+        public void AddRemoveTempStatusTest()
+        {
+            Monster monster = new Monster();
+            AddRemoveTempStatus(monster, TempStatus.Confuse);
+            AddRemoveTempStatus(monster, TempStatus.Mute);
+            AddRemoveTempStatus(monster, TempStatus.Paralysis);
+            AddRemoveTempStatus(monster, TempStatus.Sleep);
+            AddRemoveTempStatus(monster, TempStatus.Venom);
+            // Mini kills on success
+        }
+
+        /// <summary>
+        /// Helper. Add and remove a TempStatus from a monster.
+        /// </summary>
+        /// <param name="monster"></param>
+        /// <param name="tempStatus"></param>
+        private void AddRemoveTempStatus(Monster monster, TempStatus tempStatus)
+        {
+            // Test that the status can be applied and removed
+            monster.AddTempStatus(tempStatus);
+            Assert.AreEqual(true, monster.HasTempStatus(tempStatus));
+            monster.RemoveTempStatus(tempStatus);
+            Assert.AreEqual(false, monster.HasTempStatus(tempStatus));
+        }
 
         [TestMethod]
         public void ConfuseTest()
