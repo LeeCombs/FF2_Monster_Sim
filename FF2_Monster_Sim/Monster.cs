@@ -93,20 +93,18 @@ namespace FF2_Monster_Sim
         {
             get
             {
-                // TODO: Determine what happens between Haste and Slow if they both exist
+                // TODO: Determine what happens between Haste and Slow if they both exist. They shouldn't.
                 int totalHits = hits;
 
-                // Add Haste stacks to total hits
+                // Add Haste stacks to total hits, or remove slow stacks
                 int totalStacks = 0;
                 if (Buffs.ContainsKey(Buff.Haste)) totalStacks = Buffs[Buff.Haste];
                 if (totalStacks > 16) totalStacks = 16; // 16-stack maximum for Haste
                 totalHits += totalStacks;
-
-                // Remove Slow stacks from total hits
+                
                 if (Debuffs.ContainsKey(Debuff.Slow)) totalHits -= Debuffs[Debuff.Slow];
+                if (totalHits < 1) totalHits = 1; // Always a 1 hit minimum
 
-                // Always a 1 hit minimum
-                if (totalHits < 1) totalHits = 1;
                 return totalHits;
             }
             set
@@ -167,7 +165,7 @@ namespace FF2_Monster_Sim
         {
             get
             {
-                // Add number of Blink stacks to blocks
+                // Add Blink stacks to blocks
                 int totalBlocks = blocks;
                 if (Buffs.ContainsKey(Buff.Blink)) totalBlocks += Buffs[Buff.Blink];
                 return totalBlocks;
@@ -203,7 +201,7 @@ namespace FF2_Monster_Sim
         {
             get
             {
-                // Add number of Shell stacks to magic blocks
+                // Add Shell stacks to magic blocks
                 int totalMagicBlocks = magicBlocks;
                 if (Buffs.ContainsKey(Buff.Shell)) totalMagicBlocks += Buffs[Buff.Shell];
                 return totalMagicBlocks;
@@ -336,9 +334,35 @@ namespace FF2_Monster_Sim
         /// <returns>Whether or not the Buff was successfully added</returns>
         public bool AddBuff(Buff buff, int stacks)
         {
+            /* Notes TODO
+             * 
+             * Aura - Grants family-killing properties to main weapon
+             * 1 - Magic Beast
+             * 2 - Aquatic
+             * 3 - Earth
+             * 4 - Giants
+             * 5 - Spellcaster
+             * 6 - Dragons
+             * 7 - Were
+             * 8+ - Undead (Doesn't work)
+             * 
+             * Barrier - Grants elemental resists
+             * 1 - Matter
+             * 2 - Fire
+             * 3 - Mind
+             * 4 - Lighting
+             * 5 - Death
+             * 6 - Poison
+             * 7 - Body
+             * 8+ - Ice (Doesn't work)
+             * 
+             * Wall - Negates ALL spells up to it's level 
+             * If wall exists and an instant KO spell is used, it succeeds
+             */
+
             // There are three types of Buffs: Stacking, Non-stackng, and HighestStack
 
-            // Deal with non-stacking buffs first
+            // Non-stacking
             Buff[] nonStackingBuffs = new Buff[] { Buff.Intelligence, Buff.Spirit };
             if (nonStackingBuffs.Contains(buff))
             {
@@ -348,12 +372,11 @@ namespace FF2_Monster_Sim
                 return true;
             }
 
-            // Deal with highest stack buffs
+            // Highest-stack
             Buff[] highestStack = new Buff[] { Buff.Haste, Buff.Aura, Buff.Barrier, Buff.Wall };
             if (highestStack.Contains(buff))
             {
-                // If the buff exists, set it's value to the highest between itself and stacks
-                // Otherwise add and set the buff
+                // Set the buff to the highest value between current and stacks
                 if (Buffs.TryGetValue(buff, out int value))
                 {
                     if (value < stacks) Buffs[buff] = stacks;
@@ -367,24 +390,20 @@ namespace FF2_Monster_Sim
                 return true;
             }
 
-            // Deal with stacking buffs
+            // Stacking
             Buff[] stackingBuffs = new Buff[] { Buff.Berserk, Buff.Blink, Buff.Protect, Buff.Shell, Buff.Imbibe };
             if (stackingBuffs.Contains(buff))
             {
-                // If the buff exists, add success to it's value
-                // Otherwise add and set the buff
+                // Add successes to existing buffs, else set it
                 if (Buffs.TryGetValue(buff, out int value))
                 {
-                    // Not doing anything with 'value'
                     Buffs[buff] += stacks;
                 }
                 else Buffs.Add(buff, stacks);
-
-                // Stacking buffs always "succeed" adding themselves
+                
                 return true;
             }
-
-            // The buff wasn't caught above
+            
             Debug.WriteLine("Buff not caught: " + buff);
             return false;
         }
@@ -402,7 +421,7 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Check if a Buff exists on the monster. Returns stack value of the given buff, 0 if not found.
+        /// Check if a Buff exists on the monster. Returns stack value of the buff, 0 if not found.
         /// </summary>
         /// <param name="buff">The Buff to check for</param>
         /// <returns>Stack value of the buff, 0 if not found.</returns>
@@ -447,8 +466,7 @@ namespace FF2_Monster_Sim
                 else Debuffs[debuff] = stacks;
                 return true;
             }
-
-            // The debuff wasn't caught above
+            
             Debug.WriteLine("Debuff not caught: " + debuff);
             return false;
         }
@@ -464,7 +482,18 @@ namespace FF2_Monster_Sim
             Debuffs.Remove(debuff);
             return retBool;
         }
-        
+
+        /// <summary>
+        /// Check if a Debuff exists on the monster. Returns stack value of the debuff, 0 if not found.
+        /// </summary>
+        /// <param name="debuff">The Buff to check for</param>
+        /// <returns>Stack value of the debuff, 0 if not found.</returns>
+        public int HasDebuff(Debuff debuff)
+        {
+            if (Debuffs.TryGetValue(debuff, out int value)) return value;
+            return 0;
+        }
+
         /// <summary>
         /// Attempt to add a temporary status to the monster
         /// </summary>
@@ -492,6 +521,11 @@ namespace FF2_Monster_Sim
             return TempStatuses.Remove(tempStatus);
         }
 
+        public bool HasTempStatus(TempStatus tempStatus)
+        {
+            return TempStatuses.Contains(tempStatus);
+        }
+
         /// <summary>
         /// Attempt to add a permanent status to the monster
         /// </summary>
@@ -517,6 +551,11 @@ namespace FF2_Monster_Sim
         public bool RemovePermStatus(PermStatus permStatus)
         {
             return PermStatuses.Remove(permStatus);
+        }
+
+        public bool HasPermStatus(PermStatus permStatus)
+        {
+            return PermStatuses.Contains(permStatus);
         }
     }
 }

@@ -202,7 +202,7 @@ namespace SimTests
             // Test that Buffs can be added and have intended effects
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
 
-            // Ensure stacks are additive and removes properly
+            // Ensure stacks are cumulative and remove properly
             Assert.AreEqual(4, monster.Strength);
             Assert.AreEqual(0, monster.HasBuff(Buff.Berserk));
 
@@ -230,7 +230,24 @@ namespace SimTests
         [TestMethod]
         public void BlinkTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+
+            // Ensure stacks are cumulative and remove properly
+            Assert.AreEqual(0, monster.Blocks);
+            Assert.AreEqual(0, monster.HasBuff(Buff.Blink));
+
+            monster.AddBuff(Buff.Blink, 1); // 1 stack total, + 1 buff
+            Assert.AreEqual(1, monster.HasBuff(Buff.Blink));
+            Assert.AreEqual(1, monster.Blocks);
+
+            monster.AddBuff(Buff.Blink, 2); // 3 stacks total, + 15 buff
+            Assert.AreEqual(3, monster.HasBuff(Buff.Blink));
+            Assert.AreEqual(3, monster.Blocks);
+
+            monster.RemoveBuff(Buff.Blink);
+            Assert.AreEqual(0, monster.Blocks);
+            Assert.AreEqual(0, monster.HasBuff(Buff.Blink));
         }
 
         [TestMethod]
@@ -242,13 +259,30 @@ namespace SimTests
         [TestMethod]
         public void ProtectTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+
+            // Ensure stacks are cumulative and remove properly
+            Assert.AreEqual(0, monster.Blocks);
+            monster.AddBuff(Buff.Blink, 1);
+
+
+            // Ensure Stat + Buff doesn't exceed 255
+
+            // Check Buff Overflow
         }
 
         [TestMethod]
         public void ShellTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+
+            // Ensure stacks are additive and removes properly
+
+            // Ensure Stat + Buff doesn't exceed 255
+
+            // Check Buff Overflow
         }
 
         [TestMethod]
@@ -260,19 +294,22 @@ namespace SimTests
         [TestMethod]
         public void EmbibeTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
         }
 
         [TestMethod]
         public void IntelligenceTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
         }
 
         [TestMethod]
         public void SpiritTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
         }
 
         /////////////

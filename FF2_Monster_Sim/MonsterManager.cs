@@ -95,8 +95,7 @@ namespace FF2_Monster_Sim
                     return mon;
                 }
             }
-
-            // Return null if no match was found
+            
             Debug.WriteLine("No monster found by name: " + name);
             return null;
         }
