@@ -259,7 +259,11 @@ namespace SimTests
             monster.RemoveBuff(buff);
             Assert.AreEqual(0, monster.GetBuffStacks(buff));
 
-            // TODO: Ensure buff cannot exceed max stacks (255)?
+            // Overflow check: Cannot exceed 255
+            for (int i = 0; i < 15; i++) monster.AddBuff(buff, 16);
+            Assert.AreEqual(240, monster.GetBuffStacks(buff));
+            monster.AddBuff(buff, 16);
+            Assert.AreEqual(0, monster.GetBuffStacks(buff));
         }
 
         [TestMethod]
@@ -384,7 +388,11 @@ namespace SimTests
             monster.RemoveBuff(Buff.Blink);
             Assert.AreEqual(baseBlocks, monster.Blocks);
 
-            // TODO: Overflow check?
+            // Ensure Stat + Buff doesn't exceed 255
+            monster.Blocks = 250; // Temp stat adjustment
+            Assert.AreEqual(250, monster.Blocks);
+            monster.AddBuff(Buff.Blink, 16); // 266 total (250 + 16)
+            Assert.AreEqual(255, monster.Blocks);
         }
 
         [TestMethod]
@@ -416,11 +424,9 @@ namespace SimTests
             Assert.AreEqual(0, monster.Defense);
             int baseDefense = monster.Defense;
 
-            // Ensure stacks are cumulative and have intended effect (+__ defense per stack)
-
-            // Ensure Stat + Buff doesn't exceed 255
-
-            // Check buff Overflow
+            // Note: This can't be completed until the + defense value is figured out
+            // TODO: Ensure stacks have intended effect (+__ defense per stack)
+            // TODO: Ensure Stat + Buff doesn't exceed 255
         }
 
         [TestMethod]
@@ -440,7 +446,11 @@ namespace SimTests
             monster.RemoveBuff(Buff.Shell);
             Assert.AreEqual(baseBlocks, monster.MagicBlocks);
 
-            // TODO: Overflow check?
+            // Ensure Stat + Buff doesn't exceed 255
+            monster.MagicBlocks = 250; // Temp stat adjustment
+            Assert.AreEqual(250, monster.MagicBlocks);
+            monster.AddBuff(Buff.Shell, 16); // 266 total (250 + 16)
+            Assert.AreEqual(255, monster.MagicBlocks);
         }
 
         [TestMethod]

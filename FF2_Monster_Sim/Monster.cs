@@ -78,9 +78,9 @@ namespace FF2_Monster_Sim
                 int totalBuff = 0;
                 if (Buffs.ContainsKey(Buff.Berserk)) totalBuff += (Buffs[Buff.Berserk] * 5);
                 if (Buffs.ContainsKey(Buff.Imbibe)) totalBuff += (Buffs[Buff.Imbibe] * 10);
-
                 totalStrength += (totalBuff % 256); // Overflow
-                return (totalStrength < 255) ? totalStrength : 255; // Cap at 255
+
+                return (totalStrength > 255) ? 255 : totalStrength; // Cap at 255
             }
             set
             {
@@ -169,8 +169,10 @@ namespace FF2_Monster_Sim
             {
                 // Add Blink stacks to blocks
                 int totalBlocks = blocks;
-                if (Buffs.ContainsKey(Buff.Blink)) totalBlocks += Buffs[Buff.Blink];
-                return totalBlocks;
+                int totalBuff = 0;
+                if (Buffs.ContainsKey(Buff.Blink)) totalBuff = Buffs[Buff.Blink];
+                totalBlocks += (totalBuff % 256); // Overflow
+                return (totalBlocks > 255) ? 255 : totalBlocks; // Cap at 255
             }
             set
             {
@@ -205,8 +207,10 @@ namespace FF2_Monster_Sim
             {
                 // Add Shell stacks to magic blocks
                 int totalMagicBlocks = magicBlocks;
-                if (Buffs.ContainsKey(Buff.Shell)) totalMagicBlocks += Buffs[Buff.Shell];
-                return totalMagicBlocks;
+                int totalBuff = 0;
+                if (Buffs.ContainsKey(Buff.Shell)) totalBuff = Buffs[Buff.Shell];
+                totalMagicBlocks += (totalBuff % 256); // Overflow
+                return (totalMagicBlocks > 255) ? 255 : totalMagicBlocks; // Cap at 255
             }
             set
             {
@@ -239,8 +243,9 @@ namespace FF2_Monster_Sim
                 // Add Fear stacks * Fear Power (20), with debuff overflow check
                 int totalFear = fear;
                 int totalDebuff = 0;
-                if (Debuffs.ContainsKey(Debuff.Fear)) totalDebuff += (Debuffs[Debuff.Fear] * 20);
-                return totalFear + (totalDebuff % 256);
+                if (Debuffs.ContainsKey(Debuff.Fear)) totalDebuff = (Debuffs[Debuff.Fear] * 20);
+                totalFear += (totalDebuff % 256); // Overflow
+                return (totalFear > 255) ? 255 : totalFear; // Cap at 255
             }
             set
             {
@@ -411,6 +416,7 @@ namespace FF2_Monster_Sim
                     Buffs[buff] += stacks;
                 }
                 else Buffs.Add(buff, stacks);
+                Buffs[buff] = (Buffs[buff] % 256); // Overflow
                 
                 return true;
             }
