@@ -433,7 +433,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         /// <param name="buff">The Buff to check for</param>
         /// <returns>Stack value of the buff, 0 if not found.</returns>
-        public int HasBuff(Buff buff)
+        public int GetBuffStacks(Buff buff)
         {
             if (Buffs.TryGetValue(buff, out int value)) return value;
             return 0;
@@ -502,7 +502,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         /// <param name="debuff">The Buff to check for</param>
         /// <returns>Stack value of the debuff, 0 if not found.</returns>
-        public int HasDebuff(Debuff debuff)
+        public int GetDebuffStacks(Debuff debuff)
         {
             if (Debuffs.TryGetValue(debuff, out int value)) return value;
             return 0;
