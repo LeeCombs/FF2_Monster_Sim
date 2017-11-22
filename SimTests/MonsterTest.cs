@@ -185,15 +185,37 @@ namespace SimTests
         ///////////
 
         [TestMethod]
+        public void GeneralBuffTest()
+        {
+            // Ensure invalid inputs don't add the buff
+            Monster monster = new Monster();
+            Assert.AreEqual(0, monster.HasBuff(Buff.Aura));
+            Assert.AreEqual(false, monster.AddBuff(Buff.Aura, -1));
+            Assert.AreEqual(0, monster.HasBuff(Buff.Aura));
+            Assert.AreEqual(false, monster.AddBuff(Buff.Aura, 17));
+            Assert.AreEqual(0, monster.HasBuff(Buff.Aura));
+        }
+
+        [TestMethod]
         public void AuraTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+
+            // Ensure stacks are highest-value and remove properly
+
+            // Ensure buff doesn't exceed 7 (8 with fix)
         }
 
         [TestMethod]
         public void BarrierTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+
+            // Ensure stacks are highest-value and remove properly
+
+            // Ensure buff doesn't exceed 7 (8 with fix)
         }
 
         [TestMethod]
@@ -201,29 +223,32 @@ namespace SimTests
         {
             // Test that Buffs can be added and have intended effects
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.HasBuff(Buff.Berserk));
+            Assert.AreEqual(4, monster.Strength);
+            int baseStr = monster.Strength;
 
             // Ensure stacks are cumulative and remove properly
-            Assert.AreEqual(4, monster.Strength);
-            Assert.AreEqual(0, monster.HasBuff(Buff.Berserk));
-
             monster.AddBuff(Buff.Berserk, 1); // 1 stack total, + 5 buff
             Assert.AreEqual(1, monster.HasBuff(Buff.Berserk));
-            Assert.AreEqual(9, monster.Strength);
+            Assert.AreEqual(baseStr + 5, monster.Strength);
 
             monster.AddBuff(Buff.Berserk, 2); // 3 stacks total, + 15 buff
             Assert.AreEqual(3, monster.HasBuff(Buff.Berserk));
-            Assert.AreEqual(19, monster.Strength);
+            Assert.AreEqual(baseStr + (3 * 5), monster.Strength);
 
             monster.RemoveBuff(Buff.Berserk);
-            Assert.AreEqual(4, monster.Strength);
             Assert.AreEqual(0, monster.HasBuff(Buff.Berserk));
+            Assert.AreEqual(baseStr, monster.Strength);
 
             // Ensure Str + Buff doesn't exceed 255
-            monster.AddBuff(Buff.Berserk, 51); // 51 * 5 = 255 Buff Bonus
+            monster.AddBuff(Buff.Berserk, 16);
+            monster.AddBuff(Buff.Berserk, 16);
+            monster.AddBuff(Buff.Berserk, 16);
+            monster.AddBuff(Buff.Berserk, 3); // 51 * 5 = 255 Buff Bonus
             Assert.AreEqual(255, monster.Strength); // min(255, str+(buff%256))
 
             // Check Buff Overflow
-            monster.AddBuff(Buff.Berserk, 1); // 52 * 5 = 260 Buff Bonus.
+            monster.AddBuff(Buff.Berserk, 1); // 52 * 5 = 260 Buff Bonus
             Assert.AreEqual(8, monster.Strength); // str + (buff % 256)
         }
 
@@ -232,28 +257,57 @@ namespace SimTests
         {
             // Test that Buffs can be added and have intended effects
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.HasBuff(Buff.Blink));
+            Assert.AreEqual(0, monster.Blocks);
+            int baseBlocks = monster.Blocks;
 
             // Ensure stacks are cumulative and remove properly
-            Assert.AreEqual(0, monster.Blocks);
-            Assert.AreEqual(0, monster.HasBuff(Buff.Blink));
-
-            monster.AddBuff(Buff.Blink, 1); // 1 stack total, + 1 buff
+            monster.AddBuff(Buff.Blink, 1);
             Assert.AreEqual(1, monster.HasBuff(Buff.Blink));
-            Assert.AreEqual(1, monster.Blocks);
+            Assert.AreEqual(baseBlocks + 1, monster.Blocks);
 
-            monster.AddBuff(Buff.Blink, 2); // 3 stacks total, + 15 buff
+            monster.AddBuff(Buff.Blink, 2);
             Assert.AreEqual(3, monster.HasBuff(Buff.Blink));
-            Assert.AreEqual(3, monster.Blocks);
+            Assert.AreEqual(baseBlocks + 3, monster.Blocks);
 
             monster.RemoveBuff(Buff.Blink);
-            Assert.AreEqual(0, monster.Blocks);
             Assert.AreEqual(0, monster.HasBuff(Buff.Blink));
+            Assert.AreEqual(baseBlocks, monster.Blocks);
+
+            // TODO: Overflow check?
         }
 
         [TestMethod]
         public void HasteTest()
         {
-            //
+            // Haste cannot exceed 16 since it is not cumulative, and can't be set above 16
+
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.HasBuff(Buff.Haste));
+            Assert.AreEqual(1, monster.Hits);
+            int baseHits = monster.Hits;
+
+            // Ensure stacks are highest-value and remove properly
+            monster.AddBuff(Buff.Haste, 1);
+            Assert.AreEqual(1, monster.HasBuff(Buff.Haste));
+            Assert.AreEqual(baseHits + 1, monster.Hits);
+
+            monster.AddBuff(Buff.Haste, 1);
+            Assert.AreEqual(1, monster.HasBuff(Buff.Haste));
+            Assert.AreEqual(baseHits + 1, monster.Hits);
+
+            monster.AddBuff(Buff.Haste, 5);
+            Assert.AreEqual(5, monster.HasBuff(Buff.Haste));
+            Assert.AreEqual(baseHits + 5, monster.Hits);
+
+            monster.AddBuff(Buff.Haste, 1);
+            Assert.AreEqual(5, monster.HasBuff(Buff.Haste));
+            Assert.AreEqual(baseHits + 5, monster.Hits);
+
+            monster.RemoveBuff(Buff.Haste);
+            Assert.AreEqual(0, monster.HasBuff(Buff.Haste));
+            Assert.AreEqual(1, monster.Hits);
         }
 
         [TestMethod]
@@ -263,9 +317,6 @@ namespace SimTests
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
 
             // Ensure stacks are cumulative and remove properly
-            Assert.AreEqual(0, monster.Blocks);
-            monster.AddBuff(Buff.Blink, 1);
-
 
             // Ensure Stat + Buff doesn't exceed 255
 
@@ -277,39 +328,81 @@ namespace SimTests
         {
             // Test that Buffs can be added and have intended effects
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.HasBuff(Buff.Shell));
+            Assert.AreEqual(1, monster.MagicBlocks);
+            int baseBlocks = monster.MagicBlocks;
 
-            // Ensure stacks are additive and removes properly
+            // Ensure stacks are cumulative and remove properly
+            monster.AddBuff(Buff.Shell, 1);
+            Assert.AreEqual(1, monster.HasBuff(Buff.Shell));
+            Assert.AreEqual(baseBlocks + 1, monster.MagicBlocks);
 
-            // Ensure Stat + Buff doesn't exceed 255
+            monster.AddBuff(Buff.Shell, 2);
+            Assert.AreEqual(3, monster.HasBuff(Buff.Shell));
+            Assert.AreEqual(baseBlocks + 3, monster.MagicBlocks);
 
-            // Check Buff Overflow
+            monster.RemoveBuff(Buff.Shell);
+            Assert.AreEqual(0, monster.HasBuff(Buff.Shell));
+            Assert.AreEqual(baseBlocks, monster.MagicBlocks);
+
+            // TODO: Overflow check?
         }
 
         [TestMethod]
         public void WallTest()
         {
-            //
+            // Test that Buffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+
+            // Ensure stacks are highest-value and remove properly
+
+            // Ensure buff doesn't exceed 16 (max spell level)
         }
 
         [TestMethod]
-        public void EmbibeTest()
+        public void ImbibeTest()
         {
             // Test that Buffs can be added and have intended effects
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.HasBuff(Buff.Imbibe));
+            Assert.AreEqual(4, monster.Strength);
+            int baseStr = monster.Strength;
+
+            // Ensure stacks are cumulative and remove properly
+            monster.AddBuff(Buff.Imbibe, 1); // 1 stack total, + 5 buff
+            Assert.AreEqual(1, monster.HasBuff(Buff.Imbibe));
+            Assert.AreEqual(baseStr + 10, monster.Strength);
+
+            monster.AddBuff(Buff.Imbibe, 2); // 3 stacks total, + 15 buff
+            Assert.AreEqual(3, monster.HasBuff(Buff.Imbibe));
+            Assert.AreEqual(baseStr + (3 * 10), monster.Strength);
+
+            monster.RemoveBuff(Buff.Imbibe);
+            Assert.AreEqual(0, monster.HasBuff(Buff.Imbibe));
+            Assert.AreEqual(baseStr, monster.Strength);
+
+            // Ensure Str + Buff doesn't exceed 255
+            monster.Strength = 10; // Temp increase LegEater's base str to execute test
+            monster.AddBuff(Buff.Imbibe, 16);
+            monster.AddBuff(Buff.Imbibe, 9); // 25 * 10 = 250 Buff Bonus
+            Assert.AreEqual(255, monster.Strength); // min(255, str+(buff%256))
+            monster.Strength = baseStr;
+
+            // Check Buff Overflow
+            monster.AddBuff(Buff.Imbibe, 1); // 26 * 10 = 260 Buff Bonus
+            Assert.AreEqual(8, monster.Strength); // str + (buff % 256)
         }
 
         [TestMethod]
         public void IntelligenceTest()
         {
-            // Test that Buffs can be added and have intended effects
-            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            // Skip for now, might only be relevant for PCs
         }
 
         [TestMethod]
         public void SpiritTest()
         {
-            // Test that Buffs can be added and have intended effects
-            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            // Skip for now, might only be relevant for PCs
         }
 
         /////////////
@@ -325,7 +418,28 @@ namespace SimTests
         [TestMethod]
         public void FearTest()
         {
-            //
+            // Test that Debuffs can be added and have intended effects
+            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Assert.AreEqual(0, monster.HasDebuff(Debuff.Fear));
+            Assert.AreEqual(180, monster.Fear);
+            int baseFear = monster.Fear;
+
+            // Ensure stacks are cumulative and remove properly
+            monster.AddDebuff(Debuff.Fear, 1);
+            Assert.AreEqual(1, monster.HasDebuff(Debuff.Fear));
+            Assert.AreEqual(baseFear + 20, monster.Fear);
+
+            monster.AddDebuff(Debuff.Fear, 2);
+            Assert.AreEqual(3, monster.HasDebuff(Debuff.Fear));
+            Assert.AreEqual(baseFear + (3 * 20), monster.Fear);
+
+            monster.RemoveDebuff(Debuff.Fear);
+            Assert.AreEqual(0, monster.HasDebuff(Debuff.Fear));
+            Assert.AreEqual(baseFear, monster.Fear);
+
+            // Check overflow
+            monster.AddDebuff(Debuff.Fear, 13); // 13 * 20 = 260 total
+            Assert.AreEqual(184, monster.Fear); // 180 base + (260 % 256)
         }
 
         ////////////////

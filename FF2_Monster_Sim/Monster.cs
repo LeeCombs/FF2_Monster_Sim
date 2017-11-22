@@ -74,9 +74,11 @@ namespace FF2_Monster_Sim
                 // Halve strength if afflicted with Curse. Note: Int division
                 if (PermStatuses.Contains(PermStatus.Curse)) totalStrength = totalStrength / 2;
 
-                // Add Berserk stacks * Berserk Power (5)
+                // Add Berserk stacks (5 per) and Imbibe stacks (10 per)
                 int totalBuff = 0;
                 if (Buffs.ContainsKey(Buff.Berserk)) totalBuff += (Buffs[Buff.Berserk] * 5);
+                if (Buffs.ContainsKey(Buff.Imbibe)) totalBuff += (Buffs[Buff.Imbibe] * 10);
+
                 totalStrength += (totalBuff % 256); // Overflow
                 return (totalStrength < 255) ? totalStrength : 255; // Cap at 255
             }
@@ -330,10 +332,16 @@ namespace FF2_Monster_Sim
         /// Attempt to add a Buff to the Monster
         /// </summary>
         /// <param name="buff">The Buff to add</param>
-        /// <param name="stacks">How many times to add the Buff</param>
+        /// <param name="stacks">How many times to add the Buff (1 to 16)</param>
         /// <returns>Whether or not the Buff was successfully added</returns>
         public bool AddBuff(Buff buff, int stacks)
         {
+            if (stacks < 1 || stacks > 16)
+            {
+                Debug.WriteLine("Stacks must be within range 1 - 16. Found: " + stacks);
+                return false;
+            }
+
             /* Notes TODO
              * 
              * Aura - Grants family-killing properties to main weapon
@@ -435,10 +443,16 @@ namespace FF2_Monster_Sim
         /// Attempt to add a Debuff to the Monster
         /// </summary>
         /// <param name="debuff">The Debuff to add</param>
-        /// <param name="stacks">How many times to add the Debuff</param>
+        /// <param name="stacks">How many times to add the Debuff (1 to 16)</param>
         /// <returns>Whether or not the debuff was successfully added</returns>
         public bool AddDebuff(Debuff debuff, int stacks)
         {
+            if (stacks < 1 || stacks > 16)
+            {
+                Debug.WriteLine("Stacks must be within range 1 - 16. Found: " + stacks);
+                return false;
+            }
+
             // Slow doesn't stack
             if (debuff == Debuff.Slow)
             {
