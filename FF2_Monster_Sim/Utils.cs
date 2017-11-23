@@ -20,10 +20,23 @@ namespace FF2_Monster_Sim
             {
                 return new List<string>(); // Consider returning null instead of an empty list?
             }
-            
+
             // Trim brackets, split on commas, upper case entries, and return it
             string trim = str.Substring(1, str.Length - 2);
             return trim.Split(',').Select(x => x.ToUpper()).ToList();
+        }
+        
+        public static List<Element> StringToElementList(string str)
+        {
+            if (String.IsNullOrEmpty(str))
+            {
+                return new List<Element>(); // Consider returning null instead of an empty list?
+            }
+
+            // Trim brackets, split on commas, upper case entries, and return it
+            string trim = str.Substring(1, str.Length - 2);
+            if (String.IsNullOrEmpty(trim)) return new List<Element>();
+            return trim.Split(',').Select(x => (Element)Enum.Parse(typeof(Element), x)).ToList();
         }
     }
 }

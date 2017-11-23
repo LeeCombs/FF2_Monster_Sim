@@ -17,7 +17,7 @@ namespace FF2_Monster_Sim
         public int Power;
         public int Accuracy;
         public string Status;
-        public string Element;
+        public Element Element;
         public int Price;
         public int Value;
     }

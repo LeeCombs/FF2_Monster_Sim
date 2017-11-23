@@ -11,6 +11,7 @@ namespace FF2_Monster_Sim
 {
     public enum MonsterFamily
     {
+        None,
         Aquatic,
         Dragon,
         Earth,
@@ -28,7 +29,6 @@ namespace FF2_Monster_Sim
 
         public static void Initialize()
         {
-            //
             Debug.WriteLine("monster init");
         }
 
@@ -38,8 +38,6 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_MonsterData.json");
             monsterData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_MonsterData.json"));
-
-            Monster mon = GetMonsterByName("LegEater");
         }
         
         /// <summary>
@@ -85,10 +83,9 @@ namespace FF2_Monster_Sim
 
                     // TODO: Consider converting string lists into enum lists of their corresponding types
                     mon.Families = Utils.StringToStringList((string)data.race);
-                    mon.Weaknesses = Utils.StringToStringList((string)data.weak);
-                    mon.Resistances = Utils.StringToStringList((string)data.resist);
-                    mon.Absorbs = Utils.StringToStringList((string)data.absorb);
-
+                    mon.Weaknesses = Utils.StringToElementList((string)data.weak);
+                    mon.Resistances = Utils.StringToElementList((string)data.resist);
+                    mon.Absorbs = Utils.StringToElementList((string)data.absorb);
                     mon.GilDrops = Utils.StringToStringList((string)data.gilDrops);
                     mon.ItemDrops = Utils.StringToStringList((string)data.itemDrops);
 

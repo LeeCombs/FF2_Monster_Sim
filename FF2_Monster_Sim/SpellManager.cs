@@ -67,7 +67,7 @@ namespace FF2_Monster_Sim
                     spl.Power = (int)data.power;
                     spl.Accuracy = (int)data.accuracy;
                     spl.Status = (string)data.status;
-                    spl.Element = (string)data.element;
+                    spl.Element = (Element)Enum.Parse(typeof(Element), (string)data.element);
                     spl.Price = (int)data.price;
                     spl.Value = (int)data.value;
 
@@ -93,7 +93,7 @@ namespace FF2_Monster_Sim
             // Check for absorption
             // No effect except HP gain. Damaging and non-damaging spells calculate for healing
             // Ignore weakness, resistance, and magic defense rolls
-            if (target.IsAbsorbantTo(spell.Element.ToString()))
+            if (target.IsAbsorbantTo(spell.Element))
             {
                 Debug.WriteLine("Healing: " + GetDamage(adjustedPower, level));
                 return "Absorbs";

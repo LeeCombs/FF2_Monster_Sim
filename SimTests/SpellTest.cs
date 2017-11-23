@@ -32,7 +32,7 @@ namespace SimTests
             Assert.AreEqual(10, spell.Power);
             Assert.AreEqual(0, spell.Accuracy);
             Assert.AreEqual("", spell.Status);
-            Assert.AreEqual("Fire", spell.Element);
+            Assert.AreEqual(Element.Fire, spell.Element);
             Assert.AreEqual(400, spell.Price);
             Assert.AreEqual(100, spell.Value);
         }
@@ -42,11 +42,15 @@ namespace SimTests
         // Helper Tests //
         //////////////////
 
-        private bool IsAbsorbed(Spell spell)
+
+        [TestMethod]
+        public void IsAbsorbed()
         {
             Monster monster = new Monster();
+            Assert.IsFalse(monster.IsAbsorbantTo(Element.Fire));
+            monster.Absorbs.Add(Element.Fire);
+            Assert.IsTrue(monster.IsAbsorbantTo(Element.Fire));
             // TODO: This
-            return false;
         }
 
 

@@ -50,7 +50,7 @@
    "power": 10,
    "accuracy": 0,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 7500
  },
@@ -61,7 +61,7 @@
    "power": 10,
    "accuracy": 0,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 7500
  },
@@ -72,7 +72,7 @@
    "power": 20,
    "accuracy": 0,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 40000,
    "value": 20000
  },
@@ -193,7 +193,7 @@
    "power": 5,
    "accuracy": 50,
    "status": "Berserk",
-   "element": "",
+   "element": "None",
    "price": 10000,
    "value": 5000
  },
@@ -204,7 +204,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Haste",
-   "element": "",
+   "element": "None",
    "price": 20000,
    "value": 10000
  },
@@ -215,7 +215,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Aura",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 7500
  },
@@ -226,7 +226,7 @@
    "power": 20,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 200,
    "value": 50
  },
@@ -237,7 +237,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 1500,
    "value": 750
  },
@@ -248,7 +248,7 @@
    "power": 2,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 800,
    "value": 400
  },
@@ -259,7 +259,7 @@
    "power": 1,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 800,
    "value": 400
  },
@@ -270,7 +270,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Barrier",
-   "element": "",
+   "element": "None",
    "price": 8000,
    "value": 4000
  },
@@ -281,7 +281,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Blink",
-   "element": "",
+   "element": "None",
    "price": 400,
    "value": 200
  },
@@ -292,7 +292,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Protect",
-   "element": "",
+   "element": "None",
    "price": 400,
    "value": 200
  },
@@ -303,7 +303,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Shell",
-   "element": "",
+   "element": "None",
    "price": 400,
    "value": 200
  },
@@ -314,7 +314,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Wall",
-   "element": "",
+   "element": "None",
    "price": 8000,
    "value": 4000
  },
@@ -325,7 +325,7 @@
    "power": -1,
    "accuracy": 40,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 3000,
    "value": 1500
  },
@@ -413,7 +413,7 @@
    "power": 15,
    "accuracy": 0,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 20000,
    "value": 10000
  },
@@ -435,9 +435,20 @@
    "power": 100,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 1
+ },
+ {
+   "name": "",
+   "type": "",
+   "effect": "",
+   "power": null,
+   "accuracy": null,
+   "status": "",
+   "element": "",
+   "price": null,
+   "value": null
  },
  {
    "name": "CURE_S",
@@ -446,7 +457,7 @@
    "power": 30,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -457,7 +468,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -468,7 +479,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -479,7 +490,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -490,7 +501,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -501,7 +512,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -512,7 +523,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -523,7 +534,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -534,7 +545,7 @@
    "power": 20,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -545,7 +556,7 @@
    "power": 100,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -556,7 +567,7 @@
    "power": 10,
    "accuracy": 100,
    "status": "Imbibe",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -644,7 +655,7 @@
    "power": 20,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -688,7 +699,7 @@
    "power": 30,
    "accuracy": 50,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -699,7 +710,7 @@
    "power": 7,
    "accuracy": 30,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -710,7 +721,7 @@
    "power": 15,
    "accuracy": 30,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -721,7 +732,7 @@
    "power": -1,
    "accuracy": 50,
    "status": "Paralysis",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -732,7 +743,7 @@
    "power": 70,
    "accuracy": 100,
    "status": "",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -743,7 +754,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "Spirit",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  },
@@ -754,7 +765,7 @@
    "power": -1,
    "accuracy": 100,
    "status": "Intelligence",
-   "element": "",
+   "element": "None",
    "price": 0,
    "value": 0
  }

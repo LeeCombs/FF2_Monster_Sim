@@ -258,9 +258,9 @@ namespace FF2_Monster_Sim
         public List<string> AttackEffects { get; set; }
         public List<string> SpecialAttacks { get; set; }
         public List<string> Families { get; set; }
-        public List<string> Weaknesses { get; set; }
-        public List<string> Resistances { get; set; }
-        public List<string> Absorbs { get; set; }
+        public List<Element> Weaknesses { get; set; }
+        public List<Element> Resistances { get; set; }
+        public List<Element> Absorbs { get; set; }
 
         public List<string> GilDrops { get; set; }
         public List<string> ItemDrops { get; set; }
@@ -277,6 +277,9 @@ namespace FF2_Monster_Sim
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new List<TempStatus>();
             PermStatuses = new List<PermStatus>();
+            Weaknesses = new List<Element>();
+            Resistances = new List<Element>();
+            Absorbs = new List<Element>();
         }
         
         public void Initialize(Texture2D texture, Vector2 position)
@@ -299,22 +302,19 @@ namespace FF2_Monster_Sim
         // Stat Functions //
         ////////////////////
 
-        public bool IsWeakTo(string element)
+        public bool IsWeakTo(Element element)
         {
-            if (String.IsNullOrEmpty(element)) return false;
-            return Weaknesses.Contains(element.ToUpper());
+            return Weaknesses.Contains(element);
         }
 
-        public bool IsResistantTo(string element)
+        public bool IsResistantTo(Element element)
         {
-            if (String.IsNullOrEmpty(element)) return false;
-            return Resistances.Contains(element.ToUpper());
+            return Resistances.Contains(element);
         }
 
-        public bool IsAbsorbantTo(string element)
+        public bool IsAbsorbantTo(Element element)
         {
-            if (String.IsNullOrEmpty(element)) return false;
-            return Absorbs.Contains(element.ToUpper());
+            return Absorbs.Contains(element);
         }
 
         //////////////////////

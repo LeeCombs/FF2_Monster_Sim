@@ -48,6 +48,7 @@ namespace FF2_Monster_Sim
     {
         // Found naming has been inconsistent so far
         // e.g. Dimension = Time = Matter, Mind = Mental, Body = Physical
+        None,
         Dimension,
         Mind,
         Body,
