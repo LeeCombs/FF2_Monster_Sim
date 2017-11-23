@@ -28,7 +28,6 @@ namespace FF2_Monster_Sim
 
         public static void Initialize()
         {
-            //
             rnd = new Random();
         }
 
@@ -40,10 +39,6 @@ namespace FF2_Monster_Sim
             spellData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_SpellData.json"));
 
             Monster monster = MonsterManager.GetMonsterByName("Wizard");
-            CastSpell(monster, monster, GetSpellByName("FIRE_S"), 16);
-            CastSpell(monster, monster, GetSpellByName("FIRE_S"), 16, true);
-            CastSpell(monster, monster, GetSpellByName("PEEP"), 10);
-            CastSpell(monster, monster, GetSpellByName("HEAL"), 10);
         }
 
         /// <summary>
@@ -149,7 +144,9 @@ namespace FF2_Monster_Sim
                     break;
                 case "Heal":
                     // Roll damage like usual, except heal
-                    Debug.WriteLine("Healing: " + GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy)));
+                    int totalHeal = GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy));
+                    Debug.WriteLine("Healing: " + totalHeal);
+                    target.Heal(totalHeal);
                     // TODO: If undead, treat as damage
                     break;
                 case "Revive":
@@ -204,7 +201,6 @@ namespace FF2_Monster_Sim
                     {
                         if (i >= tempCureOrder.Length) break;
                         target.RemoveTempStatus(tempCureOrder[i]);
-                        Debug.WriteLine("Removing TS: " + tempCureOrder[i]);
                     }
 
                     break;
@@ -215,7 +211,6 @@ namespace FF2_Monster_Sim
                     {
                         if (i >= permCureOrder.Length) break;
                         target.RemovePermStatus(permCureOrder[i]);
-                        Debug.WriteLine("Removing PS: " + permCureOrder[i]);
                     }
                     break;
                 case "Special":

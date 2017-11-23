@@ -15,7 +15,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void CreationTest()
+        public void MonsterCreationTest()
         {
             // Test that monsters properly load with known stats from data
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
@@ -44,7 +44,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void StatChangeTest()
+        public void MonsterStatChangeTest()
         {
             // Test that changes produce expected values, min/max values are enforced, and overflow checks
             Monster monster = MonsterManager.GetMonsterByName("LegEater");

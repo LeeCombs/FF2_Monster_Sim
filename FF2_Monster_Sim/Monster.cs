@@ -329,6 +329,20 @@ namespace FF2_Monster_Sim
             return "";
         }
 
+        /// <summary>
+        /// Heal the monster a given amount
+        /// </summary>
+        /// <param name="amount"></param>
+        public void Heal(int amount)
+        {
+            if (amount < 0)
+            {
+                Debug.WriteLine("Cannot heal a negative amount: " + amount);
+                return;
+            }
+            HP += amount;
+        }
+
         ////////////////////////////
         // (De)Buffs and Statuses //
         ////////////////////////////
