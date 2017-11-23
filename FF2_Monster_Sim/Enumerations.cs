@@ -47,8 +47,8 @@ namespace FF2_Monster_Sim
     public enum Element
     {
         // Found naming has been inconsistent so far
-        // e.g. Time = Matter, Mind = Mental, Body = Physical
-        Matter,
+        // e.g. Dimension = Time = Matter, Mind = Mental, Body = Physical
+        Dimension,
         Mind,
         Body,
         Death,

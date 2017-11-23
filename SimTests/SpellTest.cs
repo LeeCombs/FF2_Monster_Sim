@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FF2_Monster_Sim;
 
@@ -16,6 +17,10 @@ namespace SimTests
             SpellManager.LoadContent();
         }
 
+        ///////////////////
+        // General Tests //
+        ///////////////////
+
         [TestMethod]
         public void SpellCreationTest()
         {
@@ -31,6 +36,23 @@ namespace SimTests
             Assert.AreEqual(400, spell.Price);
             Assert.AreEqual(100, spell.Value);
         }
+
+
+        //////////////////
+        // Helper Tests //
+        //////////////////
+
+        private bool IsAbsorbed(Spell spell)
+        {
+            Monster monster = new Monster();
+            // TODO: This
+            return false;
+        }
+
+
+        //////////////////////////
+        // Specific Spell Tests //
+        //////////////////////////
 
         [TestMethod]
         public void EsunaHEALTest()
@@ -106,6 +128,236 @@ namespace SimTests
             Assert.AreEqual(true, monster.HP <= monster.HPMax);
 
             // TODO: Damage vs Undead
+        }
+
+        ////////////////////////
+        // Temp Status Spells //
+        ////////////////////////
+
+        [TestMethod]
+        public void SLEPTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("SLEP");
+
+            // Ensure the spell has only intended effect: Sleep
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void STONTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("STON");
+
+            // Ensure the spell has only intended effect: Paralysis
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void STOPTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("STOP");
+
+            // Ensure the spell has only intended effect: Paralysis
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void CHRMTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("CHRM");
+
+            // Ensure the spell has only intended effect: Confusion
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void MINITest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("MINI");
+
+            // Ensure the spell has only intended effect: Mini (KO)
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void MUTETest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("MUTE");
+
+            // Ensure the spell has only intended effect: MUTE
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void WinkTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("Wink");
+
+            // Ensure the spell has only intended effect: Confusion
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void Blast2Test()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("Blast_2");
+
+            // Ensure the spell has only intended effect: Paralysis
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        ////////////////////////
+        // Perm Status Spells //
+        ////////////////////////
+
+        [TestMethod]
+        public void BLNDTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("BLND");
+
+            // Ensure the spell has only intended effect: Darkness
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void CURSTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("CURS");
+
+            // Ensure the spell has only intended effect: Curse
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void TOADTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("TOAD");
+
+            // Ensure the spell has only intended effect: Toad (KO)
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void BRAKTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("BRAK");
+
+            // Ensure the spell has only intended effect: Stone (KO)
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void XZONTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("XZON");
+
+            // Ensure the spell has only intended effect: KO
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void FOGTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("FOG");
+
+            // Ensure the spell has only intended effect: Amnesia
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void EXITTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("EXIT");
+
+            // Ensure the spell has only intended effect: KO
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+
+        }
+
+        [TestMethod]
+        public void BreathTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("Breath");
+
+            // Ensure the spell has only intended effect: Stone (KO)
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
+        }
+
+        [TestMethod]
+        public void GlareTest()
+        {
+            // Ensure normal base stats
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("Glare");
+
+            // Ensure the spell has only intended effect: Stone (KO)
+            // TODO: Ensure status doesn't work against enemis who resistant its element
+            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status auto-hits enemies who are weak to its element
         }
     }
 }
