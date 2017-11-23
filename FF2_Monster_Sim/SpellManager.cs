@@ -39,13 +39,18 @@ namespace FF2_Monster_Sim
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_SpellData.json");
             spellData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_SpellData.json"));
 
-            Monster monster = MonsterManager.GetMonsterByName("Satan");
-            CastSpell(monster, monster, GetSpellByName("FIRE"), 16);
-            CastSpell(monster, monster, GetSpellByName("FIRE"), 16, true);
-            CastSpell(monster, monster, GetSpellByName("FIRE"), 16);
-            CastSpell(monster, monster, GetSpellByName("FIRE"), 16, true);
+            Monster monster = MonsterManager.GetMonsterByName("Wizard");
+            CastSpell(monster, monster, GetSpellByName("FIRE_S"), 16);
+            CastSpell(monster, monster, GetSpellByName("FIRE_S"), 16, true);
+            CastSpell(monster, monster, GetSpellByName("PEEP"), 10);
+            CastSpell(monster, monster, GetSpellByName("HEAL"), 10);
         }
 
+        /// <summary>
+        /// Retrieve a Spell object by name. Returns null if invalid.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Spell GetSpellByName(string name)
         {
             if (String.IsNullOrEmpty(name))
@@ -120,35 +125,35 @@ namespace FF2_Monster_Sim
             switch (spell.Effect)
             {
                 case "Damage":
+                case "Damage_2": // TODO: Is this just normal damage?
+                case "Damage_3": // TODO: Is this just normal damage?
                     if (target.IsResistantTo(spell.Element))
                     {
-                        Debug.WriteLine("Resist Damage: " + GetDamage(adjustedPower, level) / 2);
+                        // Minimum hits (level), then halve damage
+                        Debug.WriteLine("Resist! Damaging: " + GetDamage(adjustedPower, level) / 2);
                         return "resist";
                     }
                     if (target.IsWeakTo(spell.Element))
                     {
-                        Debug.WriteLine("Weak Damage: " + GetDamage(adjustedPower, level * 2) * 2);
-                        return "resist";
+                        // Minimum hits (level * 2), then double damage
+                        Debug.WriteLine("Weak! Damaging: " + GetDamage(adjustedPower, level * 2) * 2);
+                        return "weak";
                     }
-                    // Normal and Resist + Weak damage
-                    Debug.WriteLine("Damaging: " + GetDamage(adjustedPower, level + GetSuccesses(level, adjustedAccuracy)));
-
-                    break;
-                case "Damage_2":
-                    // TODO: Is this just normal damage?
-                    break;
-                case "Damage_3":
-                    // TODO: Is this just normal damage?
+                    // TODO: Weak and Resist don't modify damage, spells fail. Is that successes?
+                    // Normal logic
+                    int hits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
+                    Debug.WriteLine(hits + " hits. Damaging: " + GetDamage(adjustedPower, hits));
                     break;
                 case "Damage_Ultima":
-                    // TODO
+                    // TODO: Ultima damage bug
                     break;
                 case "Heal":
-                    // TODO: Roll damage like usual, except heal
-                    // TODO: If undead, then treat as damage
+                    // Roll damage like usual, except heal
+                    Debug.WriteLine("Healing: " + GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy)));
+                    // TODO: If undead, treat as damage
                     break;
                 case "Revive":
-                    // Ignore this for now, since it`s irrelevant for Monsters
+                    // TODO: Life is effective against undead
                     break;
                 case "Buff":
                     // Autohits, ignores magic resistance rolls
@@ -176,6 +181,7 @@ namespace FF2_Monster_Sim
                         return "success";
                     }
                     // TODO: Normal logic
+                    // A single hit = success?
                     break;
                 case "PermStatus":
                     if (target.IsResistantTo(spell.Element)) return "ineffective";
@@ -187,12 +193,30 @@ namespace FF2_Monster_Sim
                         return "success";
                     }
                     // TODO: Normal logic
+                    // A single hit = success?
                     break;
                 case "CureTempStatus":
-                    // TODO: Auto hits
+                    // This is PEEP/Basuna
+                    // 1 = Venom & Sleep, then one more per level, up to 5
+                    TempStatus[] tempCureOrder = { TempStatus.Venom, TempStatus.Sleep, TempStatus.Mini, TempStatus.Mute, TempStatus.Paralysis, TempStatus.Confuse };
+                    target.RemoveTempStatus(TempStatus.Venom);
+                    for (int i = 1; i < level; i++)
+                    {
+                        if (i >= tempCureOrder.Length) break;
+                        target.RemoveTempStatus(tempCureOrder[i]);
+                        Debug.WriteLine("Removing TS: " + tempCureOrder[i]);
+                    }
+
                     break;
                 case "CurePermStatus":
-                    // TODO: Auto hits
+                    // This is HEAL/Esuna. Cure everything up to and including level.
+                    PermStatus[] permCureOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
+                    for (int i = 0; i < level; i++)
+                    {
+                        if (i >= permCureOrder.Length) break;
+                        target.RemovePermStatus(permCureOrder[i]);
+                        Debug.WriteLine("Removing PS: " + permCureOrder[i]);
+                    }
                     break;
                 case "Special":
                     // TODO: HP Drain, MP Drain, Swap, Halve MP
@@ -223,6 +247,16 @@ namespace FF2_Monster_Sim
                 sum += rnd.Next(power, 2 * power);
             }
             return sum;
+        }
+
+        private static int GetMagicBlocks(Monster monster)
+        {
+            int successes = 0;
+            for (int i = 0; i < monster.MagicBlocks; i++)
+            {
+                if (rnd.Next(0, 100) < monster.MagicEvasion) successes++;
+            }
+            return successes;
         }
     }
 }
