@@ -8,14 +8,17 @@ namespace FF2_Monster_Sim
 {
     public class Spell
     {
-        public string name;
-        public SpellType spellType;
-        public string effect;
-        public int power;
-        public int accuracy;
-        public string status;
-        public string element;
-        public int price;
-        public int value;
+        public const int MAX_SPELL_LEVEL = 16;
+
+        // Stats
+        public string Name;
+        public SpellType SpellType;
+        public string Effect;
+        public int Power;
+        public int Accuracy;
+        public string Status;
+        public string Element;
+        public int Price;
+        public int Value;
     }
 }

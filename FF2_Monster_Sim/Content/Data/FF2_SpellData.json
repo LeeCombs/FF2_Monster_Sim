@@ -46,7 +46,7 @@
  {
    "name": "DRAN",
    "type": "Black",
-   "effect": "",
+   "effect": "Special",
    "power": 10,
    "accuracy": 0,
    "status": "",
@@ -57,7 +57,7 @@
  {
    "name": "ASPL",
    "type": "Black",
-   "effect": "",
+   "effect": "Special",
    "power": 10,
    "accuracy": 0,
    "status": "",
@@ -192,7 +192,7 @@
    "effect": "Buff",
    "power": 5,
    "accuracy": 50,
-   "status": "",
+   "status": "Berserk",
    "element": "",
    "price": 10000,
    "value": 5000
@@ -203,7 +203,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Haste",
    "element": "",
    "price": 20000,
    "value": 10000
@@ -214,7 +214,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Aura",
    "element": "",
    "price": 0,
    "value": 7500
@@ -269,7 +269,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Barrier",
    "element": "",
    "price": 8000,
    "value": 4000
@@ -280,7 +280,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Blink",
    "element": "",
    "price": 400,
    "value": 200
@@ -291,7 +291,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Protect",
    "element": "",
    "price": 400,
    "value": 200
@@ -302,7 +302,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Shell",
    "element": "",
    "price": 400,
    "value": 200
@@ -313,7 +313,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 50,
-   "status": "",
+   "status": "Wall",
    "element": "",
    "price": 8000,
    "value": 4000
@@ -354,7 +354,7 @@
  {
    "name": "ANTI",
    "type": "White",
-   "effect": "",
+   "effect": "Special",
    "power": 5,
    "accuracy": 40,
    "status": "",
@@ -379,7 +379,7 @@
    "effect": "Debuff",
    "power": 5,
    "accuracy": 30,
-   "status": "",
+   "status": "Slow",
    "element": "Body",
    "price": 3000,
    "value": 1500
@@ -387,7 +387,7 @@
  {
    "name": "CHNG",
    "type": "White",
-   "effect": "",
+   "effect": "Special",
    "power": 5,
    "accuracy": 30,
    "status": "",
@@ -401,7 +401,7 @@
    "effect": "Debuff",
    "power": 20,
    "accuracy": 50,
-   "status": "",
+   "status": "Fear",
    "element": "Mind",
    "price": 800,
    "value": 400
@@ -552,10 +552,10 @@
  {
    "name": "Drink",
    "type": "Special",
-   "effect": "ItemHeal",
+   "effect": "Buff",
    "power": 10,
    "accuracy": 100,
-   "status": "",
+   "status": "Imbibe",
    "element": "",
    "price": 0,
    "value": 0
@@ -640,7 +640,7 @@
  {
    "name": "Blast",
    "type": "Special",
-   "effect": "Explode",
+   "effect": "Special",
    "power": 20,
    "accuracy": 50,
    "status": "",
@@ -742,7 +742,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 100,
-   "status": "",
+   "status": "Spirit",
    "element": "",
    "price": 0,
    "value": 0
@@ -753,7 +753,7 @@
    "effect": "Buff",
    "power": -1,
    "accuracy": 100,
-   "status": "",
+   "status": "Intelligence",
    "element": "",
    "price": 0,
    "value": 0

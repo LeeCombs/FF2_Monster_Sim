@@ -11,8 +11,6 @@ namespace FF2_Monster_Sim
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
-        // SpellManager spellManager;
 
         Monster monster;
 
@@ -32,6 +30,7 @@ namespace FF2_Monster_Sim
         {
             // TODO: Add your initialization logic here
             MonsterManager.Initialize();
+            SpellManager.Initialize();
             
             base.Initialize();
         }
@@ -52,8 +51,7 @@ namespace FF2_Monster_Sim
 
             // Init
             MonsterManager.LoadContent();
-
-            // spellManager.LoadContent();
+            SpellManager.LoadContent();
         }
 
         /// <summary>

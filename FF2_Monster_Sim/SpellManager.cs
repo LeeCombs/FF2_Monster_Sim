@@ -18,31 +18,35 @@ namespace FF2_Monster_Sim
 
     public class SpellManager
     {
-        private Random rnd;
-        private dynamic spellData;
+        private static Random rnd;
+        private static dynamic spellData;
 
         public SpellManager()
         {
             //
         }
 
-        public void Initialize()
+        public static void Initialize()
         {
             //
             rnd = new Random();
         }
 
-        public void LoadContent()
+        public static void LoadContent()
         {
             // Read SpellData.json and load it
             Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_SpellData.json");
             spellData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_SpellData.json"));
 
-            Spell spl = GetSpellByName("CURE");
+            Monster monster = MonsterManager.GetMonsterByName("Satan");
+            CastSpell(monster, monster, GetSpellByName("FIRE"), 16);
+            CastSpell(monster, monster, GetSpellByName("FIRE"), 16, true);
+            CastSpell(monster, monster, GetSpellByName("FIRE"), 16);
+            CastSpell(monster, monster, GetSpellByName("FIRE"), 16, true);
         }
 
-        public Spell GetSpellByName(string name)
+        public static Spell GetSpellByName(string name)
         {
             if (String.IsNullOrEmpty(name))
             {
@@ -57,15 +61,15 @@ namespace FF2_Monster_Sim
                     // Load spell
                     Spell spl = new Spell();
 
-                    spl.name = (string)data.name;
-                    spl.spellType = (SpellType)Enum.Parse(typeof(SpellType), (string)data.type);
-                    spl.effect = (string)data.effect;
-                    spl.power = (int)data.power;
-                    spl.accuracy = (int)data.accuracy;
-                    spl.status = (string)data.status;
-                    spl.element = (string)data.element;
-                    spl.price = (int)data.price;
-                    spl.value = (int)data.value;
+                    spl.Name = (string)data.name;
+                    spl.SpellType = (SpellType)Enum.Parse(typeof(SpellType), (string)data.type);
+                    spl.Effect = (string)data.effect;
+                    spl.Power = (int)data.power;
+                    spl.Accuracy = (int)data.accuracy;
+                    spl.Status = (string)data.status;
+                    spl.Element = (string)data.element;
+                    spl.Price = (int)data.price;
+                    spl.Value = (int)data.value;
 
                     return spl;
                 }
@@ -76,32 +80,36 @@ namespace FF2_Monster_Sim
             return null;
         }
 
-        public string CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
+        public static string CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
         {
-            // Reduce accuracy and power if multi-targetting
-            int adjustedAccuracy = spell.accuracy;
-            if (multiTarget) adjustedAccuracy = adjustedAccuracy / 2;
+            Debug.WriteLine("Casting spell: " + spell.Name + " " + level);
 
-            int power = spell.power;
-            if (multiTarget) power = power / 4;
+            // Reduce accuracy and power if multi-targetting
+            int adjustedAccuracy = spell.Accuracy;
+            if (multiTarget) adjustedAccuracy = adjustedAccuracy / 2;
+            int adjustedPower = spell.Power;
+            if (multiTarget) adjustedPower = adjustedPower / 4;
+
+            // Check for absorption
+            // No effect except HP gain. Damaging and non-damaging spells calculate for healing
+            // Ignore weakness, resistance, and magic defense rolls
+            if (target.IsAbsorbantTo(spell.Element.ToString()))
+            {
+                Debug.WriteLine("Healing: " + GetDamage(adjustedPower, level));
+                return "Absorbs";
+            }
 
             // Damage/Heal Spells spells
             // Get number of "hits" level + successes
             // Hits deal (power...2*power)
             // Halved after sum on resist, doubles on weakness
             
-            //// Elemental considerations 
-
-            // Absorb
-            // No effect except HP gain
-            // Damage = Heal. Non-damage -> Heal calculated as if they dealt damage
-            // Ignores weakness/resistance
-            // No MagicDefense roll
+            //// Elemental considerations
 
             // Resistance
             // Success-based properties fail, making them immune to status ailments caused by spells
             // Damage spells achieve minimum successes (level), then halve after calculation
-            // If resist and weak, spells will wail, damage not be halved or doubled
+            // If resist and weak, spells will fail, damage not be halved or doubled
 
             // Weakness
             // All spells achieve perfect success, status ailments auto-hit
@@ -109,46 +117,95 @@ namespace FF2_Monster_Sim
 
             // Strictly positive effects not subject to Magic Resistance. (e.g. CURE, BLINK, etc.)
 
-            switch (spell.effect)
+            switch (spell.Effect)
             {
                 case "Damage":
+                    if (target.IsResistantTo(spell.Element))
+                    {
+                        Debug.WriteLine("Resist Damage: " + GetDamage(adjustedPower, level) / 2);
+                        return "resist";
+                    }
+                    if (target.IsWeakTo(spell.Element))
+                    {
+                        Debug.WriteLine("Weak Damage: " + GetDamage(adjustedPower, level * 2) * 2);
+                        return "resist";
+                    }
+                    // Normal and Resist + Weak damage
+                    Debug.WriteLine("Damaging: " + GetDamage(adjustedPower, level + GetSuccesses(level, adjustedAccuracy)));
+
                     break;
                 case "Damage_2":
+                    // TODO: Is this just normal damage?
                     break;
                 case "Damage_3":
+                    // TODO: Is this just normal damage?
                     break;
                 case "Damage_Ultima":
+                    // TODO
                     break;
                 case "Heal":
+                    // TODO: Roll damage like usual, except heal
+                    // TODO: If undead, then treat as damage
                     break;
                 case "Revive":
+                    // Ignore this for now, since it`s irrelevant for Monsters
                     break;
                 case "Buff":
-                    Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.name);
-                    target.AddBuff(buff, GetSuccesses(level, spell.accuracy));
+                    // Autohits, ignores magic resistance rolls
+                    Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
+                    target.AddBuff(buff, GetSuccesses(level, adjustedAccuracy));
                     break;
                 case "Debuff":
+                    if (target.IsResistantTo(spell.Element)) return "ineffective";
+                    if (target.IsWeakTo(spell.Element))
+                    {
+                        // Auto-success
+                        Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
+                        target.AddDebuff(debuff, level); // TODO: level + successes?
+                        return "success";
+                    }
+                    // TODO: Normal logic
                     break;
                 case "TempStatus":
+                    if (target.IsResistantTo(spell.Element)) return "ineffective";
+                    if (target.IsWeakTo(spell.Element))
+                    {
+                        // Auto-success
+                        TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
+                        target.AddTempStatus(tempStatus);
+                        return "success";
+                    }
+                    // TODO: Normal logic
                     break;
                 case "PermStatus":
+                    if (target.IsResistantTo(spell.Element)) return "ineffective";
+                    if (target.IsWeakTo(spell.Element))
+                    {
+                        // Auto-success
+                        PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
+                        target.AddPermStatus(permStatus);
+                        return "success";
+                    }
+                    // TODO: Normal logic
                     break;
                 case "CureTempStatus":
+                    // TODO: Auto hits
                     break;
                 case "CurePermStatus":
+                    // TODO: Auto hits
                     break;
                 case "Special":
-                    // Drains, Swap, Half MP
+                    // TODO: HP Drain, MP Drain, Swap, Halve MP
                     break;
                 default:
-                    Debug.WriteLine("Invalid spell effect found: " + spell.effect);
+                    Debug.WriteLine("Invalid spell effect found: " + spell.Effect);
                     break;
             }
 
-            return "Whatever";
+            return "Fail";
         }
 
-        private int GetSuccesses(int rolls, int accuracy)
+        private static int GetSuccesses(int rolls, int accuracy)
         {
             int successes = 0;
             for (int i = 0; i < rolls; i++)
@@ -158,7 +215,7 @@ namespace FF2_Monster_Sim
             return successes;
         }
 
-        private int GetDamage(int power, int hits)
+        private static int GetDamage(int power, int hits)
         {
             int sum = 0;
             for (int i = 0 ; i < hits ; i++)
@@ -167,6 +224,5 @@ namespace FF2_Monster_Sim
             }
             return sum;
         }
-
     }
 }
