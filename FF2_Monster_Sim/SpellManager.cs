@@ -100,25 +100,12 @@ namespace FF2_Monster_Sim
                 target.Heal(totalHeal);
                 return "Absorbed";
             }
-
-            // Damage/Heal Spells spells
-            // Get number of "hits" level + successes
-            // Hits deal (power...2*power)
-            // Halved after sum on resist, doubles on weakness
             
-            //// Elemental considerations
-
-            // Resistance
-            // Success-based properties fail, making them immune to status ailments caused by spells
-            // Damage spells achieve minimum successes (level), then halve after calculation
-            // If resist and weak, spells will fail, damage not be halved or doubled
-
-            // Weakness
-            // All spells achieve perfect success, status ailments auto-hit
-            // Damage spells achieve successes equal to level. Damage doubled after calculation.
-
+            //// Notes of below
+            // Resistances: Success fail. Damage spells achieve minimum successes (level) and halve damage
+            // Weaknesses: Success is automatic. Damage spells achieve perfect successes (lvl*2) and double damage
+            // If resisted and weak, successes fail, damage is not halved or doubled
             // Strictly positive effects not subject to Magic Resistance. (e.g. CURE, BLINK, etc.)
-
             switch (spell.Effect)
             {
                 case "Damage":
@@ -126,17 +113,19 @@ namespace FF2_Monster_Sim
                 case "Damage_3": // TODO: Is this just normal damage?
                     if (target.IsResistantTo(spell.Element))
                     {
-                        // Minimum hits (level), then halve damage
                         Debug.WriteLine("Resist! Damaging: " + GetDamage(adjustedPower, level) / 2);
                         return "resist";
                     }
                     if (target.IsWeakTo(spell.Element))
                     {
-                        // Minimum hits (level * 2), then double damage
                         Debug.WriteLine("Weak! Damaging: " + GetDamage(adjustedPower, level * 2) * 2);
                         return "weak";
                     }
-                    // TODO: Weak and Resist don't modify damage, spells fail. Is that successes?
+                    if (target.IsWeakTo(spell.Element) && target.IsResistantTo(spell.Element))
+                    {
+                        // TODO: Damage as usual, determine how hits are determined.
+                        // Best Guess: level - blocks
+                    }
                     // Normal logic
                     int hits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
                     Debug.WriteLine(hits + " hits. Damaging: " + GetDamage(adjustedPower, hits));
@@ -152,7 +141,7 @@ namespace FF2_Monster_Sim
                     // TODO: If undead, treat as damage
                     break;
                 case "Revive":
-                    // TODO: Life is effective against undead
+                    // TODO: Life is effective against undead, useless otherwise
                     break;
                 case "Buff":
                     // Autohits, ignores magic resistance rolls
@@ -179,10 +168,9 @@ namespace FF2_Monster_Sim
                         target.AddTempStatus(tempStatus);
                         return "success";
                     }
-
                     // Normal logic
                     // TODO: A single hit = success?
-                    int tsHits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
+                    int tsHits = GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
                     if (tsHits > 0)
                     {
                         TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
@@ -199,10 +187,9 @@ namespace FF2_Monster_Sim
                         target.AddPermStatus(permStatus);
                         return "success";
                     }
-
                     // Normal logic
                     // TODO: A single hit = success?
-                    int psHits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
+                    int psHits = GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
                     if (psHits > 0)
                     {
                         PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
@@ -220,7 +207,6 @@ namespace FF2_Monster_Sim
                         if (i >= tempCureOrder.Length) break;
                         target.RemoveTempStatus(tempCureOrder[i]);
                     }
-
                     break;
                 case "CurePermStatus":
                     // This is HEAL/Esuna. Cure everything up to and including level.
@@ -233,6 +219,7 @@ namespace FF2_Monster_Sim
                     break;
                 case "Special":
                     // TODO: HP Drain, MP Drain, Swap, Halve MP
+                    return HandleSpecialSpell(spell);
                     break;
                 default:
                     Debug.WriteLine("Invalid spell effect found: " + spell.Effect);
@@ -242,6 +229,42 @@ namespace FF2_Monster_Sim
             return "Fail";
         }
 
+        /// <summary>
+        /// Helper for handling special spells HP/MP drain, Swap, and Halve-MP
+        /// </summary>
+        /// <param name="spell"></param>
+        /// <returns></returns>
+        private static string HandleSpecialSpell(Spell spell)
+        {
+            switch (spell.Name.ToUpper())
+            {
+                case "DRAN":
+                    // Drain HP
+                    break;
+                case "ASPL":
+                    // Drain MP
+                    // TODO: Deducts MP cost after the first target?
+                    break;
+                case "ANTI":
+                    // Halve MP
+                    // BUG: Only effects first byte of MP
+                    break;
+                case "CHNG":
+                    // Swap HP and MP
+                    // TODO: Deducts MP cost after the first target?
+                    break;
+                default:
+                    break;
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Calculate how many successes were found (e.g. 5 rolls at 50% accuracy chance)
+        /// </summary>
+        /// <param name="rolls"></param>
+        /// <param name="accuracy"></param>
+        /// <returns></returns>
         private static int GetSuccesses(int rolls, int accuracy)
         {
             int successes = 0;
@@ -252,16 +275,11 @@ namespace FF2_Monster_Sim
             return successes;
         }
 
-        private static int GetDamage(int power, int hits)
-        {
-            int sum = 0;
-            for (int i = 0 ; i < hits ; i++)
-            {
-                sum += rnd.Next(power, 2 * power);
-            }
-            return sum;
-        }
-
+        /// <summary>
+        /// Calculate how many amgic blocks a monster was able to perform. (e.g. 5 blocks at 50% evasion chance)
+        /// </summary>
+        /// <param name="monster"></param>
+        /// <returns></returns>
         private static int GetMagicBlocks(Monster monster)
         {
             int successes = 0;
@@ -270,6 +288,22 @@ namespace FF2_Monster_Sim
                 if (rnd.Next(0, 100) < monster.MagicEvasion) successes++;
             }
             return successes;
+        }
+
+        /// <summary>
+        /// Get the sum of damage rolls (power...2*power per hit)
+        /// </summary>
+        /// <param name="power"></param>
+        /// <param name="hits"></param>
+        /// <returns></returns>
+        private static int GetDamage(int power, int hits)
+        {
+            int sum = 0;
+            for (int i = 0 ; i < hits ; i++)
+            {
+                sum += rnd.Next(power, 2 * power);
+            }
+            return sum;
         }
     }
 }

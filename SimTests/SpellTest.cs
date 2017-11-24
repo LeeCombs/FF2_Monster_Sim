@@ -68,18 +68,21 @@ namespace SimTests
             return monster.HP > 1;
         }
 
-        private bool ResistsStatus(Spell spell)
+        /// <summary>
+        /// Returns whether a status spell is resisted (ineffective) against a monster who resists its element
+        /// </summary>
+        /// <param name="spell"></param>
+        /// <returns></returns>
+        private bool StatusIsResisted(Spell spell)
         {
-            // If a monster resists a status spell's element, it cannot be inflicted by the status
-
             // Create a monster that resists all elements
             Monster monster = new Monster();
             foreach (Element e in Enum.GetValues(typeof(Element))) monster.Resistances.Add(e);
             monster.Resistances.Remove(Element.None);  // Monsters cannot resist the fabled None element
 
+            // Cast the spell a ton of times and make sure the monster isn't inflicted with the status
             if (String.Equals(spell.Effect.ToUpper(), "TEMPSTATUS"))
             {
-                // Cast the spell a bunch and make sure the monster isn't inflicted with the status
                 TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), (string)spell.Status);
                 Assert.IsFalse(monster.HasTempStatus(tempStatus));
                 for (int i = 0; i < 10; i++) SpellManager.CastSpell(monster, monster, spell, 16);
@@ -87,24 +90,57 @@ namespace SimTests
             }
             if (String.Equals(spell.Effect.ToUpper(), "PERMSTATUS"))
             {
-                // Cast the spell a bunch and make sure the monster isn't inflicted with the status
                 PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), (string)spell.Status);
                 Assert.IsFalse(monster.HasPermStatus(permStatus));
                 for (int i = 0; i < 10; i++) SpellManager.CastSpell(monster, monster, spell, 16);
                 return !monster.HasPermStatus(permStatus); // Opposite. If inflicted, it didn't resist
             }
 
-            Debug.WriteLine("ResistsStatus spell fell through: " + spell.Name);
+            Debug.WriteLine("StatusIsResisted spell fell through: " + spell.Name);
             return false;
         }
 
+        /// <summary>
+        /// Returns whether a status spell automatically hits a monster based purely on elemental weakness.
+        /// </summary>
+        /// <param name="spell"></param>
+        /// <returns></returns>
+        private bool StatusAutoHits(Spell spell)
+        {
+            // Create a monster that is weak to all elements
+            Monster monster = new Monster();
+            foreach (Element e in Enum.GetValues(typeof(Element))) monster.Weaknesses.Add(e);
+            monster.Weaknesses.Remove(Element.None);  // Monsters cannot be weak to the fabled None element
+
+            // Set spell's accuracy to 0, which normally would not allow it to hit, and make sure it hits on a single cast
+            spell.Accuracy = 0;
+            Assert.AreEqual(0, spell.Accuracy);
+
+            if (String.Equals(spell.Effect.ToUpper(), "TEMPSTATUS"))
+            {
+                TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), (string)spell.Status);
+                Assert.IsFalse(monster.HasTempStatus(tempStatus));
+                SpellManager.CastSpell(monster, monster, spell, 1);
+                return monster.HasTempStatus(tempStatus);
+            }
+            if (String.Equals(spell.Effect.ToUpper(), "PERMSTATUS"))
+            {
+                PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), (string)spell.Status);
+                Assert.IsFalse(monster.HasPermStatus(permStatus));
+                SpellManager.CastSpell(monster, monster, spell, 1);
+                return monster.HasPermStatus(permStatus);
+            }
+
+            Debug.WriteLine("StatusAutoHits spell fell through: " + spell.Name);
+            return false;
+        }
 
         //////////////////////////
         // Specific Spell Tests //
         //////////////////////////
 
         [TestMethod]
-        public void EsunaHEALTest()
+        public void EsunaHEALSpellTest()
         {
             // This is HEAL/Esuna
             Spell spell = SpellManager.GetSpellByName("HEAL");
@@ -129,7 +165,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void BasunaPEEPTest()
+        public void BasunaPEEPSpellTest()
         {
             // This is PEEP/Basuna
             Spell spell = SpellManager.GetSpellByName("PEEP");
@@ -156,7 +192,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void CureTest()
+        public void CureSpellTest()
         {
             // Set up the monster to be healed
             Monster monster = new Monster();
@@ -179,235 +215,72 @@ namespace SimTests
             // TODO: Damage vs Undead
         }
 
-        ////////////////////////
-        // Temp Status Spells //
-        ////////////////////////
+        ///////////////////
+        // Status Spells //
+        ///////////////////
 
         [TestMethod]
-        public void SLEPTest()
+        public void TempStatusSpellsTest()
         {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("SLEP");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
+            string[] tempStatusSpells = new String[] { "SLEP", "STON", "STOP", "CHRM", "MINI", "MUTE", "Wink" };
 
-            // Ensure the spell has only intended effect: Sleep
-            // TODO: Ensure status auto-hits enemies who are weak to its element
+            foreach (string spellName in tempStatusSpells)
+            {
+                // Every spell has an element and get be absorbed/resisted/weaked
+                Spell spell = SpellManager.GetSpellByName(spellName);
+                Assert.IsTrue(IsAbsorbed(spell));
+                Assert.IsTrue(StatusIsResisted(spell));
+                Assert.IsTrue(StatusAutoHits(spell));
+            }
+
+            // Special case. Blast_2 is the only non-elemental status spell.
+            Spell blastSpell = SpellManager.GetSpellByName("Blast_2");
+            Assert.IsFalse(IsAbsorbed(blastSpell));
+            Assert.IsFalse(StatusIsResisted(blastSpell));
+            Assert.IsFalse(StatusAutoHits(blastSpell));
         }
 
         [TestMethod]
-        public void STONTest()
+        public void PermStatusSpellsTest()
         {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("STON");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
+            string[] permStatusSpells = new String[] { "BLND", "CURS", "TOAD", "BRAK", "XZON", "FOG", "EXIT", "Breath", "Glare" };
 
-            // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status auto-hits enemies who are weak to its element
+            // Make sure every spell can effect it's status on a target and followed elemental rules
+            foreach (string spellName in permStatusSpells)
+            {
+                Spell spell = SpellManager.GetSpellByName(spellName);
+                Assert.IsTrue(IsAbsorbed(spell));
+                Assert.IsTrue(StatusIsResisted(spell));
+                Assert.IsTrue(StatusAutoHits(spell));
+            }
         }
 
-        [TestMethod]
-        public void STOPTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("STOP");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
+        ///////////////////
+        // Damage Spells //
+        ///////////////////
 
-            // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
+        // 1 - FIRE, BOLT, ICE, AERO, FLAR, HOLY, FIRE_S, ICE_S, BOLT_S, Mist
+        // 2 - Quake, Tnad, Wave
+        // 3 - Bow, Rock, Meteo
+        // ULTM
 
-        [TestMethod]
-        public void CHRMTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("CHRM");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
+        /////////////////
+        // Buff Spells //
+        /////////////////
 
-            // Ensure the spell has only intended effect: Confusion
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
+        // BSRK, HAST, AURA, BARR, BLNK, SAFE, SHEL, WALL, Drink, Spirit, Intelligence
 
-        [TestMethod]
-        public void MINITest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("MINI");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
+        ///////////////////
+        // Debuff Spells //
+        ///////////////////
 
-            // Ensure the spell has only intended effect: Mini (KO)
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
+        // DSPL, SLOW, FEAR
 
-        [TestMethod]
-        public void MUTETest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("MUTE");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
+        ////////////////////
+        // Special Spells //
+        ////////////////////
 
-            // Ensure the spell has only intended effect: MUTE
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
+        // DRAN, ASPL, ANTI, CHNG, Blast
 
-        [TestMethod]
-        public void WinkTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("Wink");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Confusion
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void Blast2Test()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("Blast_2");
-            // No element, cannot be resisted
-            Assert.IsFalse(IsAbsorbed(spell));
-            Assert.IsFalse(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        ////////////////////////
-        // Perm Status Spells //
-        ////////////////////////
-
-        [TestMethod]
-        public void BLNDTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("BLND");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Darkness
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void CURSTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("CURS");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Curse
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void TOADTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("TOAD");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Toad (KO)
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void BRAKTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("BRAK");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void XZONTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("XZON");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: KO
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void FOGTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("FOG");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Amnesia
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void EXITTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("EXIT");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: KO
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-
-        }
-
-        [TestMethod]
-        public void BreathTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("Breath");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
-
-        [TestMethod]
-        public void GlareTest()
-        {
-            // Ensure normal base stats
-            Monster monster = new Monster();
-            Spell spell = SpellManager.GetSpellByName("Glare");
-            Assert.IsTrue(IsAbsorbed(spell));
-            Assert.IsTrue(ResistsStatus(spell));
-
-            // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status auto-hits enemies who are weak to its element
-        }
     }
 }
