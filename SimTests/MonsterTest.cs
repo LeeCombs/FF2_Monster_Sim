@@ -191,9 +191,9 @@ namespace SimTests
             Monster monster = new Monster();
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
-            Assert.AreEqual(false, monster.AddBuff(Buff.Aura, -1));
+            Assert.IsFalse(monster.AddBuff(Buff.Aura, -1));
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
-            Assert.AreEqual(false, monster.AddBuff(Buff.Berserk, 17));
+            Assert.IsFalse(monster.AddBuff(Buff.Berserk, 17));
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
         }
 
@@ -567,9 +567,9 @@ namespace SimTests
         {
             // Test that the status can be applied and removed
             monster.AddPermStatus(permStatus);
-            Assert.AreEqual(true, monster.HasPermStatus(permStatus));
+            Assert.IsTrue(monster.HasPermStatus(permStatus));
             monster.RemovePermStatus(permStatus);
-            Assert.AreEqual(false, monster.HasPermStatus(permStatus));
+            Assert.IsFalse(monster.HasPermStatus(permStatus));
         }
 
         [TestMethod]
@@ -577,7 +577,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Amnesia));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.Amnesia));
             
             // Test intended effects
             // TODO: Get monster who can only cast spells (Wizard) to cast a spell
@@ -594,7 +594,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Curse));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.Curse));
             Assert.AreEqual(4, monster.Strength);
             Assert.AreEqual(0, monster.Defense);
             // TODO: Spell power
@@ -621,7 +621,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Darkness));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.Darkness));
             Assert.AreEqual(60, monster.Accuracy);
 
             // Test intended effects: Halves accuracy
@@ -647,7 +647,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Poison));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.Poison));
             Assert.AreEqual(6, monster.HP);
 
             // TODO: Test intended effects
@@ -661,7 +661,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.KO));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.KO));
 
             // Test that the status can be applied and the monster is removed from battle
             monster.AddPermStatus(PermStatus.KO);
@@ -673,7 +673,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Stone));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.Stone));
 
             // Test that the status can be applied and the monster is removed from battle
             monster.AddPermStatus(PermStatus.Stone);
@@ -685,7 +685,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasPermStatus(PermStatus.Toad));
+            Assert.IsFalse(monster.HasPermStatus(PermStatus.Toad));
 
             // Test that the status can be applied and the monster is removed from battle
             monster.AddPermStatus(PermStatus.Toad);
@@ -717,9 +717,9 @@ namespace SimTests
         {
             // Test that the status can be applied and removed
             monster.AddTempStatus(tempStatus);
-            Assert.AreEqual(true, monster.HasTempStatus(tempStatus));
+            Assert.IsTrue(monster.HasTempStatus(tempStatus));
             monster.RemoveTempStatus(tempStatus);
-            Assert.AreEqual(false, monster.HasTempStatus(tempStatus));
+            Assert.IsFalse(monster.HasTempStatus(tempStatus));
         }
 
         [TestMethod]
@@ -727,13 +727,13 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Confuse));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Confuse));
 
             // Test that the status can be applied and removed
             monster.AddTempStatus(TempStatus.Confuse);
-            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Confuse));
+            Assert.IsTrue(monster.HasTempStatus(TempStatus.Confuse));
             monster.RemoveTempStatus(TempStatus.Confuse);
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Confuse));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Confuse));
 
             // Test intended effects
             // TODO: Monster targets enemy as usual
@@ -751,13 +751,13 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Mute));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Mute));
 
             // Test that the status can be applied and removed
             monster.AddTempStatus(TempStatus.Mute);
-            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Mute));
+            Assert.IsTrue(monster.HasTempStatus(TempStatus.Mute));
             monster.RemoveTempStatus(TempStatus.Mute);
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Mute));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Mute));
 
             // Test intended effects
             // TODO: Get monster who can only cast spells (Wizard) to cast a spell
@@ -775,14 +775,14 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Paralysis));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Paralysis));
             Assert.AreEqual(0, monster.Evasion);
 
             // Test that the status can be applied and removed
             monster.AddTempStatus(TempStatus.Paralysis);
-            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Paralysis));
+            Assert.IsTrue(monster.HasTempStatus(TempStatus.Paralysis));
             monster.RemoveTempStatus(TempStatus.Paralysis);
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Paralysis));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Paralysis));
 
             // Test intended effects: No actions, no Evasion
             monster.Evasion = 10; // Temp stat change
@@ -805,14 +805,14 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Sleep));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Sleep));
             Assert.AreEqual(0, monster.Evasion);
 
             // Test that the status can be applied and removed
             monster.AddTempStatus(TempStatus.Sleep);
-            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Sleep));
+            Assert.IsTrue(monster.HasTempStatus(TempStatus.Sleep));
             monster.RemoveTempStatus(TempStatus.Sleep);
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Sleep));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Sleep));
 
             // Test intended effects: No actions, no Evasion
             monster.Evasion = 10; // Temp stat change
@@ -835,14 +835,14 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Venom));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Venom));
             Assert.AreEqual(6, monster.HP);
 
             // Test that the status can be applied and removed
             monster.AddTempStatus(TempStatus.Venom);
-            Assert.AreEqual(true, monster.HasTempStatus(TempStatus.Venom));
+            Assert.IsTrue(monster.HasTempStatus(TempStatus.Venom));
             monster.RemoveTempStatus(TempStatus.Venom);
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Venom));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Venom));
 
             // Test intended effects: HP reduction
             monster.AddTempStatus(TempStatus.Venom);
@@ -857,7 +857,7 @@ namespace SimTests
         {
             // Ensure normal base stats
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
-            Assert.AreEqual(false, monster.HasTempStatus(TempStatus.Mini));
+            Assert.IsFalse(monster.HasTempStatus(TempStatus.Mini));
 
             // Test that the status can be applied and the monster is removed from battle
             monster.AddTempStatus(TempStatus.Mini);

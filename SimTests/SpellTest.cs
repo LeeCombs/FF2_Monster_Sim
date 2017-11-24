@@ -42,20 +42,60 @@ namespace SimTests
         // Helper Tests //
         //////////////////
         
+        /// <summary>
+        /// Returns whether a spell is able to be absorbed by a monster or not
+        /// </summary>
+        /// <param name="spell"></param>
+        /// <returns></returns>
         private bool IsAbsorbed(Spell spell)
         {
             // Create a monster that absorbs all elements
             Monster monster = new Monster();
-
             foreach (Element e in Enum.GetValues(typeof(Element))) monster.Absorbs.Add(e);
             monster.Absorbs.Remove(Element.None);  // Monsters cannot absorb the fabled None element
 
+            // For 0 accuracy spells, just being absorbent is good enough
+            if (spell.Accuracy == 0 && monster.IsAbsorbantTo(spell.Element)) return true;
+
+            // If it can hit the monster, ensure sure it heals them
             monster.HPMax = 1000;
             monster.HP = 1;
             SpellManager.CastSpell(monster, monster, spell, 16);
             SpellManager.CastSpell(monster, monster, spell, 16);
             SpellManager.CastSpell(monster, monster, spell, 16);
+            SpellManager.CastSpell(monster, monster, spell, 16);
+            SpellManager.CastSpell(monster, monster, spell, 16);
             return monster.HP > 1;
+        }
+
+        private bool ResistsStatus(Spell spell)
+        {
+            // If a monster resists a status spell's element, it cannot be inflicted by the status
+
+            // Create a monster that resists all elements
+            Monster monster = new Monster();
+            foreach (Element e in Enum.GetValues(typeof(Element))) monster.Resistances.Add(e);
+            monster.Resistances.Remove(Element.None);  // Monsters cannot resist the fabled None element
+
+            if (String.Equals(spell.Effect.ToUpper(), "TEMPSTATUS"))
+            {
+                // Cast the spell a bunch and make sure the monster isn't inflicted with the status
+                TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), (string)spell.Status);
+                Assert.IsFalse(monster.HasTempStatus(tempStatus));
+                for (int i = 0; i < 10; i++) SpellManager.CastSpell(monster, monster, spell, 16);
+                return !monster.HasTempStatus(tempStatus); // Opposite. If inflicted, it didn't resist
+            }
+            if (String.Equals(spell.Effect.ToUpper(), "PERMSTATUS"))
+            {
+                // Cast the spell a bunch and make sure the monster isn't inflicted with the status
+                PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), (string)spell.Status);
+                Assert.IsFalse(monster.HasPermStatus(permStatus));
+                for (int i = 0; i < 10; i++) SpellManager.CastSpell(monster, monster, spell, 16);
+                return !monster.HasPermStatus(permStatus); // Opposite. If inflicted, it didn't resist
+            }
+
+            Debug.WriteLine("ResistsStatus spell fell through: " + spell.Name);
+            return false;
         }
 
 
@@ -74,17 +114,17 @@ namespace SimTests
             // Ensure each status doesn't exist, add it, and test for it
             foreach (PermStatus stat in permStatOrder)
             {
-                Assert.AreEqual(false, monster.HasPermStatus(stat));
+                Assert.IsFalse(monster.HasPermStatus(stat));
                 monster.AddPermStatus(stat);
-                Assert.AreEqual(true, monster.HasPermStatus(stat));
+                Assert.IsTrue(monster.HasPermStatus(stat));
             }
 
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
             {
                 SpellManager.CastSpell(monster, monster, spell, i + 1);
-                for (int j = 0; j < (i < 7 ? i : 7); j++) Assert.AreEqual(false, monster.HasPermStatus(permStatOrder[j]));
-                for (int k = i + 1; k < permStatOrder.Length; k++) Assert.AreEqual(true, monster.HasPermStatus(permStatOrder[k]));
+                for (int j = 0; j < (i < 7 ? i : 7); j++) Assert.IsFalse(monster.HasPermStatus(permStatOrder[j]));
+                for (int k = i + 1; k < permStatOrder.Length; k++) Assert.IsTrue(monster.HasPermStatus(permStatOrder[k]));
             }
         }
 
@@ -99,9 +139,9 @@ namespace SimTests
             // Ensure each status doesn't exist, add it, and test for it
             foreach (TempStatus stat in tempStatOrder)
             {
-                Assert.AreEqual(false, monster.HasTempStatus(stat));
+                Assert.IsFalse(monster.HasTempStatus(stat));
                 monster.AddTempStatus(stat);
-                Assert.AreEqual(true, monster.HasTempStatus(stat));
+                Assert.IsTrue(monster.HasTempStatus(stat));
             }
 
             // Cast spells up to max spell level, and check that only the proper statuses are removed
@@ -109,9 +149,9 @@ namespace SimTests
             {
                 SpellManager.CastSpell(monster, monster, spell, i + 1);
                 // Level 1 removes both Venom and Sleep
-                Assert.AreEqual(false, monster.HasTempStatus(tempStatOrder[0]));
-                for (int j = 1; j < (i < 5 ? i : 5); j++) Assert.AreEqual(false, monster.HasTempStatus(tempStatOrder[j]));
-                for (int k = i + 1; k < tempStatOrder.Length; k++) Assert.AreEqual(true, monster.HasTempStatus(tempStatOrder[k]));
+                Assert.IsFalse(monster.HasTempStatus(tempStatOrder[0]));
+                for (int j = 1; j < (i < 5 ? i : 5); j++) Assert.IsFalse(monster.HasTempStatus(tempStatOrder[j]));
+                for (int k = i + 1; k < tempStatOrder.Length; k++) Assert.IsTrue(monster.HasTempStatus(tempStatOrder[k]));
             }
         }
 
@@ -128,13 +168,13 @@ namespace SimTests
             // Heal the monster, ensure it's effective and stays within bounds
             Spell spell = SpellManager.GetSpellByName("CURE");
             SpellManager.CastSpell(monster, monster, spell, 1);
-            Assert.AreEqual(true, monster.HP >= 1);
-            Assert.AreEqual(true, monster.HP <= monster.HPMax);
+            Assert.IsTrue(monster.HP >= 1);
+            Assert.IsTrue(monster.HP <= monster.HPMax);
 
             // Try to over-heal the target, ensure HP doesn't exceed HPMax
             for (int i = 0; i < 50; i++) SpellManager.CastSpell(monster, monster, spell, 16);
-            Assert.AreEqual(true, monster.HP > 1);
-            Assert.AreEqual(true, monster.HP <= monster.HPMax);
+            Assert.IsTrue(monster.HP > 1);
+            Assert.IsTrue(monster.HP <= monster.HPMax);
 
             // TODO: Damage vs Undead
         }
@@ -150,9 +190,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("SLEP");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Sleep
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -163,9 +203,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("STON");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -176,9 +216,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("STOP");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -189,9 +229,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("CHRM");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Confusion
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -202,9 +242,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("MINI");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Mini (KO)
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -215,9 +255,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("MUTE");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: MUTE
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -228,9 +268,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Wink");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Confusion
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -240,10 +280,11 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Blast_2");
+            // No element, cannot be resisted
             Assert.IsFalse(IsAbsorbed(spell));
+            Assert.IsFalse(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -258,9 +299,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("BLND");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Darkness
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -271,9 +312,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("CURS");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Curse
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -284,9 +325,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("TOAD");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Toad (KO)
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -297,9 +338,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("BRAK");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -310,9 +351,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("XZON");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: KO
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -323,9 +364,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("FOG");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Amnesia
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -335,10 +376,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("EXIT");
-            Assert.IsFalse(IsAbsorbed(spell)); // No absorb no accuracy
+            Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: KO
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
 
         }
@@ -350,9 +391,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Breath");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -363,9 +404,9 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Glare");
             Assert.IsTrue(IsAbsorbed(spell));
+            Assert.IsTrue(ResistsStatus(spell));
 
             // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
     }

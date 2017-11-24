@@ -179,8 +179,16 @@ namespace FF2_Monster_Sim
                         target.AddTempStatus(tempStatus);
                         return "success";
                     }
-                    // TODO: Normal logic
-                    // A single hit = success?
+
+                    // Normal logic
+                    // TODO: A single hit = success?
+                    int tsHits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
+                    if (tsHits > 0)
+                    {
+                        TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
+                        target.AddTempStatus(tempStatus);
+                        return "success";
+                    }
                     break;
                 case "PermStatus":
                     if (target.IsResistantTo(spell.Element)) return "ineffective";
@@ -191,8 +199,16 @@ namespace FF2_Monster_Sim
                         target.AddPermStatus(permStatus);
                         return "success";
                     }
-                    // TODO: Normal logic
-                    // A single hit = success?
+
+                    // Normal logic
+                    // TODO: A single hit = success?
+                    int psHits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
+                    if (psHits > 0)
+                    {
+                        PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
+                        target.AddPermStatus(permStatus);
+                        return "success";
+                    }
                     break;
                 case "CureTempStatus":
                     // This is PEEP/Basuna
