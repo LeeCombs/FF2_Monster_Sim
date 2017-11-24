@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FF2_Monster_Sim;
 
@@ -41,16 +41,21 @@ namespace SimTests
         //////////////////
         // Helper Tests //
         //////////////////
-
-
-        [TestMethod]
-        public void IsAbsorbed()
+        
+        private bool IsAbsorbed(Spell spell)
         {
+            // Create a monster that absorbs all elements
             Monster monster = new Monster();
-            Assert.IsFalse(monster.IsAbsorbantTo(Element.Fire));
-            monster.Absorbs.Add(Element.Fire);
-            Assert.IsTrue(monster.IsAbsorbantTo(Element.Fire));
-            // TODO: This
+
+            foreach (Element e in Enum.GetValues(typeof(Element))) monster.Absorbs.Add(e);
+            monster.Absorbs.Remove(Element.None);  // Monsters cannot absorb the fabled None element
+
+            monster.HPMax = 1000;
+            monster.HP = 1;
+            SpellManager.CastSpell(monster, monster, spell, 16);
+            SpellManager.CastSpell(monster, monster, spell, 16);
+            SpellManager.CastSpell(monster, monster, spell, 16);
+            return monster.HP > 1;
         }
 
 
@@ -144,10 +149,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("SLEP");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Sleep
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -157,10 +162,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("STON");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -170,10 +175,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("STOP");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -183,10 +188,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("CHRM");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Confusion
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -196,10 +201,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("MINI");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Mini (KO)
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -209,10 +214,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("MUTE");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: MUTE
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -222,10 +227,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Wink");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Confusion
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -235,10 +240,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Blast_2");
+            Assert.IsFalse(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Paralysis
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -252,10 +257,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("BLND");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Darkness
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -265,10 +270,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("CURS");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Curse
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -278,10 +283,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("TOAD");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Toad (KO)
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -291,10 +296,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("BRAK");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -304,10 +309,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("XZON");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: KO
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -317,10 +322,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("FOG");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Amnesia
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -330,10 +335,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("EXIT");
+            Assert.IsFalse(IsAbsorbed(spell)); // No absorb no accuracy
 
             // Ensure the spell has only intended effect: KO
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
 
         }
@@ -344,10 +349,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Breath");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
 
@@ -357,10 +362,10 @@ namespace SimTests
             // Ensure normal base stats
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Glare");
+            Assert.IsTrue(IsAbsorbed(spell));
 
             // Ensure the spell has only intended effect: Stone (KO)
-            // TODO: Ensure status doesn't work against enemis who resistant its element
-            // TODO: Ensure spell heals enemies who absorb its element
+            // TODO: Ensure status doesn't work against enemies who resistant its element
             // TODO: Ensure status auto-hits enemies who are weak to its element
         }
     }

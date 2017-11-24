@@ -440,17 +440,6 @@
    "value": 1
  },
  {
-   "name": "",
-   "type": "",
-   "effect": "",
-   "power": null,
-   "accuracy": null,
-   "status": "",
-   "element": "",
-   "price": null,
-   "value": null
- },
- {
    "name": "CURE_S",
    "type": "Special",
    "effect": "ItemHeal",

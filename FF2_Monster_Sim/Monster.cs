@@ -258,16 +258,16 @@ namespace FF2_Monster_Sim
         public List<string> AttackEffects { get; set; }
         public List<string> SpecialAttacks { get; set; }
         public List<string> Families { get; set; }
-        public List<Element> Weaknesses { get; set; }
-        public List<Element> Resistances { get; set; }
-        public List<Element> Absorbs { get; set; }
+        public List<Element> Weaknesses { get; set; } // TODO: Some sort of setter that disallows Element.None
+        public List<Element> Resistances { get; set; } // TODO: Some sort of setter that disallows Element.None
+        public List<Element> Absorbs { get; set; } // TODO: Some sort of setter that disallows Element.None
 
         public List<string> GilDrops { get; set; }
         public List<string> ItemDrops { get; set; }
 
         // In-battle effects
         public Dictionary<Buff, int> Buffs { get; set; }
-        public Dictionary<Debuff, int> Debuffs { get; set; }
+        public Dictionary<Debuff, int> Debuffs { get; set; } 
         public List<TempStatus> TempStatuses { get; set; }
         public List<PermStatus> PermStatuses { get; set; }
 

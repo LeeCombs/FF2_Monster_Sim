@@ -23,6 +23,7 @@ namespace FF2_Monster_Sim
 
             // Trim brackets, split on commas, upper case entries, and return it
             string trim = str.Substring(1, str.Length - 2);
+            if (String.IsNullOrEmpty(trim)) return new List<string>();
             return trim.Split(',').Select(x => x.ToUpper()).ToList();
         }
         

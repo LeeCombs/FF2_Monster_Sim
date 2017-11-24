@@ -267,7 +267,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void HAddRemoveighestStackBuffTest()
+        public void AddRemoveHighestStackBuffTest()
         {
             Monster monster = new Monster();
             AddRemoveHighestStackBuff(monster, Buff.Aura, 8);

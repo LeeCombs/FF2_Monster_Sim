@@ -41,7 +41,7 @@
 "HOLY","White","Damage",15,0,,"None",20000,10000
 "EXIT","White","PermStatus",5,0,"KO","Dimension",1500,750
 "UTLM","White","Damage_Ultima",100,50,,"None",0,1
-,,,,,,,,
+
 "CURE_S","Special","ItemHeal",30,100,,"None",0,0
 "EyeD","Special","ItemCure",-1,100,,"None",0,0
 "Anti","Special","ItemCure",-1,100,,"None",0,0

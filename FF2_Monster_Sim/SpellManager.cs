@@ -95,8 +95,10 @@ namespace FF2_Monster_Sim
             // Ignore weakness, resistance, and magic defense rolls
             if (target.IsAbsorbantTo(spell.Element))
             {
-                Debug.WriteLine("Healing: " + GetDamage(adjustedPower, level));
-                return "Absorbs";
+                int totalHeal = GetDamage(adjustedAccuracy, level);
+                Debug.WriteLine("Healing: " + totalHeal);
+                target.Heal(totalHeal);
+                return "Absorbed";
             }
 
             // Damage/Heal Spells spells

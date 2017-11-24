@@ -11,7 +11,6 @@ namespace FF2_Monster_Sim
 {
     public enum MonsterFamily
     {
-        None,
         Aquatic,
         Dragon,
         Earth,
