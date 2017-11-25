@@ -59,13 +59,14 @@ namespace FF2_Monster_Sim
                 {
                     Monster mon = new Monster();
 
+                    Debug.WriteLine((object)data.ToString());
+
                     // Doing this by hand since generated .json naming isn't consistent, nor formatted 100%
                     mon.Name = data.name;
                     mon.HPMax = data.HP; // Set HPMax before HP
                     mon.HP = data.HP;
                     mon.MPMax = data.MP; // Set MPMax before MP
                     mon.MP = data.MP;
-                    // mon.Level = data.skillLevel;
                     mon.Strength = data.strength;
                     mon.Hits = data.hits;
                     mon.Defense = data.defense;
@@ -75,18 +76,17 @@ namespace FF2_Monster_Sim
                     mon.Accuracy = data.accuracy;
                     mon.MagicEvasion = data.mEvade;
                     mon.Fear = data.cowardice;
+                    mon.AttackEffects = data.attackEffect.ToObject<List<String>>();
+                    mon.AttackList = data.attackList.ToObject<List<dynamic>>();
+                    mon.Families = data.race.ToObject<List<String>>();
+                    mon.Weaknesses = data.weak.ToObject<List<Element>>();
+                    mon.Resistances = data.resist.ToObject<List<Element>>();
+                    mon.Absorbs = data.absorb.ToObject<List<Element>>();
 
-                    // Currently arrays are represented by strings and must be converted
-                    mon.AttackEffects = Utils.StringToStringList((string)data.attackEffect);
-                    mon.SpecialAttacks = Utils.StringToStringList((string)data.attackList);
-
-                    // TODO: Consider converting string lists into enum lists of their corresponding types
-                    mon.Families = Utils.StringToStringList((string)data.race);
-                    mon.Weaknesses = Utils.StringToElementList((string)data.weak);
-                    mon.Resistances = Utils.StringToElementList((string)data.resist);
-                    mon.Absorbs = Utils.StringToElementList((string)data.absorb);
-                    mon.GilDrops = Utils.StringToStringList((string)data.gilDrops);
-                    mon.ItemDrops = Utils.StringToStringList((string)data.itemDrops);
+                    // Below may or may not be implemented
+                    // mon.Level = data.skillLevel;
+                    // mon.GilDrops = data.gilDrops.ToObject<List<String>>();
+                    // mon.ItemDrops = data.itemDrops.ToObject<List<String>>();
 
                     return mon;
                 }

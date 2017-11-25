@@ -42,7 +42,6 @@ namespace FF2_Monster_Sim
                 if (hp > HPMax) hp = HPMax;
             }
         }
-
         public int HPMax { get; set; }
 
         private int mp;
@@ -59,9 +58,7 @@ namespace FF2_Monster_Sim
                 if (mp > MPMax) mp = MPMax;
             }
         }
-
         public int MPMax { get; set; }
-        public int Level { get; set; }
 
         private int strength;
         public int Strength
@@ -256,14 +253,16 @@ namespace FF2_Monster_Sim
         }
 
         public List<string> AttackEffects { get; set; }
-        public List<string> SpecialAttacks { get; set; }
+        public List<dynamic> AttackList { get; set; }
         public List<string> Families { get; set; }
         public List<Element> Weaknesses { get; set; } // TODO: Some sort of setter that disallows Element.None
         public List<Element> Resistances { get; set; } // TODO: Some sort of setter that disallows Element.None
         public List<Element> Absorbs { get; set; } // TODO: Some sort of setter that disallows Element.None
 
-        public List<string> GilDrops { get; set; }
-        public List<string> ItemDrops { get; set; }
+        // The below may or may not be implemented
+        // public int Level { get; set; }
+        // public List<string> GilDrops { get; set; }
+        // public List<string> ItemDrops { get; set; }
 
         // In-battle effects
         public Dictionary<Buff, int> Buffs { get; set; }
