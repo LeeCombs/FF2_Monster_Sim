@@ -65,3 +65,4 @@ monodroid*.msi
 /FF2_Monster_Sim/Content/Graphics/
 /FF2_Monster_Sim/Content/Sounds/
 /FF2_Monster_Sim/Content/Music/
+*.csv#
