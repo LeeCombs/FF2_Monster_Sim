@@ -9,18 +9,6 @@ using Newtonsoft.Json;
 
 namespace FF2_Monster_Sim
 {
-    public enum MonsterFamily
-    {
-        Aquatic,
-        Dragon,
-        Earth,
-        Giant,
-        MagicBeast,
-        Spellcaster,
-        Undead,
-        Werebeast
-    }
-
     public static class MonsterManager
     {
         private static dynamic monsterData;
@@ -76,12 +64,12 @@ namespace FF2_Monster_Sim
                     mon.Accuracy = data.accuracy;
                     mon.MagicEvasion = data.mEvade;
                     mon.Fear = data.cowardice;
-                    mon.AttackEffects = data.attackEffect.ToObject<List<String>>();
-                    mon.AttackList = data.attackList.ToObject<List<dynamic>>();
-                    mon.Families = data.race.ToObject<List<String>>();
-                    mon.Weaknesses = data.weak.ToObject<List<Element>>();
-                    mon.Resistances = data.resist.ToObject<List<Element>>();
-                    mon.Absorbs = data.absorb.ToObject<List<Element>>();
+                    mon.AttackEffects = data.attackEffect.ToObject<HashSet<String>>();
+                    mon.ActionList = data.attackList.ToObject<List<MonsterAction>>();
+                    mon.Families = data.race.ToObject<HashSet<MonsterFamily>>();
+                    mon.Weaknesses = data.weak.ToObject<HashSet<Element>>();
+                    mon.Resistances = data.resist.ToObject<HashSet<Element>>();
+                    mon.Absorbs = data.absorb.ToObject<HashSet<Element>>();
 
                     // Below may or may not be implemented
                     // mon.Level = data.skillLevel;

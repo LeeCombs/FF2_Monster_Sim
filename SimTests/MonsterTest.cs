@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FF2_Monster_Sim;
 
@@ -33,12 +35,23 @@ namespace SimTests
             Assert.AreEqual(60, monster.Accuracy);
             Assert.AreEqual(0, monster.Evasion);
             Assert.AreEqual(50, monster.MagicEvasion);
-            // race
-            // resist
-            // absorb
-            // weak
-            // attacklist
-            // attackeffect
+
+            HashSet<MonsterFamily> familySet = new HashSet<MonsterFamily>() { MonsterFamily.Earth };
+            Assert.IsTrue(monster.Families.SetEquals(familySet));
+            HashSet<Element> resistSet = new HashSet<Element>() { Element.Mind, Element.Body };
+            Assert.IsTrue(monster.Resistances.SetEquals(resistSet));
+            HashSet<Element> weakSet = new HashSet<Element>() { };
+            Assert.IsTrue(monster.Weaknesses.SetEquals(weakSet));
+            HashSet<Element> absorbSet = new HashSet<Element>() { };
+            Assert.IsTrue(monster.Absorbs.SetEquals(absorbSet));
+            HashSet<string> atkEffectList = new HashSet<string>() { };
+            Assert.IsTrue(monster.AttackEffects.SetEquals(atkEffectList));
+            
+            MonsterAction attack = new MonsterAction("Attack", 0, 0, 0, "SingleTarget");
+            List<MonsterAction> actionList = new List<MonsterAction>();
+            for (int i = 0; i < 8; i++) actionList.Add(attack);
+            Assert.IsTrue(monster.ActionList.SequenceEqual(actionList));
+            
             // gildrops
             // itemdrops
         }

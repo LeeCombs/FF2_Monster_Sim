@@ -10,6 +10,36 @@ using System.Diagnostics;
 
 namespace FF2_Monster_Sim
 {
+    public enum MonsterFamily
+    {
+        Air,
+        Water,
+        Earth,
+        Giant,
+        Magic,
+        Dragon,
+        Were,
+        Undead
+    }
+
+    public struct MonsterAction
+    {
+        public string Name;
+        public int Level;
+        public int Accuracy;
+        public int MPCost;
+        public string Target;
+
+        public MonsterAction(string name, int level, int acc, int mpCost, string target)
+        {
+            Name = name;
+            Level = level;
+            Accuracy = acc;
+            MPCost = mpCost;
+            Target = target;
+        }
+    }
+
     public class Monster
     {
         // Sprite Stuff
@@ -252,12 +282,12 @@ namespace FF2_Monster_Sim
             }
         }
 
-        public List<string> AttackEffects { get; set; }
-        public List<dynamic> AttackList { get; set; }
-        public List<string> Families { get; set; }
-        public List<Element> Weaknesses { get; set; } // TODO: Some sort of setter that disallows Element.None
-        public List<Element> Resistances { get; set; } // TODO: Some sort of setter that disallows Element.None
-        public List<Element> Absorbs { get; set; } // TODO: Some sort of setter that disallows Element.None
+        public List<MonsterAction> ActionList { get; set; }
+        public HashSet<string> AttackEffects { get; set; }
+        public HashSet<MonsterFamily> Families { get; set; }
+        public HashSet<Element> Weaknesses { get; set; } // TODO: Some sort of setter that disallows Element.None
+        public HashSet<Element> Resistances { get; set; } // TODO: Some sort of setter that disallows Element.None
+        public HashSet<Element> Absorbs { get; set; } // TODO: Some sort of setter that disallows Element.None
 
         // The below may or may not be implemented
         // public int Level { get; set; }
@@ -276,9 +306,10 @@ namespace FF2_Monster_Sim
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new List<TempStatus>();
             PermStatuses = new List<PermStatus>();
-            Weaknesses = new List<Element>();
-            Resistances = new List<Element>();
-            Absorbs = new List<Element>();
+            AttackEffects = new HashSet<string>();
+            Weaknesses = new HashSet<Element>();
+            Resistances = new HashSet<Element>();
+            Absorbs = new HashSet<Element>();
         }
         
         public void Initialize(Texture2D texture, Vector2 position)
