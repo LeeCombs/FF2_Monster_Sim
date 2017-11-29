@@ -123,8 +123,10 @@ namespace FF2_Monster_Sim
                     }
                     if (target.IsWeakTo(spell.Element) && target.IsResistantTo(spell.Element))
                     {
-                        // TODO: Damage as usual, determine how hits are determined.
-                        // Best Guess: level - blocks
+                        // Damage as usual. Best guess at hits: level - blocks
+                        int rwHits = level - GetMagicBlocks(target);
+                        Debug.WriteLine("Resist and Weak! " + rwHits + " hits. Damaging: " + GetDamage(adjustedPower, rwHits));
+                        return "weak";
                     }
                     // Normal logic
                     int hits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
@@ -152,26 +154,28 @@ namespace FF2_Monster_Sim
                     if (target.IsResistantTo(spell.Element)) return "ineffective";
                     if (target.IsWeakTo(spell.Element))
                     {
-                        // Auto-success
                         Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
                         target.AddDebuff(debuff, level); // TODO: level + successes?
                         return "success";
                     }
-                    // TODO: Normal logic
+                    // Normal logic
+                    int debuffHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
+                    if (debuffHits > 0)
+                    {
+                        Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
+                        target.AddDebuff(debuff, level);
+                    }
                     break;
                 case "TempStatus":
                     if (target.IsResistantTo(spell.Element)) return "ineffective";
                     if (target.IsWeakTo(spell.Element))
                     {
-                        // Auto-success
                         TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
                         target.AddTempStatus(tempStatus);
                         return "success";
                     }
-                    // Normal logic
-                    // TODO: A single hit = success?
-                    int tsHits = GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
-                    if (tsHits > 0)
+                    // Normal logic. A single hit = success
+                    if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                     {
                         TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
                         target.AddTempStatus(tempStatus);
@@ -182,15 +186,12 @@ namespace FF2_Monster_Sim
                     if (target.IsResistantTo(spell.Element)) return "ineffective";
                     if (target.IsWeakTo(spell.Element))
                     {
-                        // Auto-success
                         PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
                         target.AddPermStatus(permStatus);
                         return "success";
                     }
-                    // Normal logic
-                    // TODO: A single hit = success?
-                    int psHits = GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
-                    if (psHits > 0)
+                    // Normal logic. A single hit = success
+                    if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                     {
                         PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
                         target.AddPermStatus(permStatus);
@@ -288,6 +289,14 @@ namespace FF2_Monster_Sim
                 if (rnd.Next(0, 100) < monster.MagicEvasion) successes++;
             }
             return successes;
+        }
+
+        /// <summary>
+        /// Dumb little helper to help readability
+        /// </summary>
+        private static int GetHitsAgainstTarget(int level, int accuracy, Monster target)
+        {
+            return GetSuccesses(level, accuracy) - GetMagicBlocks(target);
         }
 
         /// <summary>

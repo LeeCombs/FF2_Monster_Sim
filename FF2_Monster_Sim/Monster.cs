@@ -201,10 +201,7 @@ namespace FF2_Monster_Sim
         private int magicEvasion;
         public int MagicEvasion
         {
-            get
-            {
-                return magicEvasion;
-            }
+            get { return magicEvasion; }
             set { magicEvasion = Utils.EnforceStatCap(value, 99); }
         }
 
