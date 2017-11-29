@@ -57,6 +57,35 @@ namespace SimTests
         }
 
         [TestMethod]
+        public void MonsterAttackListTest()
+        {
+            // Setup a dummy monster with known moves
+            Monster monster = new Monster();
+            List<MonsterAction> actList = new List<MonsterAction>();
+            for (int i = 0; i < 8; i++)
+            {
+                MonsterAction mAct = new MonsterAction();
+                mAct.Name = i.ToString();
+                mAct.Level = i;
+                mAct.Accuracy = i;
+                mAct.MPCost = i;
+                mAct.Target = "SingleEnemy";
+                actList.Add(mAct);
+            }
+            monster.ActionList = actList;
+
+            // Expected odds per slot are roughly 20%, 20%, 20%, 10%, 10%, 10%, 5%, 5%
+            // Using accuracy, build a found moves array and populate it based on GetAction
+            int[] expectedOdds = { 20000, 20000, 20000, 10000, 10000, 10000, 5000, 5000 };
+            int[] foundOdds = new int[8];
+            for (int j = 0; j < 100000; j++) foundOdds[monster.GetAction().Accuracy]++;
+            
+            // Check that rolled odds are within a threshold of expected odds
+            int threshold = 500; // 0.5% variance
+            for (int ii = 0; ii < 8; ii++) Assert.IsTrue(Math.Abs(expectedOdds[ii] - foundOdds[ii]) < threshold);
+        }
+
+        [TestMethod]
         public void MonsterStatChangeTest()
         {
             // Test that changes produce expected values, min/max values are enforced, and overflow checks
@@ -182,7 +211,7 @@ namespace SimTests
             monster.MagicEvasion = 100;
             Assert.AreNotEqual(100, monster.MagicEvasion);
             Assert.AreEqual(99, monster.MagicEvasion);
-
+            
             // race
             // resist
             // absorb

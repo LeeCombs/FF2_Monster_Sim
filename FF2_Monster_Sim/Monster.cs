@@ -42,6 +42,8 @@ namespace FF2_Monster_Sim
 
     public class Monster
     {
+        private Random rnd;
+
         // Sprite Stuff
         public Texture2D MonsterTexture;
         public Vector2 Position;
@@ -310,6 +312,9 @@ namespace FF2_Monster_Sim
             Weaknesses = new HashSet<Element>();
             Resistances = new HashSet<Element>();
             Absorbs = new HashSet<Element>();
+            ActionList = new List<MonsterAction>();
+
+            rnd = new Random();
         }
         
         public void Initialize(Texture2D texture, Vector2 position)
@@ -351,12 +356,25 @@ namespace FF2_Monster_Sim
         // Battle Functions //
         //////////////////////
 
-        public string GetAction()
+        public MonsterAction GetAction()
         {
             // Noting this here... Curse halves magic power, but that's not a base stat
 
             // Step through action logic, determine action, and return it
-            return "";
+
+            // Odds per slot: 20, 20, 20, 10, 10, 10, 5, 5
+            int[] slotOdds = { 20, 40, 60, 70, 80, 90, 95, 100 };
+            int rndRoll = rnd.Next(0, 100);
+            for (int i = 0; i < slotOdds.Length; i++)
+            {
+                if (slotOdds[i] > rndRoll)
+                {
+                    return ActionList[i];
+                }
+            }
+
+            Debug.WriteLine("Error retrieving action");
+            return new MonsterAction();
         }
 
         /// <summary>
