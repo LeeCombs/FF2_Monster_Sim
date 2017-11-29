@@ -26,18 +26,19 @@ namespace FF2_Monster_Sim
             if (String.IsNullOrEmpty(trim)) return new List<string>();
             return trim.Split(',').Select(x => x.ToUpper()).ToList();
         }
-        
-        public static List<Element> StringToElementList(string str)
-        {
-            if (String.IsNullOrEmpty(str))
-            {
-                return new List<Element>(); // Consider returning null instead of an empty list?
-            }
 
-            // Trim brackets, split on commas, upper case entries, and return it
-            string trim = str.Substring(1, str.Length - 2);
-            if (String.IsNullOrEmpty(trim)) return new List<Element>();
-            return trim.Split(',').Select(x => (Element)Enum.Parse(typeof(Element), x)).ToList();
+        /// <summary>
+        /// Get the capped value of a given stat (0 - max)
+        /// </summary>
+        /// <param name="stat"></param>
+        /// <param name="max">The highest value for the stat</param>
+        /// <param name="max">The lowest value for the stat</param>
+        /// <returns></returns>
+        public static int EnforceStatCap(int stat, int max = 255, int min = 0)
+        {
+            if (stat < min) return min;
+            if (stat > max) return max;
+            return stat;
         }
     }
 }

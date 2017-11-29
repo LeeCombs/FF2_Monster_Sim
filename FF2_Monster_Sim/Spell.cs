@@ -14,9 +14,28 @@ namespace FF2_Monster_Sim
         public string Name;
         public SpellType SpellType;
         public string Effect;
-        public int Power;
-        public int Accuracy;
-        public string Status;
+
+        private int power;
+        public int Power
+        {
+            get { return power; }
+            set { power = Utils.EnforceStatCap(value); }
+        }
+
+        private int accuracy;
+        public int Accuracy
+        {
+            get { return accuracy; }
+            set
+            {
+                // Accuracy for spells is explicitly not capped
+                accuracy = value;
+                if (accuracy < 0) accuracy = 0;
+                
+            }
+        }
+        
+        public string Status; 
         public Element Element;
         public int Price;
         public int Value;
