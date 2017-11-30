@@ -282,6 +282,14 @@ namespace FF2_Monster_Sim
 
         public bool IsResistantTo(Element element)
         {
+            Element[] barrResists = { Element.Dimension, Element.Fire, Element.Mind, Element.Lightning, Element.Death, Element.Poison, Element.Body, Element.Ice };
+            for (int i = 0; i < GetBuffStacks(Buff.Barrier); i++)
+            {
+                // Ignore Ice unless bug fixes are in effect
+                if (!Globals.BUG_FIXES && i == 7) break;
+                if (barrResists[i] == element) return true;
+            }
+
             return Resistances.Contains(element);
         }
 
@@ -390,16 +398,6 @@ namespace FF2_Monster_Sim
              * 6 - Dragons
              * 7 - Were
              * 8+ - Undead (Doesn't work)
-             * 
-             * Barrier - Grants elemental resists
-             * 1 - Matter
-             * 2 - Fire
-             * 3 - Mind
-             * 4 - Lighting
-             * 5 - Death
-             * 6 - Poison
-             * 7 - Body
-             * 8+ - Ice (Doesn't work)
              * 
              * Wall - Negates ALL spells up to it's level 
              * If wall exists and an instant KO spell is used, it succeeds

@@ -212,7 +212,7 @@ namespace SimTests
             Assert.AreNotEqual(100, monster.MagicEvasion);
             Assert.AreEqual(99, monster.MagicEvasion);
             
-            // race
+            // families
             // resist
             // absorb
             // weak
@@ -368,20 +368,31 @@ namespace SimTests
         public void BarrierTest()
         {
             // Ensure normal base stats
-            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Monster monster = new Monster();
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Barrier));
+            Queue<Element> resistQueue = new Queue<Element>();
+            Queue<Element> noResistQueue = new Queue<Element>(new[] { Element.Dimension, Element.Fire, Element.Mind, Element.Lightning, Element.Death, Element.Poison, Element.Body, Element.Ice });
+            foreach (Element e in resistQueue) Assert.IsTrue(monster.IsResistantTo(e));
+            foreach (Element e in noResistQueue) Assert.IsFalse(monster.IsResistantTo(e));
+            System.Diagnostics.Debug.WriteLine(String.Join(",", resistQueue));
+            System.Diagnostics.Debug.WriteLine(String.Join(",", noResistQueue));
+            System.Diagnostics.Debug.WriteLine("---");
 
-            // TODO: Ensure stacks have intended effect: Elemental resistance bsaed on stack level
-            // 1 - Matter
-            // 2 - Fire
-            // 3 - Mind
-            // 4 - Lighting
-            // 5 - Death
-            // 6 - Poison
-            // 7 - Body
-            // 8 - Ice (Doesn't work)
+            // Ensure stacks have intended effect: Elemental resistance baaed on stack level
+            for (int i = 0; i < 7; i++)
+            {
+                monster.AddBuff(Buff.Barrier, i + 1);
+                resistQueue.Enqueue(noResistQueue.Dequeue());
+                foreach (Element e in resistQueue) Assert.IsTrue(monster.IsResistantTo(e));
+                foreach (Element e in noResistQueue) Assert.IsFalse(monster.IsResistantTo(e));
+            }
 
-            // TODO: Ensure 8th stack doesn't work unless fix is selected
+            // Check for the 8th stack, Ice, and ensure it doesn't work unless BUG_FIX
+            monster.AddBuff(Buff.Barrier, 8);
+            Globals.BUG_FIXES = false;
+            Assert.IsFalse(monster.IsResistantTo(Element.Ice));
+            Globals.BUG_FIXES = true;
+            Assert.IsTrue(monster.IsResistantTo(Element.Ice));
         }
 
         [TestMethod]
