@@ -240,15 +240,17 @@ namespace FF2_Monster_Sim
 
         public Monster()
         {
+            ActionList = new List<MonsterAction>();
+            AttackEffects = new HashSet<string>();
+            Families = new HashSet<MonsterFamily>();
+            Weaknesses = new HashSet<Element>();
+            Resistances = new HashSet<Element>();
+            Absorbs = new HashSet<Element>();
+
             Buffs = new Dictionary<Buff, int>();
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new List<TempStatus>();
             PermStatuses = new List<PermStatus>();
-            AttackEffects = new HashSet<string>();
-            Weaknesses = new HashSet<Element>();
-            Resistances = new HashSet<Element>();
-            Absorbs = new HashSet<Element>();
-            ActionList = new List<MonsterAction>();
 
             rnd = new Random();
         }
@@ -316,10 +318,10 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Heal the monster a given amount
+        /// HealHP the monster a given amount
         /// </summary>
         /// <param name="amount"></param>
-        public void Heal(int amount)
+        public void HealHP(int amount)
         {
             if (amount < 0)
             {
@@ -327,6 +329,36 @@ namespace FF2_Monster_Sim
                 return;
             }
             HP += amount;
+        }
+
+        public void HealMP(int amount)
+        {
+            if (amount < 0)
+            {
+                Debug.WriteLine("Cannot heal a negative amount: " + amount);
+                return;
+            }
+            MP += amount;
+        }
+
+        public void DamageHP(int amount)
+        {
+            if (amount < 0)
+            {
+                Debug.WriteLine("Cannot damage a negative amount: " + amount);
+                return;
+            }
+            HP -= amount;
+        }
+
+        public void DamageMP(int amount)
+        {
+            if (amount < 0)
+            {
+                Debug.WriteLine("Cannot damage a negative amount: " + amount);
+                return;
+            }
+            MP -= amount;
         }
 
         ////////////////////////////

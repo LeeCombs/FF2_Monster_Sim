@@ -97,7 +97,7 @@ namespace FF2_Monster_Sim
             {
                 int totalHeal = GetDamage(adjustedAccuracy, level);
                 Debug.WriteLine("Healing: " + totalHeal);
-                target.Heal(totalHeal);
+                target.HealHP(totalHeal);
                 return "Absorbed";
             }
             
@@ -139,8 +139,8 @@ namespace FF2_Monster_Sim
                     // Roll damage like usual, except heal
                     int totalHeal = GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy));
                     Debug.WriteLine("Healing: " + totalHeal);
-                    target.Heal(totalHeal);
-                    // TODO: If undead, treat as damage
+                    target.HealHP(totalHeal);
+                    // TODO: If undead, treat as damage. Do they roll to resist?
                     break;
                 case "Revive":
                     // TODO: Life is effective against undead, useless otherwise
@@ -220,7 +220,82 @@ namespace FF2_Monster_Sim
                     break;
                 case "Special":
                     // TODO: HP Drain, MP Drain, Swap, Halve MP
-                    return HandleSpecialSpell(spell);
+                    switch (spell.Name.ToUpper())
+                    {
+                        case "DRAN": // Drain HP
+                            // Each hit target loses 1/16 (round down) of Max HP. Caster gains that amount
+                            
+                            int hpDrainAmt = target.HPMax / 16; // NOTE: Int division
+                            int dranHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
+                            if (dranHits > 0)
+                            {
+                                int dranAmt = hpDrainAmt * dranHits;
+                                // Opposite effect vs. Undead
+                                if (target.Families.Contains(MonsterFamily.Undead))
+                                {
+                                    caster.DamageHP(dranAmt);
+                                    target.HealHP(dranAmt);
+                                }
+                                else
+                                {
+                                    caster.HealHP(dranAmt);
+                                    target.DamageHP(dranAmt);
+                                }
+                                return "success";
+                            }
+                            break;
+                        case "ASPL": // Drain MP
+                            // Each hit target loses 1/16 (round down) of Max MP. Caster gains that amount
+
+                            int mpDrainAmt = target.MPMax / 16; // NOTE: Int division
+                            int asplHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
+                            if (asplHits > 0)
+                            {
+                                int asplAmt = mpDrainAmt * asplHits;
+                                // Opposite effect vs. Undead
+                                if (target.Families.Contains(MonsterFamily.Undead))
+                                {
+                                    caster.DamageMP(asplAmt);
+                                    target.HealMP(asplAmt);
+                                }
+                                else
+                                {
+                                    caster.HealMP(asplAmt);
+                                    target.DamageMP(asplAmt);
+                                }
+                                return "success";
+                            }
+                            break;
+                        case "ANTI": // Halve MP
+                            if (target.IsResistantTo(spell.Element)) return "failed";
+                            if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
+                            {
+                                // Target loses half of MP
+                                // NES_BUG: This only effects the first byte of the MP value
+                                return "success";
+                            }
+                            break;
+                        case "CHNG": // Caster and Target swap HP and MP
+                            if (target.IsResistantTo(spell.Element)) return "failed";
+                            if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
+                            {
+                                int casterHP = caster.HP;
+                                int casterMP = caster.MP;
+                                caster.HP = target.HP;
+                                caster.MP = target.MP;
+                                target.HP = casterHP;
+                                target.MP = casterMP;
+                                // caster.MP -= MPConsumption
+                                return "success";
+                            }
+                            break;
+                        case "BLAST":
+                            // Bomb's Explosion Spell
+                            break;
+                        default:
+                            Debug.WriteLine("Invalid spell found at speical: " + spell.Name);
+                            break;
+                    }
                     break;
                 default:
                     Debug.WriteLine("Invalid spell effect found: " + spell.Effect);
@@ -228,36 +303,6 @@ namespace FF2_Monster_Sim
             }
 
             return "Fail";
-        }
-
-        /// <summary>
-        /// Helper for handling special spells HP/MP drain, Swap, and Halve-MP
-        /// </summary>
-        /// <param name="spell"></param>
-        /// <returns></returns>
-        private static string HandleSpecialSpell(Spell spell)
-        {
-            switch (spell.Name.ToUpper())
-            {
-                case "DRAN":
-                    // Drain HP
-                    break;
-                case "ASPL":
-                    // Drain MP
-                    // TODO: Deducts MP cost after the first target?
-                    break;
-                case "ANTI":
-                    // Halve MP
-                    // BUG: Only effects first byte of MP
-                    break;
-                case "CHNG":
-                    // Swap HP and MP
-                    // TODO: Deducts MP cost after the first target?
-                    break;
-                default:
-                    break;
-            }
-            return "";
         }
 
         /// <summary>

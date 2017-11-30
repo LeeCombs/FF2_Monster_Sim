@@ -201,7 +201,7 @@ namespace SimTests
             Assert.AreEqual(1000, monster.HPMax);
             Assert.AreEqual(1, monster.HP);
 
-            // Heal the monster, ensure it's effective and stays within bounds
+            // HealHP the monster, ensure it's effective and stays within bounds
             Spell spell = SpellManager.GetSpellByName("CURE");
             SpellManager.CastSpell(monster, monster, spell, 1);
             Assert.IsTrue(monster.HP >= 1);
@@ -270,11 +270,33 @@ namespace SimTests
 
         // BSRK, HAST, AURA, BARR, BLNK, SAFE, SHEL, WALL, Drink, Spirit, Intelligence
 
+        [TestMethod]
+        public void BuffSpellTest()
+        {
+            // Set up
+            Monster monster = new Monster();
+            string[] buffSpells = { "BSRK", "HAST", "AURA", "BARR", "BLNK", "SAFE", "SHEL", "WALL", "Drink" };
+            // Ignore Spirit and Intelligence for now as they may be irrelevant
+
+            // Cast each spell and ensure they add the proper buff to the monster
+        }
+
         ///////////////////
         // Debuff Spells //
         ///////////////////
 
         // DSPL, SLOW, FEAR
+
+        [TestMethod]
+        public void DebuffSpellTest()
+        {
+            // Set up
+            Monster monster = new Monster();
+            string[] debuffSpells = { "SLOW", "FEAR" };
+            // DSPL is busted and just doesn't work
+
+            // Cast each spell and ensure they add the proper buff to the monster
+        }
 
         ////////////////////
         // Special Spells //
@@ -282,5 +304,133 @@ namespace SimTests
 
         // DRAN, ASPL, ANTI, CHNG, Blast
 
+        [TestMethod]
+        public void DRANTest()
+        {
+            // Set up
+            Monster caster = new Monster();
+            caster.HPMax = 160;
+            caster.HP = 1;
+            Monster target = new Monster();
+            target.HPMax = 160;
+            target.HP = 160;
+            Spell spell = SpellManager.GetSpellByName("DRAN");
+            spell.Accuracy = 50; // Adjust accuracy so it actually hits
+
+            // Cast the spell and ensure HP is drained
+            Assert.IsTrue(caster.HP == 1);
+            Assert.IsTrue(target.HP == target.HPMax);
+            SpellManager.CastSpell(caster, target, spell, 16);
+            Assert.IsTrue(caster.HP > 1);
+            Assert.IsTrue(target.HP < target.HPMax);
+            
+            // Ensure Undead creatures reverse the effect
+            caster.HP = caster.HPMax;
+            target.HP = 1;
+            target.Families.Add(MonsterFamily.Undead);
+            Assert.AreEqual(caster.HPMax, caster.HP);
+            Assert.AreEqual(1, target.HP);
+            SpellManager.CastSpell(caster, target, spell, 16);
+            Assert.IsTrue(caster.HP < caster.HPMax);
+            Assert.IsTrue(target.HP > 1);
+
+            // No resistance check due to no element
+        }
+
+        [TestMethod]
+        public void ASPLTest()
+        {
+            // Set up
+            Monster caster = new Monster();
+            caster.MPMax = 160;
+            caster.MP = 0;
+            Monster target = new Monster();
+            target.MPMax = 160;
+            target.MP = 160;
+            Spell spell = SpellManager.GetSpellByName("ASPL");
+            spell.Accuracy = 50; // Adjust accuracy so it actually hits
+
+            // Cast the spell and ensure MP is drained
+            Assert.IsTrue(caster.MP == 0);
+            Assert.IsTrue(target.MP == target.MPMax);
+            SpellManager.CastSpell(caster, target, spell, 16);
+            Assert.IsTrue(caster.MP > 0);
+            Assert.IsTrue(target.MP < target.MPMax);
+
+            // Ensure Undead creatures reverse the effect
+            caster.MP = caster.MPMax;
+            target.MP = 0;
+            target.Families.Add(MonsterFamily.Undead);
+            Assert.AreEqual(caster.MPMax, caster.MP);
+            Assert.AreEqual(0, target.MP);
+            SpellManager.CastSpell(caster, target, spell, 16);
+            Assert.IsTrue(caster.MP < caster.MPMax);
+            Assert.IsTrue(target.MP > 0);
+            
+            // No resistance check due to no element
+        }
+
+        [TestMethod]
+        public void ANTITest()
+        {
+            // Set up
+            Monster monster = new Monster();
+            monster.MPMax = 1000;
+            monster.MP = 100;
+            Assert.AreEqual(100, monster.MP);
+            Spell spell = SpellManager.GetSpellByName("ANTI");
+
+            // Cast the spell and ensure that MP was halved in it's bugged fashion
+            // TODO: That ^
+
+            // TODO: Ensure the spell fails if the target is resistant to ANTI's element
+            monster.Resistances.Add(Element.Mind);
+        }
+
+        [TestMethod]
+        public void CHNGTest()
+        {
+            // Set up some monsters
+            Monster caster = new Monster();
+            caster.HPMax = 500;
+            caster.MPMax = 500;
+            caster.HP = 100;
+            caster.MP = 100;
+            Assert.AreEqual(100, caster.HP);
+            Assert.AreEqual(100, caster.MP);
+
+            Monster target = new Monster();
+            target.HPMax = 500;
+            target.MPMax = 500;
+            target.HP = 200;
+            target.MP = 200;
+            Assert.AreEqual(200, target.HP);
+            Assert.AreEqual(200, target.MP);
+
+            // Cast the spell and ensure the hp/mp values were swapped
+            Spell spell = SpellManager.GetSpellByName("CHNG");
+            SpellManager.CastSpell(caster, target, spell, 16, false);
+            Assert.AreEqual(200, caster.HP);
+            Assert.AreEqual(200, caster.MP);
+            Assert.AreEqual(100, target.HP);
+            Assert.AreEqual(100, target.MP);
+
+            // Ensure the spell fails if the target is resistant to CHNG's element
+            target.Resistances.Add(Element.Dimension);
+            SpellManager.CastSpell(caster, target, spell, 16, false);
+            Assert.AreEqual(200, caster.HP);
+            Assert.AreEqual(200, caster.MP);
+            Assert.AreEqual(100, target.HP);
+            Assert.AreEqual(100, target.MP);
+        }
+
+        [TestMethod]
+        public void BlastTest()
+        {
+            // Set up
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("Blast");
+            // This is a bomb's explode spell, should kill em outright
+        }
     }
 }
