@@ -166,7 +166,7 @@ namespace FF2_Monster_Sim
                     // TODO: Ultima damage bug
                     break;
                 case "Heal":
-                    // Damage undead, heal otherwise
+                    // This is CURE, not HEAL. Damage undead, heal otherwise
                     if (target.Families.Contains(MonsterFamily.Undead))
                     {
                         int healHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
@@ -270,29 +270,33 @@ namespace FF2_Monster_Sim
                     }
                     break;
                 case "CureTempStatus":
-                    // This is PEEP/Basuna
+                    // This is PEEP
                     // 1 = Venom & Sleep, then one more per level, up to 5
                     TempStatus[] tempCureOrder = { TempStatus.Venom, TempStatus.Sleep, TempStatus.Mini, TempStatus.Mute, TempStatus.Paralysis, TempStatus.Confuse };
+                    String[] peepMsgOrder = { "Devenomed", "Scared", "Grew", "Can speak", "Can move", "Normal" };
                     target.RemoveTempStatus(TempStatus.Venom);
+                    List<string> peepMsgs = new List<string>{ "Devenomed" };
                     for (int i = 1; i < level; i++)
                     {
                         if (i >= tempCureOrder.Length) break;
                         target.RemoveTempStatus(tempCureOrder[i]);
-                        // TODO: PEEP returns different multiple result messages based on what it cures
+                        peepMsgs.Add(peepMsgOrder[i]);
                     }
                     // TODO: If nothing is cured, is ineffective returned?
-                    return statusSuccessResult;
+                    return new SpellResult(peepMsgs); ;
                 case "CurePermStatus":
-                    // This is HEAL/Esuna. Cure everything up to and including level.
+                    // This is HEAL. Cure everything up to and including level.
                     PermStatus[] permCureOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
+                    String[] healMsgOrder = { "Can see", "Devenomed", "Uncursed", "Remembers", "Regained form", "Normal body", "" };
+                    List<string> healMsgs = new List<string>();
                     for (int i = 0; i < level; i++)
                     {
                         if (i >= permCureOrder.Length) break;
                         target.RemovePermStatus(permCureOrder[i]);
-                        // TODO: HEAL returns different multiple result messages based on what it cures
+                        healMsgs.Add(healMsgOrder[i]);
                     }
                     // TODO: If nothing is cured, is ineffective returned?
-                    return statusSuccessResult;
+                    return new SpellResult(healMsgs);
                 case "Special":
                     // TODO: HP Drain, MP Drain, Swap, Halve MP
                     switch (spell.Name.ToUpper())
