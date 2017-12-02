@@ -243,7 +243,7 @@ namespace SimTests
         [TestMethod]
         public void PermStatusSpellsTest()
         {
-            string[] permStatusSpells = new String[] { "BLND", "CURS", "TOAD", "BRAK", "XZON", "FOG", "EXIT", "Breath", "Glare" };
+            string[] permStatusSpells = new String[] { "BLND", "CURS", "TOAD", "BRAK", "WARP", "FOG", "EXIT", "Breath", "Glare" };
 
             // Make sure every spell can effect it's status on a target and followed elemental rules
             foreach (string spellName in permStatusSpells)

@@ -8,7 +8,8 @@
    "status": "",
    "element": "Fire",
    "price": 400,
-   "value": 100
+   "value": 100,
+   "successMessage": ""
  },
  {
    "name": "BOLT",
@@ -19,7 +20,8 @@
    "status": "",
    "element": "Lightning",
    "price": 400,
-   "value": 100
+   "value": 100,
+   "successMessage": ""
  },
  {
    "name": "ICE",
@@ -30,7 +32,8 @@
    "status": "",
    "element": "Ice",
    "price": 400,
-   "value": 100
+   "value": 100,
+   "successMessage": ""
  },
  {
    "name": "AERO",
@@ -41,7 +44,8 @@
    "status": "",
    "element": "Poison",
    "price": 0,
-   "value": 1000
+   "value": 1000,
+   "successMessage": ""
  },
  {
    "name": "DRAN",
@@ -52,7 +56,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 7500
+   "value": 7500,
+   "successMessage": "HP Absorbed!"
  },
  {
    "name": "ASPL",
@@ -63,7 +68,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 7500
+   "value": 7500,
+   "successMessage": "MP Absorbed!"
  },
  {
    "name": "FLAR",
@@ -74,7 +80,8 @@
    "status": "",
    "element": "None",
    "price": 40000,
-   "value": 20000
+   "value": 20000,
+   "successMessage": ""
  },
  {
    "name": "SLEP",
@@ -85,7 +92,8 @@
    "status": "Sleep",
    "element": "Mind",
    "price": 0,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "???"
  },
  {
    "name": "STON",
@@ -96,7 +104,8 @@
    "status": "Paralysis",
    "element": "Body",
    "price": 0,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "Paralyzed"
  },
  {
    "name": "STOP",
@@ -107,7 +116,8 @@
    "status": "Paralysis",
    "element": "Dimension",
    "price": 0,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "Paralyzed"
  },
  {
    "name": "CHRM",
@@ -118,7 +128,8 @@
    "status": "Confuse",
    "element": "Mind",
    "price": 0,
-   "value": 5000
+   "value": 5000,
+   "successMessage": "Confused"
  },
  {
    "name": "BLND",
@@ -129,7 +140,8 @@
    "status": "Darkness",
    "element": "Body",
    "price": 0,
-   "value": 2000
+   "value": 2000,
+   "successMessage": "Blinded"
  },
  {
    "name": "CURS",
@@ -140,7 +152,8 @@
    "status": "Curse",
    "element": "Mind",
    "price": 0,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "Cursed"
  },
  {
    "name": "TOAD",
@@ -151,7 +164,8 @@
    "status": "Toad",
    "element": "Dimension",
    "price": 0,
-   "value": 5000
+   "value": 5000,
+   "successMessage": "Toad"
  },
  {
    "name": "BRAK",
@@ -162,7 +176,8 @@
    "status": "Stone",
    "element": "Dimension",
    "price": 0,
-   "value": 5000
+   "value": 5000,
+   "successMessage": "Stopped"
  },
  {
    "name": "DETH",
@@ -173,10 +188,11 @@
    "status": "KO",
    "element": "Death",
    "price": 10000,
-   "value": 5000
+   "value": 5000,
+   "successMessage": "Collapsed"
  },
  {
-   "name": "XZON",
+   "name": "WARP",
    "type": "Black",
    "effect": "PermStatus",
    "power": 5,
@@ -184,7 +200,8 @@
    "status": "KO",
    "element": "Dimension",
    "price": 1500,
-   "value": 750
+   "value": 750,
+   "successMessage": "Collapsed"
  },
  {
    "name": "BSRK",
@@ -195,7 +212,8 @@
    "status": "Berserk",
    "element": "None",
    "price": 10000,
-   "value": 5000
+   "value": 5000,
+   "successMessage": "Att. up!"
  },
  {
    "name": "HAST",
@@ -206,7 +224,8 @@
    "status": "Haste",
    "element": "None",
    "price": 20000,
-   "value": 10000
+   "value": 10000,
+   "successMessage": "Multi Att. up!"
  },
  {
    "name": "AURA",
@@ -217,7 +236,8 @@
    "status": "Aura",
    "element": "None",
    "price": 0,
-   "value": 7500
+   "value": 7500,
+   "successMessage": "MULTIPLE"
  },
  {
    "name": "CURE",
@@ -228,7 +248,8 @@
    "status": "",
    "element": "None",
    "price": 200,
-   "value": 50
+   "value": 50,
+   "successMessage": "Hp up!"
  },
  {
    "name": "LIFE",
@@ -239,7 +260,8 @@
    "status": "",
    "element": "None",
    "price": 1500,
-   "value": 750
+   "value": 750,
+   "successMessage": "???"
  },
  {
    "name": "PEEP",
@@ -250,7 +272,8 @@
    "status": "",
    "element": "None",
    "price": 800,
-   "value": 400
+   "value": 400,
+   "successMessage": "MULTIPLE"
  },
  {
    "name": "HEAL",
@@ -261,7 +284,8 @@
    "status": "",
    "element": "None",
    "price": 800,
-   "value": 400
+   "value": 400,
+   "successMessage": "MULTIPLE"
  },
  {
    "name": "BARR",
@@ -272,7 +296,8 @@
    "status": "Barrier",
    "element": "None",
    "price": 8000,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "MULTIPLE"
  },
  {
    "name": "BLNK",
@@ -283,7 +308,8 @@
    "status": "Blink",
    "element": "None",
    "price": 400,
-   "value": 200
+   "value": 200,
+   "successMessage": "Easy to dodge"
  },
  {
    "name": "SAFE",
@@ -294,7 +320,8 @@
    "status": "Protect",
    "element": "None",
    "price": 400,
-   "value": 200
+   "value": 200,
+   "successMessage": "Def up!"
  },
  {
    "name": "SHEL",
@@ -305,7 +332,8 @@
    "status": "Shell",
    "element": "None",
    "price": 400,
-   "value": 200
+   "value": 200,
+   "successMessage": "M.Def up!"
  },
  {
    "name": "WALL",
@@ -316,7 +344,8 @@
    "status": "Wall",
    "element": "None",
    "price": 8000,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "Wall"
  },
  {
    "name": "DSPL",
@@ -327,7 +356,8 @@
    "status": "",
    "element": "None",
    "price": 3000,
-   "value": 1500
+   "value": 1500,
+   "successMessage": "MULTIPLE"
  },
  {
    "name": "MINI",
@@ -338,7 +368,8 @@
    "status": "Mini",
    "element": "Dimension",
    "price": 3000,
-   "value": 1500
+   "value": 1500,
+   "successMessage": "Shrank"
  },
  {
    "name": "MUTE",
@@ -349,7 +380,8 @@
    "status": "Mute",
    "element": "Body",
    "price": 800,
-   "value": 400
+   "value": 400,
+   "successMessage": "Muted"
  },
  {
    "name": "ANTI",
@@ -360,7 +392,8 @@
    "status": "",
    "element": "Mind",
    "price": 1500,
-   "value": 750
+   "value": 750,
+   "successMessage": "MP went down"
  },
  {
    "name": "FOG",
@@ -371,7 +404,8 @@
    "status": "Amnesia",
    "element": "Mind",
    "price": 3000,
-   "value": 1500
+   "value": 1500,
+   "successMessage": "Dumbfounded"
  },
  {
    "name": "SLOW",
@@ -382,7 +416,8 @@
    "status": "Slow",
    "element": "Body",
    "price": 3000,
-   "value": 1500
+   "value": 1500,
+   "successMessage": "Multi Att. down"
  },
  {
    "name": "CHNG",
@@ -393,7 +428,8 @@
    "status": "",
    "element": "Dimension",
    "price": 8000,
-   "value": 4000
+   "value": 4000,
+   "successMessage": "Swapped stats"
  },
  {
    "name": "FEAR",
@@ -404,7 +440,8 @@
    "status": "Fear",
    "element": "Mind",
    "price": 800,
-   "value": 400
+   "value": 400,
+   "successMessage": "Scared"
  },
  {
    "name": "HOLY",
@@ -415,7 +452,8 @@
    "status": "",
    "element": "None",
    "price": 20000,
-   "value": 10000
+   "value": 10000,
+   "successMessage": ""
  },
  {
    "name": "EXIT",
@@ -426,7 +464,8 @@
    "status": "KO",
    "element": "Dimension",
    "price": 1500,
-   "value": 750
+   "value": 750,
+   "successMessage": "Collapsed"
  },
  {
    "name": "UTLM",
@@ -437,7 +476,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 1
+   "value": 1,
+   "successMessage": ""
  },
  {
    "name": "CURE_S",
@@ -448,7 +488,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "EyeD",
@@ -459,7 +500,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Anti",
@@ -470,7 +512,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Cross",
@@ -481,7 +524,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Hammr",
@@ -492,7 +536,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Kiss",
@@ -503,7 +548,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Needle",
@@ -514,7 +560,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Revi",
@@ -525,7 +572,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Ether",
@@ -536,7 +584,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Elixir",
@@ -547,7 +596,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Drink",
@@ -558,7 +608,8 @@
    "status": "Imbibe",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": "Att. up!"
  },
  {
    "name": "FIRE_S",
@@ -569,7 +620,8 @@
    "status": "",
    "element": "Fire",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "ICE_S",
@@ -580,7 +632,8 @@
    "status": "",
    "element": "Ice",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "BOLT_S",
@@ -591,7 +644,8 @@
    "status": "",
    "element": "Lightning",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Mist",
@@ -602,7 +656,8 @@
    "status": "",
    "element": "Poison",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Breath",
@@ -613,7 +668,8 @@
    "status": "Stone",
    "element": "Dimension",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": "Stopped"
  },
  {
    "name": "Glare",
@@ -624,7 +680,8 @@
    "status": "Stone",
    "element": "Dimension",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": "Stopped"
  },
  {
    "name": "Wink",
@@ -635,7 +692,8 @@
    "status": "Confuse",
    "element": "Mind",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": "Confused"
  },
  {
    "name": "Blast",
@@ -646,7 +704,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Quake",
@@ -657,7 +716,8 @@
    "status": "",
    "element": "Dimension",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Tnad",
@@ -668,7 +728,8 @@
    "status": "",
    "element": "Mind",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Wave",
@@ -679,7 +740,8 @@
    "status": "",
    "element": "Dimension",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Glic",
@@ -690,7 +752,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Bow",
@@ -701,7 +764,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Rock",
@@ -712,7 +776,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Blast_2",
@@ -723,7 +788,8 @@
    "status": "Paralysis",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": "Paralyzed"
  },
  {
    "name": "Meteo",
@@ -734,7 +800,8 @@
    "status": "",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Spirit",
@@ -745,7 +812,8 @@
    "status": "Spirit",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": ""
  },
  {
    "name": "Intelligence",
@@ -756,6 +824,7 @@
    "status": "Intelligence",
    "element": "None",
    "price": 0,
-   "value": 0
+   "value": 0,
+   "successMessage": "INT up!"
  }
 ]

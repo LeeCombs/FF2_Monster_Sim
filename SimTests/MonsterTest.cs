@@ -510,7 +510,7 @@ namespace SimTests
         public void WallTest()
         {
             // Ensure normal base stats
-            Monster monster = MonsterManager.GetMonsterByName("LegEater");
+            Monster monster = new Monster();
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Wall));
 
             // TODO: Ensure stacks have intended effect: Negates ALL spells up to it's level

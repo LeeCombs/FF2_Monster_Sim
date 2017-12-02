@@ -369,6 +369,11 @@ namespace FF2_Monster_Sim
             MP -= amount;
         }
 
+        public bool IsDead()
+        {
+            return HP > 0;
+        }
+
         ////////////////////////////
         // (De)Buffs and Statuses //
         ////////////////////////////

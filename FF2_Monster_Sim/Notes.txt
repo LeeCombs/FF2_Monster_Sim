@@ -89,14 +89,14 @@ Spell Messages {
     FEAR: Scared
     FOG : Dumbfounded
     MUTE: Muted
+    MINI: Shrank
     WARP: <<MONSTER>> fell, Collapsed
     DETH: <<MONSTER>> fell, Collapsed
-    MINI: Shrank
-    EXIT: 
+    EXIT: <<MONSTER>> fell, Collapsed
     
     DRAN: HP Absorbed!
     ASPL: MP Absorbed!
-    DSPL: Bolt def. dn, Prot, Poison, Body, Ice
+    DSPL: Chng def. dn, Fire, Soul, Bolt, Prot, Poison, Body, Ice
     ANTI: MP went down
     
     CHNG: Swapped stats

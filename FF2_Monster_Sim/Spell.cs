@@ -39,5 +39,6 @@ namespace FF2_Monster_Sim
         public Element Element;
         public int Price;
         public int Value;
+        public string SuccessMessage;
     }
 }

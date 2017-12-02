@@ -16,6 +16,30 @@ namespace FF2_Monster_Sim
         Special
     }
 
+    public struct SpellResult
+    {
+        public int Damage;
+        public List<string> Results;
+
+        public SpellResult(int damage, List<string> results)
+        {
+            Damage = damage;
+            Results = results;
+        }
+
+        public SpellResult(int damage)
+        {
+            Damage = damage;
+            Results = new List<string>();
+        }
+
+        public SpellResult(List<string> results)
+        {
+            Damage = -1;
+            Results = results;
+        }
+    }
+
     public class SpellManager
     {
         private static Random rnd;
@@ -44,8 +68,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Retrieve a Spell object by name. Returns null if invalid.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <returns>The Spell object if found, null if error.</returns>
         public static Spell GetSpellByName(string name)
         {
             if (String.IsNullOrEmpty(name))
@@ -58,9 +81,7 @@ namespace FF2_Monster_Sim
             {
                 if (String.Equals(name, (string)data.name, StringComparison.OrdinalIgnoreCase))
                 {
-                    // Load spell
                     Spell spl = new Spell();
-
                     spl.Name = (string)data.name;
                     spl.SpellType = (SpellType)Enum.Parse(typeof(SpellType), (string)data.type);
                     spl.Effect = (string)data.effect;
@@ -70,7 +91,7 @@ namespace FF2_Monster_Sim
                     spl.Element = (Element)Enum.Parse(typeof(Element), (string)data.element);
                     spl.Price = (int)data.price;
                     spl.Value = (int)data.value;
-
+                    spl.SuccessMessage = (string)data.successMessage;
                     return spl;
                 }
             }
@@ -80,9 +101,24 @@ namespace FF2_Monster_Sim
             return null;
         }
 
-        public static string CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
+        /// <summary>
+        /// Cast a spell against a target. Applies the effects and returns the result.
+        /// </summary>
+        /// <param name="multiTarget">Whether the spell being cast is targeting multiple monsters. Halves accuracy and quarters power.</param>
+        /// <returns>Result of casting the spell</returns>
+        public static SpellResult CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
         {
             Debug.WriteLine("Casting spell: " + spell.Name + " " + level);
+
+            // Helpers
+            SpellResult failedResult = new SpellResult(new List<string> { "Ineffective" });
+            SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.Status });
+
+            if (level <= target.GetBuffStacks(Buff.Wall))
+            {
+                Debug.WriteLine("Wall stacks exceed spell level");
+                return failedResult;
+            }
 
             // Reduce accuracy and power if multi-targetting
             int adjustedAccuracy = spell.Accuracy;
@@ -90,15 +126,13 @@ namespace FF2_Monster_Sim
             int adjustedPower = spell.Power;
             if (multiTarget) adjustedPower = adjustedPower / 4;
 
-            // Check for absorption
-            // No effect except HP gain. Damaging and non-damaging spells calculate for healing
-            // Ignore weakness, resistance, and magic defense rolls
+            // Check for absorption. No effect except HP gain. All spells calculate damage.
             if (target.IsAbsorbantTo(spell.Element))
             {
                 int totalHeal = GetDamage(adjustedAccuracy, level);
                 Debug.WriteLine("Healing: " + totalHeal);
                 target.HealHP(totalHeal);
-                return "Absorbed";
+                return new SpellResult(new List<string> { "HP up!" });
             }
             
             //// Notes of below
@@ -113,89 +147,112 @@ namespace FF2_Monster_Sim
                 case "Damage_3": // TODO: Is this just normal damage?
                     if (target.IsResistantTo(spell.Element))
                     {
-                        Debug.WriteLine("Resist! Damaging: " + GetDamage(adjustedPower, level) / 2);
-                        return "resist";
+                        return HandleDamageSpellResult(target, GetDamage(adjustedPower, level) / 2);
                     }
                     if (target.IsWeakTo(spell.Element))
                     {
-                        Debug.WriteLine("Weak! Damaging: " + GetDamage(adjustedPower, level * 2) * 2);
-                        return "weak";
+                        return HandleDamageSpellResult(target, GetDamage(adjustedPower, level  *2) * 2);
                     }
                     if (target.IsWeakTo(spell.Element) && target.IsResistantTo(spell.Element))
                     {
                         // Damage as usual. Best guess at hits: level - blocks
                         int rwHits = level - GetMagicBlocks(target);
-                        Debug.WriteLine("Resist and Weak! " + rwHits + " hits. Damaging: " + GetDamage(adjustedPower, rwHits));
-                        return "weak";
+                        return HandleDamageSpellResult(target, GetDamage(adjustedPower, rwHits));
                     }
                     // Normal logic
                     int hits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
-                    Debug.WriteLine(hits + " hits. Damaging: " + GetDamage(adjustedPower, hits));
-                    break;
+                    return HandleDamageSpellResult(target, GetDamage(adjustedPower, hits));
                 case "Damage_Ultima":
                     // TODO: Ultima damage bug
                     break;
                 case "Heal":
-                    // Roll damage like usual, except heal
+                    // Damage undead, heal otherwise
+                    if (target.Families.Contains(MonsterFamily.Undead))
+                    {
+                        int healHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
+                        return HandleDamageSpellResult(target, GetDamage(adjustedPower, healHits));
+                    }
                     int totalHeal = GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy));
                     Debug.WriteLine("Healing: " + totalHeal);
                     target.HealHP(totalHeal);
-                    // TODO: If undead, treat as damage. Do they roll to resist?
-                    break;
+                    return new SpellResult(new List<string> { "HP up!" });
                 case "Revive":
-                    // TODO: Life is effective against undead, useless otherwise
+                    // Chance to kill undead, otherwise fail. Fails if multi-targeting.
+                    if (multiTarget) return failedResult;
+                    if (target.Families.Contains(MonsterFamily.Undead))
+                    {
+                        if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
+                        {
+                            // TODO: KO target
+                            return new SpellResult(new List<string> { target.Name + " fell", "Collapsed" });
+                        }
+                    }
                     break;
                 case "Buff":
                     // Autohits, ignores magic resistance rolls
                     Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
                     target.AddBuff(buff, GetSuccesses(level, adjustedAccuracy));
+                    // TODO: AURA, BARR, HEAL, PEEP all have their unique results based on # of successes
+                    switch (spell.Name)
+                    {
+                        case "AURA":
+                            string[] auraMessages = { };
+                            break;
+                        case "BARR":
+                            break;
+                        default:
+                            return statusSuccessResult;
+                    }
                     break;
                 case "Debuff":
-                    if (target.IsResistantTo(spell.Element)) return "ineffective";
+                    if (target.IsResistantTo(spell.Element)) return failedResult;
                     if (target.IsWeakTo(spell.Element))
                     {
                         Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
                         target.AddDebuff(debuff, level); // TODO: level + successes?
-                        return "success";
+                        // TODO: DSPL has unique results messages based on # of successes
+                        return statusSuccessResult;
                     }
                     // Normal logic
                     int debuffHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
                     if (debuffHits > 0)
                     {
                         Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
-                        target.AddDebuff(debuff, level);
+                        target.AddDebuff(debuff, debuffHits);
+                        // TODO: DSPL has unique results messages based on # of successes
+                        return statusSuccessResult;
                     }
                     break;
                 case "TempStatus":
-                    if (target.IsResistantTo(spell.Element)) return "ineffective";
+                    if (target.IsResistantTo(spell.Element)) return new SpellResult(new List<string> { "Ineffective" });
                     if (target.IsWeakTo(spell.Element))
                     {
                         TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
                         target.AddTempStatus(tempStatus);
-                        return "success";
+                        return statusSuccessResult;
                     }
                     // Normal logic. A single hit = success
                     if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                     {
                         TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), spell.Status);
                         target.AddTempStatus(tempStatus);
-                        return "success";
+                        return statusSuccessResult;
                     }
                     break;
                 case "PermStatus":
-                    if (target.IsResistantTo(spell.Element)) return "ineffective";
+                    if (target.IsResistantTo(spell.Element)) return failedResult;
                     if (target.IsWeakTo(spell.Element))
                     {
                         PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
                         target.AddPermStatus(permStatus);
-                        return "success";
+                        return statusSuccessResult;
                     }
                     // Normal logic. A single hit = success
                     if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                     {
                         PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), spell.Status);
                         target.AddPermStatus(permStatus);
-                        return "success";
+                        return statusSuccessResult;
                     }
                     break;
                 case "CureTempStatus":
@@ -207,8 +264,10 @@ namespace FF2_Monster_Sim
                     {
                         if (i >= tempCureOrder.Length) break;
                         target.RemoveTempStatus(tempCureOrder[i]);
+                        // TODO: PEEP returns different multiple result messages based on what it cures
                     }
-                    break;
+                    // TODO: If nothing is cured, is ineffective returned?
+                    return statusSuccessResult;
                 case "CurePermStatus":
                     // This is HEAL/Esuna. Cure everything up to and including level.
                     PermStatus[] permCureOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
@@ -216,15 +275,16 @@ namespace FF2_Monster_Sim
                     {
                         if (i >= permCureOrder.Length) break;
                         target.RemovePermStatus(permCureOrder[i]);
+                        // TODO: HEAL returns different multiple result messages based on what it cures
                     }
-                    break;
+                    // TODO: If nothing is cured, is ineffective returned?
+                    return statusSuccessResult;
                 case "Special":
                     // TODO: HP Drain, MP Drain, Swap, Halve MP
                     switch (spell.Name.ToUpper())
                     {
                         case "DRAN": // Drain HP
                             // Each hit target loses 1/16 (round down) of Max HP. Caster gains that amount
-                            
                             int hpDrainAmt = target.HPMax / 16; // NOTE: Int division
                             int dranHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
                             if (dranHits > 0)
@@ -241,12 +301,11 @@ namespace FF2_Monster_Sim
                                     caster.HealHP(dranAmt);
                                     target.DamageHP(dranAmt);
                                 }
-                                return "success";
+                                return statusSuccessResult;
                             }
                             break;
                         case "ASPL": // Drain MP
                             // Each hit target loses 1/16 (round down) of Max MP. Caster gains that amount
-
                             int mpDrainAmt = target.MPMax / 16; // NOTE: Int division
                             int asplHits = GetHitsAgainstTarget(level, adjustedAccuracy, target);
                             if (asplHits > 0)
@@ -263,20 +322,20 @@ namespace FF2_Monster_Sim
                                     caster.HealMP(asplAmt);
                                     target.DamageMP(asplAmt);
                                 }
-                                return "success";
+                                return statusSuccessResult;
                             }
                             break;
                         case "ANTI": // Halve MP
-                            if (target.IsResistantTo(spell.Element)) return "failed";
+                            if (target.IsResistantTo(spell.Element)) return failedResult;
                             if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                             {
-                                // Target loses half of MP
+                                // TODO: Target loses half of MP
                                 // NES_BUG: This only effects the first byte of the MP value
-                                return "success";
+                                return statusSuccessResult;
                             }
                             break;
                         case "CHNG": // Caster and Target swap HP and MP
-                            if (target.IsResistantTo(spell.Element)) return "failed";
+                            if (target.IsResistantTo(spell.Element)) return failedResult;
                             if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                             {
                                 int casterHP = caster.HP;
@@ -286,11 +345,14 @@ namespace FF2_Monster_Sim
                                 target.HP = casterHP;
                                 target.MP = casterMP;
                                 // caster.MP -= MPConsumption
-                                return "success";
+                                return statusSuccessResult;
                             }
                             break;
                         case "BLAST":
-                            // Bomb's Explosion Spell
+                            // Bomb's Explosion Spell. It's kinda dumb...
+                            // Fails if HP is full. Acts like a physical attack...
+                            // Deals ((20...40) - Defense) * level
+                            if (caster.HP == caster.HPMax) return failedResult;
                             break;
                         default:
                             Debug.WriteLine("Invalid spell found at speical: " + spell.Name);
@@ -302,15 +364,18 @@ namespace FF2_Monster_Sim
                     break;
             }
 
-            return "Fail";
+            return failedResult;
         }
+
+
+        /////////////
+        // Helpers //
+        /////////////
+
 
         /// <summary>
         /// Calculate how many successes were found (e.g. 5 rolls at 50% accuracy chance)
         /// </summary>
-        /// <param name="rolls"></param>
-        /// <param name="accuracy"></param>
-        /// <returns></returns>
         private static int GetSuccesses(int rolls, int accuracy)
         {
             int successes = 0;
@@ -324,8 +389,6 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Calculate how many amgic blocks a monster was able to perform. (e.g. 5 blocks at 50% evasion chance)
         /// </summary>
-        /// <param name="monster"></param>
-        /// <returns></returns>
         private static int GetMagicBlocks(Monster monster)
         {
             int successes = 0;
@@ -347,9 +410,6 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Get the sum of damage rolls (power...2*power per hit)
         /// </summary>
-        /// <param name="power"></param>
-        /// <param name="hits"></param>
-        /// <returns></returns>
         private static int GetDamage(int power, int hits)
         {
             int sum = 0;
@@ -358,6 +418,18 @@ namespace FF2_Monster_Sim
                 sum += rnd.Next(power, 2 * power);
             }
             return sum;
+        }
+
+        /// <summary>
+        /// Deal damage to a target, and build and return the result.
+        /// </summary>
+        private static SpellResult HandleDamageSpellResult(Monster target, int damage)
+        {
+            Debug.WriteLine("Damaging " + target.Name + " for " + damage);
+            SpellResult res = new SpellResult(damage);
+            target.DamageHP(damage);
+            if (target.IsDead()) res.Results.Add(target.Name + " fell");
+            return res;
         }
     }
 }
