@@ -369,6 +369,13 @@ namespace FF2_Monster_Sim
             MP -= amount;
         }
 
+        public void Kill()
+        {
+            HP = 0;
+            // Animation
+            // Removal
+        }
+
         public bool IsDead()
         {
             return HP > 0;

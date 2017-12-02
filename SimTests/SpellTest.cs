@@ -140,9 +140,9 @@ namespace SimTests
         //////////////////////////
 
         [TestMethod]
-        public void EsunaHEALSpellTest()
+        public void HEALSpellTest()
         {
-            // This is HEAL/Esuna
+            // Setup
             Spell spell = SpellManager.GetSpellByName("HEAL");
             Monster monster = new Monster();
             PermStatus[] permStatOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
@@ -165,9 +165,9 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void BasunaPEEPSpellTest()
+        public void PEEPSpellTest()
         {
-            // This is PEEP/Basuna
+            // Setup
             Spell spell = SpellManager.GetSpellByName("PEEP");
             Monster monster = new Monster();
             TempStatus[] tempStatOrder = { TempStatus.Venom, TempStatus.Sleep, TempStatus.Mini, TempStatus.Mute, TempStatus.Paralysis, TempStatus.Confuse };
@@ -279,6 +279,32 @@ namespace SimTests
             // Ignore Spirit and Intelligence for now as they may be irrelevant
 
             // Cast each spell and ensure they add the proper buff to the monster
+
+            // Ensure each spell's result returns expected success message
+        }
+
+        [TestMethod]
+        public void BARRTest()
+        {
+            // Setup
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("BARR");
+            spell.Accuracy = 255;
+
+            // Test SpellResult messages and ensure they're there and in order
+            SpellResult res = SpellManager.CastSpell(monster, monster, spell, 3);
+            Debug.WriteLine(String.Join(",", res.Results));
+        }
+
+        [TestMethod]
+        public void AURATest()
+        {
+            // Setup
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("AURA");
+            spell.Accuracy = 255;
+
+            // Test SpellResult messages and ensure they're there and in order
         }
 
         ///////////////////

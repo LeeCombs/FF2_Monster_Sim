@@ -173,7 +173,6 @@ namespace FF2_Monster_Sim
                         return HandleDamageSpellResult(target, GetDamage(adjustedPower, healHits));
                     }
                     int totalHeal = GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy));
-                    Debug.WriteLine("Healing: " + totalHeal);
                     target.HealHP(totalHeal);
                     return new SpellResult(new List<string> { "HP up!" });
                 case "Revive":
@@ -183,7 +182,7 @@ namespace FF2_Monster_Sim
                     {
                         if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                         {
-                            // TODO: KO target
+                            target.Kill();
                             return new SpellResult(new List<string> { target.Name + " fell", "Collapsed" });
                         }
                     }
@@ -191,19 +190,34 @@ namespace FF2_Monster_Sim
                 case "Buff":
                     // Autohits, ignores magic resistance rolls
                     Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
-                    target.AddBuff(buff, GetSuccesses(level, adjustedAccuracy));
-                    // TODO: AURA, BARR, HEAL, PEEP all have their unique results based on # of successes
+                    int buffHits = GetSuccesses(level, adjustedAccuracy);
+                    if (buffHits == 0) return failedResult;
+                    target.AddBuff(buff, buffHits);
+
+                    // AURA and BARR have their unique results based on # of successes. Messages are displayed highest to lowest.
                     switch (spell.Name)
                     {
                         case "AURA":
-                            string[] auraMessages = { };
-                            break;
+                            string[] auraMessages = { "White", "Yellow", "Green", "Black", "Blue", "Orange", "Red" };
+                            List<string> auraMsgList = new List<string>();
+                            buffHits--;
+                            for (int i = buffHits > 6 ? 6 : buffHits; i >= 0; i--)
+                            {
+                                auraMsgList.Add(auraMessages[i] + " Aura");
+                            }
+                            return new SpellResult(auraMsgList);
                         case "BARR":
-                            break;
+                            string[] barrMessages = { "Ice", "Critical Hit!", "Poison", "Death", "Bolt", "Soul", "Fire" };
+                            List<string> barrMsgList = new List<string>();
+                            buffHits--;
+                            for (int i = buffHits > 6 ? 6 : buffHits; i >= 0; i--)
+                            {
+                                barrMsgList.Add(barrMessages[i] + " Df");
+                            }
+                            return new SpellResult(barrMsgList);
                         default:
                             return statusSuccessResult;
                     }
-                    break;
                 case "Debuff":
                     if (target.IsResistantTo(spell.Element)) return failedResult;
                     if (target.IsWeakTo(spell.Element))
