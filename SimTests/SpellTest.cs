@@ -140,7 +140,7 @@ namespace SimTests
         //////////////////////////
 
         [TestMethod]
-        public void HEALSpellTest()
+        public void HEALTest()
         {
             // Setup
             Spell spell = SpellManager.GetSpellByName("HEAL");
@@ -165,7 +165,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void PEEPSpellTest()
+        public void PEEPTest()
         {
             // Setup
             Spell spell = SpellManager.GetSpellByName("PEEP");
@@ -192,7 +192,7 @@ namespace SimTests
         }
 
         [TestMethod]
-        public void CureSpellTest()
+        public void CURETest()
         {
             // Set up the monster to be healed
             Monster monster = new Monster();
@@ -277,10 +277,22 @@ namespace SimTests
             Monster monster = new Monster();
             string[] buffSpells = { "BSRK", "HAST", "AURA", "BARR", "BLNK", "SAFE", "SHEL", "WALL", "Drink" };
             // Ignore Spirit and Intelligence for now as they may be irrelevant
+            
+            // Cast each spell and ensure they add the right buff and return the right result message
+            foreach (string name in buffSpells)
+            {
+                Spell spell = SpellManager.GetSpellByName(name);
+                Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
+                spell.Accuracy = 255;
 
-            // Cast each spell and ensure they add the proper buff to the monster
+                SpellResult res = SpellManager.CastSpell(monster, monster, spell, 1);
+                Assert.IsTrue(monster.GetBuffStacks(buff) > 0);
+                monster.RemoveBuff(buff);
 
-            // Ensure each spell's result returns expected success message
+                // AURA and BARR have unique messages and are covered in other tests
+                if (spell.Name == "AURA" || spell.Name == "BARR") continue;
+                Assert.AreEqual(spell.SuccessMessage, res.Results[0]);
+            }
         }
 
         [TestMethod]
@@ -290,6 +302,7 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("BARR");
             spell.Accuracy = 255;
+            string[] expectedMessages = { "Fire Df", "Soul Df", "Bolt Df", "Death Df", "Poison Df", "Critical Hit! Df", "Ice Df" };
 
             // Test SpellResult messages and ensure they're there and in order
             SpellResult res = SpellManager.CastSpell(monster, monster, spell, 3);
@@ -303,8 +316,20 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("AURA");
             spell.Accuracy = 255;
+            string[] expectedMessages = { "Red Aura", "Orange Aura", "Blue Aura", "Black Aura", "Green Aura", "Yellow Aura", "White Aura" };
 
             // Test SpellResult messages and ensure they're there and in order
+            for (int i = 0; i < 7; i++)
+            {
+                int startIndex = 6 - i;
+                int endIndex = 6;
+
+                SpellResult res = SpellManager.CastSpell(monster, monster, spell, i + 1);
+                Debug.WriteLine(String.Join(",", res.Results));
+                // level 1 = index 6
+                // level 2 = index 5 - 6
+                // level 3 = index 4 - 6
+            }
         }
 
         ///////////////////

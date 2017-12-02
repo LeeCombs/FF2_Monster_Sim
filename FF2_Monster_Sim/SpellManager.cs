@@ -112,7 +112,7 @@ namespace FF2_Monster_Sim
 
             // Helpers
             SpellResult failedResult = new SpellResult(new List<string> { "Ineffective" });
-            SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.Status });
+            SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.SuccessMessage });
 
             if (level <= target.GetBuffStacks(Buff.Wall))
             {

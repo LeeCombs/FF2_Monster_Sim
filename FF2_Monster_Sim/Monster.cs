@@ -459,7 +459,6 @@ namespace FF2_Monster_Sim
                 }
                 else Buffs.Add(buff, stacks);
                 Buffs[buff] = (Buffs[buff] % 256); // Overflow
-                
                 return true;
             }
             
