@@ -245,7 +245,41 @@ namespace SimTests
             Assert.IsTrue(monster.HP > 1);
             Assert.IsTrue(monster.HP <= monster.HPMax);
 
-            // TODO: Damage vs Undead
+            // Damage vs Undead
+            monster.Families.Add(MonsterFamily.Undead);
+            monster.HP = monster.HPMax;
+            Assert.AreEqual(1000, monster.HP);
+            SpellManager.CastSpell(monster, monster, spell, 16);
+            Assert.IsTrue(monster.HP < 1000);
+        }
+
+        [TestMethod]
+        public void LIFETest()
+        {
+            // Setup
+            Monster monster = new Monster();
+            monster.HPMax = 100;
+            monster.HP = 100;
+            Assert.AreEqual(100, monster.HP);
+            Spell spell = SpellManager.GetSpellByName("LIFE");
+            spell.Accuracy = 255;
+
+            // TODO: Ensure LIFE has no effect normally
+            SpellResult resFail = SpellManager.CastSpell(monster, monster, spell, 16);
+            Assert.AreEqual("Ineffective", resFail.Results[0]);
+
+            // TODO: Ensure LIFE fails if multi-casted, even against undead
+            monster.Families.Add(MonsterFamily.Undead);
+            monster.Name = "Spooky Ghost";
+            SpellResult resMulti = SpellManager.CastSpell(monster, monster, spell, 16, true);
+            Assert.IsFalse(monster.IsDead());
+            Assert.AreEqual("Ineffective", resMulti.Results[0]);
+
+            // Ensure LIFE kills undead creatures
+            SpellResult resUndead = SpellManager.CastSpell(monster, monster, spell, 16);
+            Assert.AreEqual(monster.Name + " fell", resUndead.Results[0]);
+            Assert.AreEqual("Collapsed", resUndead.Results[1]);
+            Assert.IsTrue(monster.IsDead());
         }
 
         ///////////////////
@@ -578,7 +612,11 @@ namespace SimTests
             // Set up
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Blast");
-            // This is a bomb's explode spell, should kill em outright
+            
+            // Unless BUG_FIX, this does not work when caster is at full HP
+            // After being cast, the caster should be removed from battle
+            // This spell acts like physical damage instead of spell damage
+            // If the target has 40+ defense, there should be no damage achieved
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
 using Newtonsoft.Json;
@@ -114,6 +111,7 @@ namespace FF2_Monster_Sim
             SpellResult failedResult = new SpellResult(new List<string> { "Ineffective" });
             SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.SuccessMessage });
 
+            // If wall is high enough, the spell fails outright
             if (level <= target.GetBuffStacks(Buff.Wall))
             {
                 Debug.WriteLine("Wall stacks exceed spell level");
@@ -143,8 +141,8 @@ namespace FF2_Monster_Sim
             switch (spell.Effect)
             {
                 case "Damage":
-                case "Damage_2": // TODO: Is this just normal damage?
-                case "Damage_3": // TODO: Is this just normal damage?
+                case "Damage_2":
+                case "Damage_3":
                     if (target.IsResistantTo(spell.Element))
                     {
                         return HandleDamageSpellResult(target, GetDamage(adjustedPower, level) / 2);
@@ -223,7 +221,7 @@ namespace FF2_Monster_Sim
                     if (target.IsWeakTo(spell.Element))
                     {
                         Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
-                        target.AddDebuff(debuff, level); // TODO: level + successes?
+                        target.AddDebuff(debuff, level);
                         // TODO: DSPL has unique results messages based on # of successes
                         return statusSuccessResult;
                     }
@@ -282,7 +280,7 @@ namespace FF2_Monster_Sim
                         if (target.RemoveTempStatus(tempCureOrder[i])) peepMsgs.Add(peepMsgOrder[i]);
                     }
                     // TODO: If nothing is cured, is ineffective returned?
-                    return new SpellResult(peepMsgs); ;
+                    return new SpellResult(peepMsgs);
                 case "CurePermStatus":
                     // This is HEAL. Cure everything up to and including level.
                     PermStatus[] permCureOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
@@ -297,7 +295,7 @@ namespace FF2_Monster_Sim
                     // TODO: If nothing is cured, is ineffective returned?
                     return new SpellResult(healMsgs);
                 case "Special":
-                    // TODO: HP Drain, MP Drain, Swap, Halve MP
+                    // Spells that have unique effects: DRAN, ASPL, CHNG, ANTI, Blast
                     switch (spell.Name.ToUpper())
                     {
                         case "DRAN": // Drain HP
@@ -372,7 +370,7 @@ namespace FF2_Monster_Sim
                             if (caster.HP == caster.HPMax) return failedResult;
                             break;
                         default:
-                            Debug.WriteLine("Invalid spell found at speical: " + spell.Name);
+                            Debug.WriteLine("Invalid spell found at special: " + spell.Name);
                             break;
                     }
                     break;
@@ -380,18 +378,15 @@ namespace FF2_Monster_Sim
                     Debug.WriteLine("Invalid spell effect found: " + spell.Effect);
                     break;
             }
-
             return failedResult;
         }
-
-
+        
         /////////////
         // Helpers //
         /////////////
-
-
+        
         /// <summary>
-        /// Calculate how many successes were found (e.g. 5 rolls at 50% accuracy chance)
+        /// Calculate how many successes are rolled (e.g. 5 rolls at 50% accuracy chance)
         /// </summary>
         private static int GetSuccesses(int rolls, int accuracy)
         {
@@ -404,7 +399,7 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Calculate how many amgic blocks a monster was able to perform. (e.g. 5 blocks at 50% evasion chance)
+        /// Calculate how many magic blocks a monster was able to perform (e.g. 5 blocks at 50% evasion chance)
         /// </summary>
         private static int GetMagicBlocks(Monster monster)
         {

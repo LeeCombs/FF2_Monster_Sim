@@ -31,11 +31,10 @@ namespace FF2_Monster_Sim
                 // Accuracy for spells is explicitly not capped
                 accuracy = value;
                 if (accuracy < 0) accuracy = 0;
-                
             }
         }
         
-        public string Status; 
+        public string Status;
         public Element Element;
         public int Price;
         public int Value;

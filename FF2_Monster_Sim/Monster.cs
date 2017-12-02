@@ -358,7 +358,7 @@ namespace FF2_Monster_Sim
         public bool IsDead()
         {
             // TODO: Add KO status checks here?
-            return HP > 0;
+            return HP <= 0;
         }
 
         ///////////
