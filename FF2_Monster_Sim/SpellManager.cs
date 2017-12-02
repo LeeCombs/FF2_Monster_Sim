@@ -288,6 +288,7 @@ namespace FF2_Monster_Sim
                     // This is HEAL. Cure everything up to and including level.
                     PermStatus[] permCureOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
                     String[] healMsgOrder = { "Can see", "Devenomed", "Uncursed", "Remembers", "Regained form", "Normal body", "" };
+                    
                     List<string> healMsgs = new List<string>();
                     for (int i = 0; i < level; i++)
                     {

@@ -235,8 +235,8 @@ namespace FF2_Monster_Sim
         // In-battle effects
         public Dictionary<Buff, int> Buffs { get; set; }
         public Dictionary<Debuff, int> Debuffs { get; set; } 
-        public List<TempStatus> TempStatuses { get; set; }
-        public List<PermStatus> PermStatuses { get; set; }
+        public HashSet<TempStatus> TempStatuses { get; set; }
+        public HashSet<PermStatus> PermStatuses { get; set; }
 
         public Monster()
         {
@@ -249,8 +249,8 @@ namespace FF2_Monster_Sim
 
             Buffs = new Dictionary<Buff, int>();
             Debuffs = new Dictionary<Debuff, int>();
-            TempStatuses = new List<TempStatus>();
-            PermStatuses = new List<PermStatus>();
+            TempStatuses = new HashSet<TempStatus>();
+            PermStatuses = new HashSet<PermStatus>();
 
             rnd = new Random();
         }
@@ -305,7 +305,6 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Get the monster's current action.
         /// </summary>
-        /// <returns></returns>
         public MonsterAction GetAction()
         {
             // Noting this here... Curse halves magic power, but that's not a base stat
@@ -324,66 +323,47 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("Error retrieving action");
             return new MonsterAction();
         }
-
-        /// <summary>
-        /// HealHP the monster a given amount
-        /// </summary>
-        /// <param name="amount"></param>
+        
         public void HealHP(int amount)
         {
-            if (amount < 0)
-            {
-                Debug.WriteLine("Cannot heal a negative amount: " + amount);
-                return;
-            }
-            HP += amount;
+            if (amount < 0) Debug.WriteLine("Cannot heal a negative amount: " + amount);
+            else HP += amount;
         }
 
         public void HealMP(int amount)
         {
-            if (amount < 0)
-            {
-                Debug.WriteLine("Cannot heal a negative amount: " + amount);
-                return;
-            }
-            MP += amount;
+            if (amount < 0) Debug.WriteLine("Cannot heal a negative amount: " + amount);
+            else MP += amount;
         }
 
         public void DamageHP(int amount)
         {
-            if (amount < 0)
-            {
-                Debug.WriteLine("Cannot damage a negative amount: " + amount);
-                return;
-            }
-            HP -= amount;
+            if (amount < 0) Debug.WriteLine("Cannot damage a negative amount: " + amount);
+            else HP -= amount;
         }
 
         public void DamageMP(int amount)
         {
-            if (amount < 0)
-            {
-                Debug.WriteLine("Cannot damage a negative amount: " + amount);
-                return;
-            }
-            MP -= amount;
+            if (amount < 0) Debug.WriteLine("Cannot damage a negative amount: " + amount);
+            else MP -= amount;
         }
 
         public void Kill()
         {
             HP = 0;
-            // Animation
-            // Removal
+            // TODO: Animation
+            // TODO: Removal
         }
 
         public bool IsDead()
         {
+            // TODO: Add KO status checks here?
             return HP > 0;
         }
 
-        ////////////////////////////
-        // (De)Buffs and Statuses //
-        ////////////////////////////
+        ///////////
+        // Buffs //
+       ////////////
 
         /// <summary>
         /// Attempt to add a Buff to the Monster
@@ -489,6 +469,10 @@ namespace FF2_Monster_Sim
             return 0;
         }
 
+        ////////////
+        // Debuff //
+        ////////////
+
         /// <summary>
         /// Attempt to add a Debuff to the Monster
         /// </summary>
@@ -538,7 +522,6 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Remove a Debuff from the Monster
         /// </summary>
-        /// <param name="debuff">The debuff to remove</param>
         /// <returns>Whether or not the Debuff existed before removal</returns>
         public bool RemoveDebuff(Debuff debuff)
         {
@@ -550,7 +533,6 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Check if a Debuff exists on the monster. Returns stack value of the debuff, 0 if not found.
         /// </summary>
-        /// <param name="debuff">The Buff to check for</param>
         /// <returns>Stack value of the debuff, 0 if not found.</returns>
         public int GetDebuffStacks(Debuff debuff)
         {
@@ -558,28 +540,26 @@ namespace FF2_Monster_Sim
             return 0;
         }
 
+        /////////////////
+        // Temp Status //
+        /////////////////
+
         /// <summary>
-        /// Attempt to add a temporary status to the monster
+        /// Attempt to add a temporary status to the monster. 
+        /// If the status is Mini, the monster is instead killed.
         /// </summary>
-        /// <param name="tempStatus">The TempStatus to add</param>
         /// <returns>Whether or not the status was successfully added</returns>
         public bool AddTempStatus(TempStatus tempStatus)
         {
-            // TODO: If successful, Mini kills monster immediately
-
-            if (!TempStatuses.Contains(tempStatus))
+            // TODO: Mini kills monster immediately
+            if (tempStatus == TempStatus.Mini)
             {
-                TempStatuses.Add(tempStatus);
-                return true;
+                Debug.WriteLine("Kill the monster");
+                // TODO: That ^
             }
-            return false;
+            return TempStatuses.Add(tempStatus);
         }
-
-        /// <summary>
-        /// Removes a tempStatus from the Monster
-        /// </summary>
-        /// <param name="tempStatus">The TempStatus to remove</param>
-        /// <returns>Whether or not the status existed prior to removal</returns>
+        
         public bool RemoveTempStatus(TempStatus tempStatus)
         {
             return TempStatuses.Remove(tempStatus);
@@ -590,28 +570,26 @@ namespace FF2_Monster_Sim
             return TempStatuses.Contains(tempStatus);
         }
 
+        /////////////////
+        // Perm Status //
+        /////////////////
+
         /// <summary>
-        /// Attempt to add a permanent status to the monster
+        /// Attempt to add a permanent status to the monster. 
+        /// If the status is KO, Stone, or Toad, the monster is instead killed.
         /// </summary>
-        /// <param name="permStatus">the PermStatus to add</param>
         /// <returns>Whether or not the status was successfully added</returns>
         public bool AddPermStatus(PermStatus permStatus)
         {
-            // TODO: If successful, KO, Stone, Toad kills monster immediately
-
-            if (!PermStatuses.Contains(permStatus))
+            // TODO: KO, Stone, and Toad kills monster immediately\
+            if (permStatus == PermStatus.KO || permStatus == PermStatus.Stone || permStatus == PermStatus.Toad)
             {
-                PermStatuses.Add(permStatus);
-                return true;
+                Debug.WriteLine("Kill the monster");
+                // TODO: That ^
             }
-            return false;
+            return PermStatuses.Add(permStatus);
         }
 
-        /// <summary>
-        /// Removes a PermStatus from the Monster
-        /// </summary>
-        /// <param name="permStatus">The PermStatus to remove</param>
-        /// <returns>Whether or not the status existed prior to removal</returns>
         public bool RemovePermStatus(PermStatus permStatus)
         {
             return PermStatuses.Remove(permStatus);

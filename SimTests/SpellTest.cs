@@ -152,9 +152,7 @@ namespace SimTests
             expectedMessages[PermStatus.Poison] = "Devenomed"; // You sure?
             expectedMessages[PermStatus.Curse] = "Uncursed";
             expectedMessages[PermStatus.Amnesia] = "Remembers";
-            expectedMessages[PermStatus.Toad] = "Regained Form";
-            expectedMessages[PermStatus.Stone] = "Normal Body";
-            expectedMessages[PermStatus.KO] = "";
+            // Toad, KO, and Stone are ignored since they just kill monsters
 
             // Ensure each status doesn't exist, add it, and test for it
             foreach (PermStatus stat in permStatOrder)
@@ -168,11 +166,12 @@ namespace SimTests
             for (int i = 0; i < 16; i++)
             {
                 foreach (PermStatus stat in permStatOrder) monster.AddPermStatus(stat);
-                SpellResult res = SpellManager.CastSpell(monster, monster, spell, i + 1);
-                // TODO: Ensure the proper result message is returned
+                SpellManager.CastSpell(monster, monster, spell, i + 1);
                 for (int j = 0; j < (i < 7 ? i : 7); j++) Assert.IsFalse(monster.HasPermStatus(permStatOrder[j]));
                 for (int k = i + 1; k < permStatOrder.Length; k++) Assert.IsTrue(monster.HasPermStatus(permStatOrder[k]));
             }
+
+            // TODO: Check that results messages return expected values
         }
 
         [TestMethod]
@@ -182,7 +181,14 @@ namespace SimTests
             Spell spell = SpellManager.GetSpellByName("PEEP");
             Monster monster = new Monster();
             TempStatus[] tempStatOrder = { TempStatus.Venom, TempStatus.Sleep, TempStatus.Mini, TempStatus.Mute, TempStatus.Paralysis, TempStatus.Confuse };
-
+            Dictionary<TempStatus, string> expectedMessages = new Dictionary<TempStatus, string>();
+            expectedMessages[TempStatus.Venom] = "Poison left"; // You sure?
+            expectedMessages[TempStatus.Sleep] = "Scared"; // You sure?
+            expectedMessages[TempStatus.Paralysis] = "Can move";
+            expectedMessages[TempStatus.Mute] = "Can speak";
+            expectedMessages[TempStatus.Confuse] = "Normal";
+            // Mini is skipped as it just kills monsters instead of minifying them
+            
             // Ensure each status doesn't exist, add it, and test for it
             foreach (TempStatus stat in tempStatOrder)
             {
@@ -194,12 +200,15 @@ namespace SimTests
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
             {
+                foreach (TempStatus stat in tempStatOrder) monster.AddTempStatus(stat);
                 SpellManager.CastSpell(monster, monster, spell, i + 1);
                 // Level 1 removes both Venom and Sleep
                 Assert.IsFalse(monster.HasTempStatus(tempStatOrder[0]));
                 for (int j = 1; j < (i < 5 ? i : 5); j++) Assert.IsFalse(monster.HasTempStatus(tempStatOrder[j]));
                 for (int k = i + 1; k < tempStatOrder.Length; k++) Assert.IsTrue(monster.HasTempStatus(tempStatOrder[k]));
             }
+
+            // TODO: Check that results messages return expected values
         }
 
         [TestMethod]
@@ -233,7 +242,7 @@ namespace SimTests
         [TestMethod]
         public void TempStatusSpellsTest()
         {
-            string[] tempStatusSpells = new String[] { "SLEP", "STON", "STOP", "CHRM", "MINI", "MUTE", "Wink" };
+            string[] tempStatusSpells = new String[] { "SLEP", "STON", "STOP", "CHRM", "MUTE", "MINI", "Wink" };
 
             foreach (string spellName in tempStatusSpells)
             {
@@ -254,7 +263,7 @@ namespace SimTests
         [TestMethod]
         public void PermStatusSpellsTest()
         {
-            string[] permStatusSpells = new String[] { "BLND", "CURS", "TOAD", "BRAK", "WARP", "FOG", "EXIT", "Breath", "Glare" };
+            string[] permStatusSpells = { "BLND", "CURS", "FOG", "TOAD", "BRAK", "WARP", "EXIT", "Breath", "Glare" };
 
             // Make sure every spell can effect it's status on a target and followed elemental rules
             foreach (string spellName in permStatusSpells)
@@ -263,6 +272,23 @@ namespace SimTests
                 Assert.IsTrue(IsAbsorbed(spell));
                 Assert.IsTrue(StatusIsResisted(spell));
                 Assert.IsTrue(StatusAutoHits(spell));
+            }
+        }
+
+        [TestMethod]
+        public void KOStatusSpellsTest()
+        {
+            // Setup
+            string[] KOStatusSpells = { "MINI", "TOAD", "BRAK", "WARP", "EXIT", "Breath" };
+
+            // Cast each spell and ensure the target monster is killed
+            foreach (string spellName in KOStatusSpells)
+            {
+                // Setup
+                Monster monster = new Monster();
+                Spell spell = SpellManager.GetSpellByName(spellName);
+                spell.Accuracy = 255;
+                // TODO: Cast spell, check for KO/Death/Whatever
             }
         }
 
