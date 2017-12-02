@@ -258,24 +258,26 @@ namespace SimTests
         {
             // Setup
             Monster monster = new Monster();
-            monster.HPMax = 100;
-            monster.HP = 100;
-            Assert.AreEqual(100, monster.HP);
+            monster.HP = monster.HPMax = 100;
             Spell spell = SpellManager.GetSpellByName("LIFE");
             spell.Accuracy = 255;
 
-            // TODO: Ensure LIFE has no effect normally
+            // Ensure LIFE has no effect normally
             SpellResult resFail = SpellManager.CastSpell(monster, monster, spell, 16);
             Assert.AreEqual("Ineffective", resFail.Results[0]);
 
-            // TODO: Ensure LIFE fails if multi-casted, even against undead
+            // Ensure LIFE fails if multi-casted, even against undead
             monster.Families.Add(MonsterFamily.Undead);
-            monster.Name = "Spooky Ghost";
-            SpellResult resMulti = SpellManager.CastSpell(monster, monster, spell, 16, true);
+            Assert.AreEqual("Ineffective", SpellManager.CastSpell(monster, monster, spell, 16, true).Results[0]);
+            Assert.AreEqual("Ineffective", SpellManager.CastSpell(monster, monster, spell, 16, true).Results[0]);
+            Assert.AreEqual("Ineffective", SpellManager.CastSpell(monster, monster, spell, 16, true).Results[0]);
+            Assert.AreEqual("Ineffective", SpellManager.CastSpell(monster, monster, spell, 16, true).Results[0]);
+            Assert.AreEqual("Ineffective", SpellManager.CastSpell(monster, monster, spell, 16, true).Results[0]);
+            Assert.AreEqual("Ineffective", SpellManager.CastSpell(monster, monster, spell, 16, true).Results[0]);
             Assert.IsFalse(monster.IsDead());
-            Assert.AreEqual("Ineffective", resMulti.Results[0]);
 
             // Ensure LIFE kills undead creatures
+            monster.Name = "Spooky Ghost";
             SpellResult resUndead = SpellManager.CastSpell(monster, monster, spell, 16);
             Assert.AreEqual(monster.Name + " fell", resUndead.Results[0]);
             Assert.AreEqual("Collapsed", resUndead.Results[1]);
@@ -353,8 +355,7 @@ namespace SimTests
         {
             // Setup
             Monster monster = new Monster();
-            monster.HPMax = 50000;
-            monster.HP = monster.HPMax;
+            monster.HP = monster.HPMax = 50000;
 
             // TODO: What do I want to test? All damage spells achieve damage?
         }
@@ -494,8 +495,7 @@ namespace SimTests
             caster.HPMax = 160;
             caster.HP = 1;
             Monster target = new Monster();
-            target.HPMax = 160;
-            target.HP = 160;
+            target.HP = target.HPMax = 160;
             Spell spell = SpellManager.GetSpellByName("DRAN");
             spell.Accuracy = 50; // Adjust accuracy so it actually hits
 
@@ -527,8 +527,7 @@ namespace SimTests
             caster.MPMax = 160;
             caster.MP = 0;
             Monster target = new Monster();
-            target.MPMax = 160;
-            target.MP = 160;
+            target.MP = target.MPMax = 160;
             Spell spell = SpellManager.GetSpellByName("ASPL");
             spell.Accuracy = 50; // Adjust accuracy so it actually hits
 

@@ -60,21 +60,29 @@ namespace FF2_Monster_Sim
         public string Name { get; set; }
         public List<string> AlternateNames { get; set; }
 
+        public int HPMax { get; set; } = -1;
         private int hp;
         public int HP
         {
             get { return hp; }
-            set { hp = Utils.EnforceStatCap(value, HPMax); }
+            set
+            {
+                if (HPMax == -1) HPMax = Utils.EnforceStatCap(value, 65535);
+                hp = Utils.EnforceStatCap(value, HPMax);
+            }
         }
-        public int HPMax { get; set; }
 
+        public int MPMax { get; set; } = -1;
         private int mp;
         public int MP
         {
             get { return mp; }
-            set { mp = Utils.EnforceStatCap(value, MPMax); }
+            set
+            {
+                if (MPMax == -1) MPMax = Utils.EnforceStatCap(value, 65535);
+                mp = Utils.EnforceStatCap(value, MPMax);
+            }
         }
-        public int MPMax { get; set; }
 
         private int strength;
         public int Strength
