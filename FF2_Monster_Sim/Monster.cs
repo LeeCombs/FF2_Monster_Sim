@@ -551,11 +551,9 @@ namespace FF2_Monster_Sim
         /// <returns>Whether or not the status was successfully added</returns>
         public bool AddTempStatus(TempStatus tempStatus)
         {
-            // TODO: Mini kills monster immediately
             if (tempStatus == TempStatus.Mini)
             {
-                Debug.WriteLine("Kill the monster");
-                // TODO: That ^
+                // TODO: Mini should kill the monster after it's added
             }
             return TempStatuses.Add(tempStatus);
         }
@@ -581,11 +579,9 @@ namespace FF2_Monster_Sim
         /// <returns>Whether or not the status was successfully added</returns>
         public bool AddPermStatus(PermStatus permStatus)
         {
-            // TODO: KO, Stone, and Toad kills monster immediately\
             if (permStatus == PermStatus.KO || permStatus == PermStatus.Stone || permStatus == PermStatus.Toad)
             {
-                Debug.WriteLine("Kill the monster");
-                // TODO: That ^
+                // TODO: KO, Stone, and Toad should kill the monster after it's added
             }
             return PermStatuses.Add(permStatus);
         }

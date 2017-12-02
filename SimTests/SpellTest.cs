@@ -149,19 +149,13 @@ namespace SimTests
             PermStatus[] permStatOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
             Dictionary<PermStatus, string> expectedMessages = new Dictionary<PermStatus, string>();
             expectedMessages[PermStatus.Darkness] = "Can see";
-            expectedMessages[PermStatus.Poison] = "Devenomed"; // You sure?
+            expectedMessages[PermStatus.Poison] = "Poison left";
             expectedMessages[PermStatus.Curse] = "Uncursed";
             expectedMessages[PermStatus.Amnesia] = "Remembers";
-            // Toad, KO, and Stone are ignored since they just kill monsters
-
-            // Ensure each status doesn't exist, add it, and test for it
-            foreach (PermStatus stat in permStatOrder)
-            {
-                Assert.IsFalse(monster.HasPermStatus(stat));
-                monster.AddPermStatus(stat);
-                Assert.IsTrue(monster.HasPermStatus(stat));
-            }
-
+            expectedMessages[PermStatus.Toad] = "Regained form";
+            expectedMessages[PermStatus.Stone] = "Normal body";
+            expectedMessages[PermStatus.KO] = ""; // TODO: Find this message
+            
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
             {
@@ -171,31 +165,37 @@ namespace SimTests
                 for (int k = i + 1; k < permStatOrder.Length; k++) Assert.IsTrue(monster.HasPermStatus(permStatOrder[k]));
             }
 
-            // TODO: Check that results messages return expected values
+            // Check that results messages return expected values
+            foreach (PermStatus stat in permStatOrder)
+            {
+                monster.AddPermStatus(stat);
+                SpellResult result = SpellManager.CastSpell(monster, monster, spell, 16);
+                Assert.AreEqual(expectedMessages[stat], result.Results[0]);
+            }
+
+            // Ensure multiple results messages are returned if multiple statuses are cured
+            PermStatus[] multStat = { PermStatus.Amnesia, PermStatus.Poison, PermStatus.Curse };
+            foreach (PermStatus status in multStat) monster.AddPermStatus(status);
+            SpellResult res = SpellManager.CastSpell(monster, monster, spell, 16);
+            Assert.AreEqual(3, res.Results.Count);
+            foreach (PermStatus status in multStat) Assert.IsTrue(res.Results.Contains(expectedMessages[status]));
         }
 
         [TestMethod]
         public void PEEPTest()
         {
             // Setup
-            Spell spell = SpellManager.GetSpellByName("PEEP");
             Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("PEEP");
+            spell.Accuracy = 255;
             TempStatus[] tempStatOrder = { TempStatus.Venom, TempStatus.Sleep, TempStatus.Mini, TempStatus.Mute, TempStatus.Paralysis, TempStatus.Confuse };
             Dictionary<TempStatus, string> expectedMessages = new Dictionary<TempStatus, string>();
-            expectedMessages[TempStatus.Venom] = "Poison left"; // You sure?
-            expectedMessages[TempStatus.Sleep] = "Scared"; // You sure?
+            expectedMessages[TempStatus.Venom] = "Devenomed";
+            expectedMessages[TempStatus.Sleep] = "Scared"; // TODO: Verify this message
             expectedMessages[TempStatus.Paralysis] = "Can move";
             expectedMessages[TempStatus.Mute] = "Can speak";
             expectedMessages[TempStatus.Confuse] = "Normal";
-            // Mini is skipped as it just kills monsters instead of minifying them
-            
-            // Ensure each status doesn't exist, add it, and test for it
-            foreach (TempStatus stat in tempStatOrder)
-            {
-                Assert.IsFalse(monster.HasTempStatus(stat));
-                monster.AddTempStatus(stat);
-                Assert.IsTrue(monster.HasTempStatus(stat));
-            }
+            expectedMessages[TempStatus.Mini] = "Grew";
 
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
@@ -208,7 +208,20 @@ namespace SimTests
                 for (int k = i + 1; k < tempStatOrder.Length; k++) Assert.IsTrue(monster.HasTempStatus(tempStatOrder[k]));
             }
 
-            // TODO: Check that results messages return expected values
+            // Check that results messages return expected values
+            foreach (TempStatus status in tempStatOrder)
+            {
+                monster.AddTempStatus(status);
+                SpellResult result = SpellManager.CastSpell(monster, monster, spell, 16);
+                Assert.AreEqual(expectedMessages[status], result.Results[0]);
+            }
+
+            // Ensure multiple results messages are returned if multiple statuses are cured
+            TempStatus[] multStat = { TempStatus.Confuse, TempStatus.Sleep, TempStatus.Venom };
+            foreach (TempStatus status in multStat) monster.AddTempStatus(status);
+            SpellResult res = SpellManager.CastSpell(monster, monster, spell, 16);
+            Assert.AreEqual(3, res.Results.Count);
+            foreach (TempStatus status in multStat) Assert.IsTrue(res.Results.Contains(expectedMessages[status]));
         }
 
         [TestMethod]

@@ -274,27 +274,25 @@ namespace FF2_Monster_Sim
                     // 1 = Venom & Sleep, then one more per level, up to 5
                     TempStatus[] tempCureOrder = { TempStatus.Venom, TempStatus.Sleep, TempStatus.Mini, TempStatus.Mute, TempStatus.Paralysis, TempStatus.Confuse };
                     String[] peepMsgOrder = { "Devenomed", "Scared", "Grew", "Can speak", "Can move", "Normal" };
-                    target.RemoveTempStatus(TempStatus.Venom);
-                    List<string> peepMsgs = new List<string>{ "Devenomed" };
+                    List<string> peepMsgs = new List<string>();
+                    if (target.RemoveTempStatus(TempStatus.Venom)) peepMsgs.Add("Devenomed");
                     for (int i = 1; i < level; i++)
                     {
                         if (i >= tempCureOrder.Length) break;
-                        target.RemoveTempStatus(tempCureOrder[i]);
-                        peepMsgs.Add(peepMsgOrder[i]);
+                        if (target.RemoveTempStatus(tempCureOrder[i])) peepMsgs.Add(peepMsgOrder[i]);
                     }
                     // TODO: If nothing is cured, is ineffective returned?
                     return new SpellResult(peepMsgs); ;
                 case "CurePermStatus":
                     // This is HEAL. Cure everything up to and including level.
                     PermStatus[] permCureOrder = { PermStatus.Darkness, PermStatus.Poison, PermStatus.Curse, PermStatus.Amnesia, PermStatus.Toad, PermStatus.Stone, PermStatus.KO };
-                    String[] healMsgOrder = { "Can see", "Devenomed", "Uncursed", "Remembers", "Regained form", "Normal body", "" };
+                    String[] healMsgOrder = { "Can see", "Poison left", "Uncursed", "Remembers", "Regained form", "Normal body", "" };
                     
                     List<string> healMsgs = new List<string>();
                     for (int i = 0; i < level; i++)
                     {
                         if (i >= permCureOrder.Length) break;
-                        target.RemovePermStatus(permCureOrder[i]);
-                        healMsgs.Add(healMsgOrder[i]);
+                        if (target.RemovePermStatus(permCureOrder[i])) healMsgs.Add(healMsgOrder[i]);
                     }
                     // TODO: If nothing is cured, is ineffective returned?
                     return new SpellResult(healMsgs);
