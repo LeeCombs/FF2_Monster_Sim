@@ -136,6 +136,147 @@ namespace SimTests
             return false;
         }
 
+        ///////////////////
+        // Status Spells //
+        ///////////////////
+
+        // Temp: SLEP, STON, STOP, CHRM, MUTE, MINI, Wink, Blast_2
+        // Perm: BLND, CURS, FOG, TOAD, BRAK, WARP, EXIT, Breath, Glare, DETH
+
+        [TestMethod]
+        public void TempStatusSpellsTest()
+        {
+            string[] tempStatusSpells = new String[] { "SLEP", "STON", "STOP", "CHRM", "MUTE", "MINI", "Wink" };
+
+            foreach (string spellName in tempStatusSpells)
+            {
+                // Every spell has an element and get be absorbed/resisted/weaked
+                Spell spell = SpellManager.GetSpellByName(spellName);
+                Assert.IsTrue(IsAbsorbed(spell));
+                Assert.IsTrue(StatusIsResisted(spell));
+                Assert.IsTrue(StatusAutoHits(spell));
+            }
+
+            // Special case. Blast_2 is the only non-elemental status spell.
+            Spell blastSpell = SpellManager.GetSpellByName("Blast_2");
+            Assert.IsFalse(IsAbsorbed(blastSpell));
+            Assert.IsFalse(StatusIsResisted(blastSpell));
+            Assert.IsFalse(StatusAutoHits(blastSpell));
+        }
+
+        [TestMethod]
+        public void PermStatusSpellsTest()
+        {
+            string[] permStatusSpells = { "DETH", "BLND", "CURS", "FOG", "TOAD", "BRAK", "WARP", "EXIT", "Breath", "Glare" };
+
+            // Make sure every spell can effect it's status on a target and followed elemental rules
+            foreach (string spellName in permStatusSpells)
+            {
+                Spell spell = SpellManager.GetSpellByName(spellName);
+                Assert.IsTrue(IsAbsorbed(spell));
+                Assert.IsTrue(StatusIsResisted(spell));
+                Assert.IsTrue(StatusAutoHits(spell));
+            }
+        }
+
+        [TestMethod]
+        public void KOStatusSpellsTest()
+        {
+            // Setup
+            string[] KOStatusSpells = { "DETH", "Glare", "MINI", "TOAD", "BRAK", "WARP", "EXIT", "Breath" };
+
+            // Cast each spell and ensure the target monster is killed
+            foreach (string spellName in KOStatusSpells)
+            {
+                // Setup
+                Monster monster = new Monster();
+                Spell spell = SpellManager.GetSpellByName(spellName);
+                spell.Accuracy = 255;
+                // TODO: Cast spell, check for KO/Death/Whatever
+            }
+        }
+
+        ///////////////////
+        // Damage Spells //
+        ///////////////////
+
+        // 1 - FIRE, BOLT, ICE, AERO, FLAR, HOLY, FIRE_S, ICE_S, BOLT_S, Mist
+        // 2 - Quake, Tnad, Wave
+        // 3 - Bow, Rock, Meteo
+        // ULTM
+
+        [TestMethod]
+        public void DamageSpellTest()
+        {
+            // Setup
+            Monster monster = new Monster();
+            monster.HP = monster.HPMax = 50000;
+
+            // TODO: What do I want to test? All damage spells achieve damage?
+        }
+
+        /////////////////
+        // Buff Spells //
+        /////////////////
+
+        // BSRK, HAST, AURA, BARR, BLNK, SAFE, SHEL, WALL, Drink, Spirit, Intelligence
+
+        [TestMethod]
+        public void BuffSpellTest()
+        {
+            // Set up
+            Monster monster = new Monster();
+            string[] buffSpells = { "BSRK", "HAST", "AURA", "BARR", "BLNK", "SAFE", "SHEL", "WALL", "Drink" };
+            // Ignore Spirit and Intelligence for now as they may be irrelevant
+            
+            // Cast each spell and ensure they add the right buff and return the right result message
+            foreach (string name in buffSpells)
+            {
+                Spell spell = SpellManager.GetSpellByName(name);
+                Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
+                spell.Accuracy = 255;
+
+                SpellResult res = SpellManager.CastSpell(monster, monster, spell, 1);
+                Assert.IsTrue(monster.GetBuffStacks(buff) > 0);
+                monster.RemoveBuff(buff);
+                Assert.AreEqual(0, monster.GetBuffStacks(buff));
+
+                // AURA and BARR have unique messages and are covered in other tests
+                if (spell.Name == "AURA" || spell.Name == "BARR") continue;
+                Assert.AreEqual(spell.SuccessMessage, res.Results[0]);
+            }
+        }
+
+        ///////////////////
+        // Debuff Spells //
+        ///////////////////
+
+        // DSPL, SLOW, FEAR
+
+        [TestMethod]
+        public void DebuffSpellTest()
+        {
+            // Setup
+            Monster monster = new Monster();
+            string[] debuffSpells = { "SLOW", "FEAR" };
+            // DSPL is busted and just doesn't work
+
+            // Cast each spell and ensure they add the proper buff to the monster
+            foreach (string name in debuffSpells)
+            {
+                Spell spell = SpellManager.GetSpellByName(name);
+                spell.Accuracy = 255;
+                Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
+                Assert.AreEqual(0, monster.GetDebuffStacks(debuff));
+                SpellManager.CastSpell(monster, monster, spell, 16);
+                Assert.AreNotEqual(0, monster.GetDebuffStacks(debuff));
+                monster.RemoveDebuff(debuff);
+                Assert.AreEqual(0, monster.GetDebuffStacks(debuff));
+            }
+
+            // TODO: Ensure proper results messages
+        }
+
         //////////////////////////
         // Specific Spell Tests //
         //////////////////////////
@@ -155,7 +296,7 @@ namespace SimTests
             expectedMessages[PermStatus.Toad] = "Regained form";
             expectedMessages[PermStatus.Stone] = "Normal body";
             expectedMessages[PermStatus.KO] = ""; // TODO: Find this message
-            
+
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
             {
@@ -251,6 +392,8 @@ namespace SimTests
             Assert.AreEqual(1000, monster.HP);
             SpellManager.CastSpell(monster, monster, spell, 16);
             Assert.IsTrue(monster.HP < 1000);
+
+            // TODO: Ensure proper messages are returned
         }
 
         [TestMethod]
@@ -282,114 +425,8 @@ namespace SimTests
             Assert.AreEqual(monster.Name + " fell", resUndead.Results[0]);
             Assert.AreEqual("Collapsed", resUndead.Results[1]);
             Assert.IsTrue(monster.IsDead());
-        }
 
-        ///////////////////
-        // Status Spells //
-        ///////////////////
-
-        [TestMethod]
-        public void TempStatusSpellsTest()
-        {
-            string[] tempStatusSpells = new String[] { "SLEP", "STON", "STOP", "CHRM", "MUTE", "MINI", "Wink" };
-
-            foreach (string spellName in tempStatusSpells)
-            {
-                // Every spell has an element and get be absorbed/resisted/weaked
-                Spell spell = SpellManager.GetSpellByName(spellName);
-                Assert.IsTrue(IsAbsorbed(spell));
-                Assert.IsTrue(StatusIsResisted(spell));
-                Assert.IsTrue(StatusAutoHits(spell));
-            }
-
-            // Special case. Blast_2 is the only non-elemental status spell.
-            Spell blastSpell = SpellManager.GetSpellByName("Blast_2");
-            Assert.IsFalse(IsAbsorbed(blastSpell));
-            Assert.IsFalse(StatusIsResisted(blastSpell));
-            Assert.IsFalse(StatusAutoHits(blastSpell));
-        }
-
-        [TestMethod]
-        public void PermStatusSpellsTest()
-        {
-            string[] permStatusSpells = { "BLND", "CURS", "FOG", "TOAD", "BRAK", "WARP", "EXIT", "Breath", "Glare" };
-
-            // Make sure every spell can effect it's status on a target and followed elemental rules
-            foreach (string spellName in permStatusSpells)
-            {
-                Spell spell = SpellManager.GetSpellByName(spellName);
-                Assert.IsTrue(IsAbsorbed(spell));
-                Assert.IsTrue(StatusIsResisted(spell));
-                Assert.IsTrue(StatusAutoHits(spell));
-            }
-        }
-
-        [TestMethod]
-        public void KOStatusSpellsTest()
-        {
-            // Setup
-            string[] KOStatusSpells = { "MINI", "TOAD", "BRAK", "WARP", "EXIT", "Breath" };
-
-            // Cast each spell and ensure the target monster is killed
-            foreach (string spellName in KOStatusSpells)
-            {
-                // Setup
-                Monster monster = new Monster();
-                Spell spell = SpellManager.GetSpellByName(spellName);
-                spell.Accuracy = 255;
-                // TODO: Cast spell, check for KO/Death/Whatever
-            }
-        }
-
-        ///////////////////
-        // Damage Spells //
-        ///////////////////
-
-        // 1 - FIRE, BOLT, ICE, AERO, FLAR, HOLY, FIRE_S, ICE_S, BOLT_S, Mist
-        // 2 - Quake, Tnad, Wave
-        // 3 - Bow, Rock, Meteo
-        // ULTM
-
-        [TestMethod]
-        public void DamageSpellTest()
-        {
-            // Setup
-            Monster monster = new Monster();
-            monster.HP = monster.HPMax = 50000;
-
-            // TODO: What do I want to test? All damage spells achieve damage?
-        }
-
-        /////////////////
-        // Buff Spells //
-        /////////////////
-
-        // BSRK, HAST, AURA, BARR, BLNK, SAFE, SHEL, WALL, Drink, Spirit, Intelligence
-
-        [TestMethod]
-        public void BuffSpellTest()
-        {
-            // Set up
-            Monster monster = new Monster();
-            string[] buffSpells = { "BSRK", "HAST", "AURA", "BARR", "BLNK", "SAFE", "SHEL", "WALL", "Drink" };
-            // Ignore Spirit and Intelligence for now as they may be irrelevant
-            
-            // Cast each spell and ensure they add the right buff and return the right result message
-            foreach (string name in buffSpells)
-            {
-                Spell spell = SpellManager.GetSpellByName(name);
-                Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
-                spell.Accuracy = 255;
-
-                SpellResult res = SpellManager.CastSpell(monster, monster, spell, 1);
-                Assert.IsTrue(monster.GetBuffStacks(buff) > 0);
-                monster.RemoveBuff(buff);
-                Assert.AreEqual(0, monster.GetBuffStacks(buff));
-
-                // AURA and BARR have unique messages and are covered in other tests
-                if (spell.Name == "AURA" || spell.Name == "BARR") continue;
-                Assert.AreEqual(spell.SuccessMessage, res.Results[0]);
-            }
+            // TODO: Ensure proper messages are returned
         }
 
         [TestMethod]
@@ -440,34 +477,6 @@ namespace SimTests
             }
         }
 
-        ///////////////////
-        // Debuff Spells //
-        ///////////////////
-
-        // DSPL, SLOW, FEAR
-
-        [TestMethod]
-        public void DebuffSpellTest()
-        {
-            // Setup
-            Monster monster = new Monster();
-            string[] debuffSpells = { "SLOW", "FEAR" };
-            // DSPL is busted and just doesn't work
-
-            // Cast each spell and ensure they add the proper buff to the monster
-            foreach (string name in debuffSpells)
-            {
-                Spell spell = SpellManager.GetSpellByName(name);
-                spell.Accuracy = 255;
-                Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
-                Assert.AreEqual(0, monster.GetDebuffStacks(debuff));
-                SpellManager.CastSpell(monster, monster, spell, 16);
-                Assert.AreNotEqual(0, monster.GetDebuffStacks(debuff));
-                monster.RemoveDebuff(debuff);
-                Assert.AreEqual(0, monster.GetDebuffStacks(debuff));
-            }
-        }
-
         [TestMethod]
         public void DSPLTest()
         {
@@ -480,12 +489,6 @@ namespace SimTests
             // Even though DSPL in non-functional in the NES version, ensure messages are returned properly
             // TODO: That ^
         }
-
-        ////////////////////
-        // Special Spells //
-        ////////////////////
-
-        // DRAN, ASPL, ANTI, CHNG, Blast
 
         [TestMethod]
         public void DRANTest()
@@ -505,7 +508,7 @@ namespace SimTests
             SpellManager.CastSpell(caster, target, spell, 16);
             Assert.IsTrue(caster.HP > 1);
             Assert.IsTrue(target.HP < target.HPMax);
-            
+
             // Ensure Undead creatures reverse the effect
             caster.HP = caster.HPMax;
             target.HP = 1;
@@ -547,7 +550,7 @@ namespace SimTests
             SpellManager.CastSpell(caster, target, spell, 16);
             Assert.IsTrue(caster.MP < caster.MPMax);
             Assert.IsTrue(target.MP > 0);
-            
+
             // No resistance check due to no element
         }
 
@@ -611,11 +614,12 @@ namespace SimTests
             // Set up
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("Blast");
-            
+
             // Unless BUG_FIX, this does not work when caster is at full HP
             // After being cast, the caster should be removed from battle
             // This spell acts like physical damage instead of spell damage
             // If the target has 40+ defense, there should be no damage achieved
         }
+
     }
 }
