@@ -6,6 +6,13 @@ using Newtonsoft.Json;
 
 namespace FF2_Monster_Sim
 {
+    /**
+     * TODO:
+     * Functions that returns a list of names for a given type
+     *     i.e. Effect TempStatus would return ["DETH", "Glare", "MINI", "TOAD", "BRAK", "WARP", "EXIT", "Breath"];
+     * 
+     */
+
     public enum SpellType
     {
         White,
@@ -44,7 +51,7 @@ namespace FF2_Monster_Sim
 
         public SpellManager()
         {
-            //
+            
         }
 
         public static void Initialize()

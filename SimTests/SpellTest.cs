@@ -9,6 +9,20 @@ namespace SimTests
     [TestClass]
     public class SpellTest
     {
+        /**
+         * Complete:
+         * Spell Creation
+         * Status absorbs, resists, weakness checks
+         * Status
+         * Buff/Debuff
+         * 
+         * TODO:
+         * Result message returns
+         * KO Status
+         * Damage
+         * ANTI, DSPL, Blast
+         * 
+         */
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
@@ -37,6 +51,14 @@ namespace SimTests
             Assert.AreEqual(400, spell.Price);
             Assert.AreEqual(100, spell.Value);
             Assert.AreEqual("", spell.SuccessMessage);
+        }
+
+        [TestMethod]
+        public void SpellMessageTest()
+        {
+            // TODO: Iterate through spells that have successMessages
+            // Cast each and ensure SpellResult returns the right message
+            // Effects: TempStatus, PermStatus, Buff, Debuff, Heal, Revive, Special
         }
         
         //////////////////
@@ -134,6 +156,20 @@ namespace SimTests
 
             Debug.WriteLine("StatusAutoHits spell fell through: " + spell.Name);
             return false;
+        }
+
+        private bool SpellMessageReturn(Spell spell)
+        {
+            Monster monster = new Monster();
+            monster.Name = "Bob";
+            spell.Accuracy = 255;
+            SpellResult res = SpellManager.CastSpell(monster, monster, spell, 16);
+
+            if (spell.Status == "KO")
+            {
+                return string.Equals("Bob fell", res.Results[0]) && string.Equals(spell.SuccessMessage, res.Results[1]);
+            }
+            return string.Equals(spell.SuccessMessage, res.Results[0]);
         }
 
         ///////////////////
