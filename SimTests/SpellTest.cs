@@ -657,5 +657,19 @@ namespace SimTests
             // If the target has 40+ defense, there should be no damage achieved
         }
 
+        [TestMethod]
+        public void SAFETest()
+        {
+            // Setup
+            Monster caster = new Monster();
+            Monster monster = new Monster();
+            Spell spell = SpellManager.GetSpellByName("SAFE");
+            spell.Accuracy = 255;
+
+            // TODO: Cast the spell, ensure if works
+            // Ensure NES bug is observed where SAFE only works on caster
+            // Ensure Bug-Fixed version of SAFE works as intended
+        }
+
     }
 }

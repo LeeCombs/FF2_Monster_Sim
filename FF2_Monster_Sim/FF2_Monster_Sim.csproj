@@ -42,6 +42,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AttackManager.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="MonsterManager.cs" />
     <Compile Include="Enumerations.cs" />

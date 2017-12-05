@@ -31,6 +31,7 @@ namespace FF2_Monster_Sim
             // TODO: Add your initialization logic here
             MonsterManager.Initialize();
             SpellManager.Initialize();
+            AttackManager.Initialize();
             
             base.Initialize();
         }
