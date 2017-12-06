@@ -640,7 +640,7 @@
    "attackEffect": []
  },
  {
-   "name": "Gotus_1",
+   "name": "Gotus",
    "HP": 2000,
    "MP": 80,
    "strength": 70,
@@ -2340,7 +2340,7 @@
    "attackEffect": []
  },
  {
-   "name": "Behemoth_1",
+   "name": "Behemoth",
    "HP": 1620,
    "MP": 0,
    "strength": 85,
@@ -2360,7 +2360,7 @@
    "attackEffect": []
  },
  {
-   "name": "Behemoth_2",
+   "name": "KingBehe",
    "HP": 5000,
    "MP": 0,
    "strength": 150,
@@ -2520,7 +2520,7 @@
    "attackEffect": ["Envenom"]
  },
  {
-   "name": "Gotus_2",
+   "name": "Asteroth",
    "HP": 7000,
    "MP": 540,
    "strength": 150,
