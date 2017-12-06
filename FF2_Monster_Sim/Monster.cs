@@ -265,6 +265,7 @@ namespace FF2_Monster_Sim
         {
             MonsterTexture = texture;
             Position = position;
+            
         }
 
         public void Update()

@@ -439,6 +439,17 @@ namespace FF2_Monster_Sim
             }
             return failedResult;
         }
+
+        /// <summary>
+        /// Get a HashSet of all spell names found within the spell data
+        /// </summary>
+        public static HashSet<string> GetSpellNames()
+        {
+            HashSet<string> nameSet = new HashSet<string>();
+            foreach (dynamic data in spellData)
+                nameSet.Add((string)data.name);
+            return nameSet;
+        }
         
         /////////////
         // Helpers //

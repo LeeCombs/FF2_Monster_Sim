@@ -25,6 +25,8 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_MonsterData.json");
             monsterData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_MonsterData.json"));
+
+            Debug.WriteLine("Name list len: " + GetMonsterNames().Count);
         }
         
         /// <summary>
@@ -46,9 +48,7 @@ namespace FF2_Monster_Sim
                 if (String.Equals(name, (string)data.name, StringComparison.OrdinalIgnoreCase))
                 {
                     Monster mon = new Monster();
-
-                    Debug.WriteLine((object)data.ToString());
-
+                    
                     // Doing this by hand since generated .json naming isn't consistent, nor formatted 100%
                     mon.Name = data.name;
                     mon.HPMax = data.HP; // Set HPMax before HP
@@ -82,6 +82,17 @@ namespace FF2_Monster_Sim
             
             Debug.WriteLine("No monster found by name: " + name);
             return null;
+        }
+
+        /// <summary>
+        /// Return a HashSet of all the monsters names within monster data
+        /// </summary>
+        public static HashSet<string> GetMonsterNames()
+        {
+            HashSet<string> nameSet = new HashSet<string>();
+            foreach (dynamic data in monsterData)
+                nameSet.Add((string)data.name);
+            return nameSet;
         }
     }
 }

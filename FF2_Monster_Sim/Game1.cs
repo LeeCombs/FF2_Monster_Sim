@@ -50,14 +50,16 @@ namespace FF2_Monster_Sim
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-            monster = new Monster();
-            Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
-            monster.Initialize(Content.Load<Texture2D>("Graphics\\Monster"), monsterPosition);
-
-            // Init
+            // Init Managers
             MonsterManager.LoadContent();
             SpellManager.LoadContent();
+
+            // TODO: use this.Content to load your game content here
+            monster = MonsterManager.GetMonsterByName("Behemoth");
+            Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+
+            monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), monsterPosition);
+
         }
 
         /// <summary>
