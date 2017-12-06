@@ -14,6 +14,8 @@ namespace FF2_Monster_Sim
 
         Monster monster;
 
+        BattleScene sceneOne, sceneTwo;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -32,6 +34,9 @@ namespace FF2_Monster_Sim
             MonsterManager.Initialize();
             SpellManager.Initialize();
             AttackManager.Initialize();
+
+            sceneOne = new BattleScene();
+            sceneTwo = new BattleScene();
             
             base.Initialize();
         }

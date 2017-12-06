@@ -23,19 +23,34 @@ namespace FF2_Monster_Sim
     {
         private static Random rnd;
 
+        /// <summary>
+        /// Helper to determine which spells to cast based on Status Touch effect
+        /// </summary>
+        private Dictionary<string, string> touchToSpellMap = new Dictionary<string, string>
+        {
+            { "Drain HP", "DRAN" },
+            { "Drain MP", "ASPL" },
+            { "Poison", "" },
+            { "Sleep", "SLEP" },
+            { "Mute", "MUTE" },
+            { "Mini", "MINI" },
+            { "Paralysis", "STOP" },
+            { "Confusion", "CHRM" },
+            { "Blind", "BLND" },
+            { "Envenom", "" },
+            { "Curse", "CURS" },
+            { "Amensia", "FOG" },
+            { "Toad", "TOAD" },
+            { "Petrify", "BRAK" },
+            { "Death", "DETH" },
+        };
+
         /**
-         * Attack Score, Number of attacks, Accuracy
-         * Defense, Evasion, Evasion Rate
-         * Damage = (atk...2 * atk) - defense
+         * TODO: 
          * 
          * Critical Hits
          * - Bonus damage equal to attack score, not affected by defense
          * - Unknown crit rate?
-         * 
-         * Attacking Family/Elemental Weakness
-         * - +20 to attack score. Only applied once
-         * - If target is absorbent, deal normal damage
-         * - If target is weak and resistant, +20 bonus
          * 
          * Status Effects
          * - Can inflict multiple Temp or Perm statuses, but not both types
@@ -44,12 +59,6 @@ namespace FF2_Monster_Sim
          * 
          * Drain Effects
          * - Each hit, regardless of damage, apply normal drain logic
-         * 
-         * Ripper Effect
-         * - NES BUG: Deals normal damage. Should deal +20 with each hit. Irrelevant to monsters.
-         * 
-         * Healing Staff:
-         * - Heals instead of harms. Some bugs. Irrelevant to monsters.
          */
 
         public AttackManager()
@@ -60,18 +69,6 @@ namespace FF2_Monster_Sim
         public static void Initialize()
         {
             rnd = new Random();
-
-            Debug.WriteLine("Attack man");
-            Monster monster = new Monster();
-            monster.Name = "Non";
-            monster.Families = new HashSet<MonsterFamily> { MonsterFamily.Air, MonsterFamily.Dragon };
-            monster.AddBuff(Buff.Aura, 8);
-            monster.Strength = 10;
-            monster.Hits = 10;
-            monster.Accuracy = 99;
-            monster.AttackEffects = new HashSet<string> { "Poison", "Boobs", "Drain HP", "Venom", "Mini", "KO", "whatever", "Drain MP" };
-            AttackResult res = AttackMonster(monster, monster);
-
         }
 
         public static AttackResult AttackMonster(Monster actor, Monster target)
@@ -105,6 +102,7 @@ namespace FF2_Monster_Sim
                     continue;
 
                 // Apply attack effects to the target
+                // TODO: I'm unsure of the logic behind status-touching, and will revisit later.
                 foreach (string effect in actor.AttackEffects)
                 {
                     if (effect == "Drain HP")
@@ -114,16 +112,10 @@ namespace FF2_Monster_Sim
                         Debug.WriteLine("Drain MP");
 
                     if (Enum.TryParse<PermStatus>(effect, out PermStatus permStat))
-                    {
-                        // TODO: Attempt to apply the PermStatus
                         Debug.WriteLine("found permStat : " + permStat);
-                    }
 
                     if (Enum.TryParse<TempStatus>(effect, out TempStatus tempStat))
-                    {
-                        // TODO: Attempt to apply the TempStatus
                         Debug.WriteLine("found tempStat : " + tempStat);
-                    }
                 }
             }
 
