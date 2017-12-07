@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace FF2_Monster_Sim
 {
@@ -14,9 +14,9 @@ namespace FF2_Monster_Sim
          * 
          *   A   B   C   D
          * +---+---+---+---+
-         * | 1 | 2 | 3 | 4 |
+         * | 1 | 3 | 5 | 7 |
          * +---+---+---+---+
-         * | 5 | 6 | 7 | 8 |
+         * | 2 | 4 | 6 | 8 |
          * +---+---+---+---+
          * 
          * 1-8 Monsters. A 2x4 grid.
@@ -32,6 +32,8 @@ namespace FF2_Monster_Sim
          */
 
         Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
+        Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
+
 
         public BattleScene()
         {
@@ -39,6 +41,30 @@ namespace FF2_Monster_Sim
             {
                 Monster[] monsters = { null, null };
                 monsterSlots[i] = monsters;
+
+                Vector2[] positions = { new Vector2(100 * i, 0), new Vector2(100 * i, 100) };
+                slotPositions[i] = positions;
+            }
+        }
+        
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+            {
+                if (entry.Value[0] != null) entry.Value[0].Draw(spriteBatch);
+                if (entry.Value[1] != null) entry.Value[1].Draw(spriteBatch);
+            }
+        }
+
+        public void PopulateScene(List<Monster> monsters)
+        {
+            int col = 0, row = 0;
+            foreach (Monster monster in monsters)
+            {
+                monsterSlots[col / 2][row % 2] = monster;
+                monster.Position = slotPositions[col / 2][row % 2];
+                row++;
+                col++;
             }
         }
     }

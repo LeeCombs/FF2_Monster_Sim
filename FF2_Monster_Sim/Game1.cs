@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace FF2_Monster_Sim
 {
@@ -12,7 +13,7 @@ namespace FF2_Monster_Sim
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Monster monster;
+        List<Monster> monsters;
 
         BattleScene sceneOne, sceneTwo;
 
@@ -35,6 +36,8 @@ namespace FF2_Monster_Sim
             SpellManager.Initialize();
             AttackManager.Initialize();
 
+            monsters = new List<Monster>();
+
             sceneOne = new BattleScene();
             sceneTwo = new BattleScene();
             
@@ -55,10 +58,19 @@ namespace FF2_Monster_Sim
             SpellManager.LoadContent();
 
             // TODO: use this.Content to load your game content here
-            monster = MonsterManager.GetMonsterByName("Behemoth");
-            Vector2 monsterPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            
 
-            monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), monsterPosition);
+            string[] mNames = { "Fiend", "Goblin", "Imp", "Molbor", "G.Molbor", "Imp", "Molbor", "L.Molbor" };
+            for (int i = 0; i < mNames.Length; i++)
+            {
+                Monster monster = MonsterManager.GetMonsterByName(mNames[i]);
+                if (monster == null) continue;
+                Vector2 monsterPosition = new Vector2();
+                monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), monsterPosition);
+                monsters.Add(monster);
+            }
+            sceneOne.PopulateScene(monsters);
+
 
         }
 
@@ -96,7 +108,7 @@ namespace FF2_Monster_Sim
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            monster.Draw(spriteBatch);
+            sceneOne.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
