@@ -10,12 +10,14 @@ namespace FF2_Monster_Sim
     /// </summary>
     public class Game1 : Game
     {
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        List<Monster> monsters;
-
+        
+        // Monster stuff
         BattleScene sceneOne, sceneTwo;
+        List<string> sceneOneNames = new List<string> { "Imp", "Molbor", "Goblin", "Balloon", "Bomb", "Brain", "Coctrice", "DesAngel" };
+        List<string> sceneTwoNames = new List<string> { "DeadHead", "DeadHead", "G.Soul", "G.Soul", "Mine", "Mine", "Sucker", "Sucker" };
 
         public Game1()
         {
@@ -35,8 +37,6 @@ namespace FF2_Monster_Sim
             MonsterManager.Initialize();
             SpellManager.Initialize();
             AttackManager.Initialize();
-
-            monsters = new List<Monster>();
 
             sceneOne = new BattleScene();
             sceneTwo = new BattleScene();
@@ -58,20 +58,32 @@ namespace FF2_Monster_Sim
             SpellManager.LoadContent();
 
             // TODO: use this.Content to load your game content here
-            
 
-            string[] mNames = { "Fiend", "Goblin", "Imp", "Molbor", "G.Molbor", "Imp", "Molbor", "L.Molbor" };
-            for (int i = 0; i < mNames.Length; i++)
+            List<Monster> sceneOneMonsters = new List<Monster>();
+            for (int i = 0; i < sceneOneNames.Count; i++)
             {
-                Monster monster = MonsterManager.GetMonsterByName(mNames[i]);
+                Monster monster = MonsterManager.GetMonsterByName(sceneOneNames[i]);
                 if (monster == null) continue;
-                Vector2 monsterPosition = new Vector2();
-                monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), monsterPosition);
-                monsters.Add(monster);
+                monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name));
+                sceneOneMonsters.Add(monster);
             }
-            sceneOne.PopulateScene(monsters);
+            sceneOne.PopulateScene(sceneOneMonsters);
 
-
+            List<Monster> sceneTwoMonsters = new List<Monster>();
+            for (int i = 0; i < sceneTwoNames.Count; i++)
+            {
+                Monster monster = MonsterManager.GetMonsterByName(sceneTwoNames[i]);
+                if (monster == null) continue;
+                monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), true);
+                sceneTwoMonsters.Add(monster);
+                monster.Position.Y += 100;
+                monster.Position.X += 100;
+            }
+            sceneTwo.PopulateScene(sceneTwoMonsters);
+            foreach (Monster m in sceneTwo.MonsterList)
+            {
+                m.Position.X += 425;
+            }
         }
 
         /// <summary>
@@ -109,6 +121,7 @@ namespace FF2_Monster_Sim
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             sceneOne.Draw(spriteBatch);
+            sceneTwo.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

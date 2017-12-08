@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 
 
@@ -41,6 +42,7 @@ namespace FF2_Monster_Sim
     public class Monster
     {
         private Random rnd;
+        private bool flipped;
 
         // Sprite Stuff
         public Texture2D MonsterTexture;
@@ -259,13 +261,15 @@ namespace FF2_Monster_Sim
             PermStatuses = new HashSet<PermStatus>();
 
             rnd = new Random();
+
+
         }
-        
-        public void Initialize(Texture2D texture, Vector2 position)
+
+        public void Initialize(Texture2D texture, bool flip = false)
         {
+            flipped = flip;
             MonsterTexture = texture;
-            Position = position;
-            
+            Position = new Vector2();
         }
 
         public void Update()
@@ -275,7 +279,9 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(MonsterTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            SpriteEffects s = SpriteEffects.None;
+            if (flipped) s = SpriteEffects.FlipHorizontally;
+            spriteBatch.Draw(MonsterTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
         }
 
         ////////////////////
