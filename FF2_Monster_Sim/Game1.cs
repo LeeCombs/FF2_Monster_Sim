@@ -16,8 +16,8 @@ namespace FF2_Monster_Sim
         
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
-        List<string> sceneOneNames = new List<string> { "Imp", "Molbor", "Goblin", "Balloon", "Bomb", "Brain", "Coctrice", "DesAngel" };
-        List<string> sceneTwoNames = new List<string> { "DeadHead", "DeadHead", "G.Soul", "G.Soul", "Mine", "Mine", "Sucker", "Sucker" };
+        List<string> sceneOneNames = new List<string> { "Imp", "Eagle", "Goblin", "Balloon", "Bomb", "Brain", "Coctrice", "DesAngel" };
+        List<string> sceneTwoNames = new List<string> { "Molbor", "IceLiz", "G.Toad", "GrOgre", "Gigas", };
 
         public Game1()
         {
@@ -39,8 +39,8 @@ namespace FF2_Monster_Sim
             AttackManager.Initialize();
 
             sceneOne = new BattleScene();
-            sceneTwo = new BattleScene();
-            
+            sceneTwo = new BattleScene(type: "B", flipped: true);
+
             base.Initialize();
         }
 
@@ -74,16 +74,13 @@ namespace FF2_Monster_Sim
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneTwoNames[i]);
                 if (monster == null) continue;
+
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), true);
                 sceneTwoMonsters.Add(monster);
-                monster.Position.Y += 100;
-                monster.Position.X += 100;
             }
             sceneTwo.PopulateScene(sceneTwoMonsters);
-            foreach (Monster m in sceneTwo.MonsterList)
-            {
-                m.Position.X += 425;
-            }
+            foreach (Monster m in sceneTwo.GetAllTargets())
+                m.Position.X += 500;
         }
 
         /// <summary>

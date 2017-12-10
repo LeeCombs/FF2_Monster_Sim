@@ -261,14 +261,12 @@ namespace FF2_Monster_Sim
             PermStatuses = new HashSet<PermStatus>();
 
             rnd = new Random();
-
-
         }
 
         public void Initialize(Texture2D texture, bool flip = false)
         {
-            flipped = flip;
             MonsterTexture = texture;
+            flipped = flip;
             Position = new Vector2();
         }
 

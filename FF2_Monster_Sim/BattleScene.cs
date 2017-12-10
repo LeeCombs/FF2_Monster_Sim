@@ -7,7 +7,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FF2_Monster_Sim
 {
-    class BattleScene
+    public struct Action
+    {
+        public Monster Actor;
+        public List<Monster> Targets;
+        public bool Physical;
+        public Spell Spell;
+
+        public Action(Monster actor)
+        {
+            Actor = actor;
+            Targets = new List<Monster>();
+            Physical = false;
+            Spell = null;
+        }
+    }
+
+    public class BattleScene
     {
         /**
          * Notes:
@@ -48,59 +64,83 @@ namespace FF2_Monster_Sim
          * If they choose to attack, they simply do "Nothing"
          */
 
-        private int width = 150, height = 100;
-        public int X = 0, Y = 0;
+        private Random rnd;
+        private int width = 300, height = 200;
         private string type;
-
-        public List<Monster> MonsterList = new List<Monster>();
+        public int X = 0, Y = 0;
+        
         Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
         Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
 
         public BattleScene(int x = 0, int y = 0, string type = "A", bool flipped = false)
         {
+            rnd = new Random();
+
             X = x;
             Y = y;
 
+            // TODO: flipped should swap column positions
+
             switch(type)
             {
-                case "A":
+                case "A": // 4 x 2 Slots
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Monster[] monsters = { null, null };
+                        monsterSlots[i] = monsters;
+
+                        Vector2[] positions = { new Vector2(75 * i, 0), new Vector2(75 * i, 100) };
+                        slotPositions[i] = positions;
+                    }
                     break;
-                case "B":
+                case "B": // 3 x 2 Slots
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Monster[] monsters = { null, null };
+                        monsterSlots[i] = monsters;
+
+                        Vector2[] positions = { new Vector2(100 * i, 0), new Vector2(100 * i, 100) };
+                        slotPositions[i] = positions;
+                    }
                     break;
-                case "C":
+                case "C": // Only one slot
+                    monsterSlots[0] = new Monster[]{ null };
+                    slotPositions[0] = new Vector2[]{ new Vector2() };
                     break;
                 default:
                     Debug.WriteLine("Scene type must be A, B, or C");
                     return;
             }
             this.type = type;
-
-
-            for (int i = 0; i < 4; i++)
-            {
-                Monster[] monsters = { null, null };
-                monsterSlots[i] = monsters;
-
-                Vector2[] positions = { new Vector2(100 * i, 0), new Vector2(100 * i, 100) };
-                slotPositions[i] = positions;
-            }
+            
         }
         
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
             {
-                if (entry.Value[0] != null) entry.Value[0].Draw(spriteBatch);
-                if (entry.Value[1] != null) entry.Value[1].Draw(spriteBatch);
+                foreach (Monster m in entry.Value)
+                {
+                    if (m == null)
+                        continue;
+
+                    m.Draw(spriteBatch);
+                }
             }
         }
 
         public void PopulateScene(List<Monster> monsters)
         {
+            // TODO: This needs to have some checks in place
+            // Length check on monsters
+            // Size checks for monsters
+            // - A must be small. B must be medium/tall. C must be large.
+            // Talls must be in row 0, and will ignore the next input~
+            // Maybe have unique layouts for combinations of medium/tall?
+
             int col = 0, row = 0;
             foreach (Monster monster in monsters)
             {
-                MonsterList.Add(monster);
                 monsterSlots[col / 2][row % 2] = monster;
                 monster.Position = slotPositions[col / 2][row % 2];
                 row++;
@@ -108,10 +148,182 @@ namespace FF2_Monster_Sim
             }
         }
 
+        public void ClearScene()
+        {
+            // TODO: Ensure this actually cleans up properly
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+                for (int i = 0; i < entry.Value.Length; i++)
+                    entry.Value[i] = null;
+        }
+
+        /////////////////////
+        // Monster Getters //
+        /////////////////////
+
+        public List<Action> GetMonsterActions(BattleScene sceneRef)
+        {
+            // Get the monster's action at a given position
+            // If monster attacks and is in back row, return "nothing"
+            List<Action> actList = new List<Action>();
+
+            foreach (Monster mon in GetAllTargets())
+            {
+                if (mon != null)
+                {
+                    Action action = new Action(mon);
+                    MonsterAction monAct = mon.GetAction();
+
+                    if (monAct.Name == "Attack")
+                    {
+                        action.Physical = true;
+                        action.Targets.Add(sceneRef.GetFrontRowTarget());
+                        continue;
+                    }
+                    else
+                    {
+                        // Get Spell
+                        Spell spell = SpellManager.GetSpellByName(monAct.Name);
+                        spell.Accuracy = monAct.Accuracy;
+
+                        switch (monAct.Target)
+                        {
+                            case "Self":
+                                action.Targets.Add(mon);
+                                break;
+                            case "SingleTarget":
+                                action.Targets.Add(sceneRef.GetAnySingleTarget());
+                                break;
+                            case "EnemyParty":
+                                action.Targets = sceneRef.GetAllTargets().ToList();
+                                break;
+                            case "CasterParty":
+                                action.Targets = this.GetAllTargets().ToList();
+                                break;
+                            default:
+                                Debug.WriteLine("Invalid monAct target: " + monAct.Target);
+                                continue;
+
+                        }
+                    }
+                }
+            }
+
+            return actList;
+        }
+
+
+        public Monster[] GetAllTargets()
+        {
+            List<Monster> activeList = new List<Monster>();
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+            {
+                foreach (Monster m in entry.Value)
+                    if (m != null)
+                        activeList.Add(m);
+            }
+            return activeList.ToArray();
+        }
+
+        public int GetLiveCount()
+        {
+            // ?
+            return GetAllTargets().Length;
+        }
+
+        public Monster GetAnySingleTarget()
+        {
+            if (monsterSlots.Count == 0)
+            {
+                Debug.WriteLine("Monster Slots must be populated before they can return anything");
+                return null;
+            }
+
+            // Build a list of current monsters, choose one randomly and return it
+            List<Monster> activeList = new List<Monster>();
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+            {
+                foreach (Monster m in entry.Value)
+                    if (m != null)
+                        activeList.Add(m);
+            }
+
+            if (activeList.Count == 0)
+                return null;
+
+            int slotRoll = rnd.Next(0, activeList.Count);
+            return activeList[slotRoll];
+        }
+
+        public Monster GetFrontRowTarget()
+        {
+            if (monsterSlots.Count == 0)
+            {
+                Debug.WriteLine("Monster Slots must be populated before they can return anything");
+                return null;
+            }
+
+            List<Monster> monsterList = new List<Monster>();
+
+            if (!ColumnIsEmpty(3))
+            {
+                // Col 3 and 2 are front
+                foreach (Monster m in monsterSlots[3])
+                    if (m != null)
+                        monsterList.Add(m);
+
+                foreach (Monster m in monsterSlots[2])
+                    if (m != null)
+                        monsterList.Add(m);
+            }
+            else if (!ColumnIsEmpty(2))
+            {
+                // Col 2 and 1 are front
+                foreach (Monster m in monsterSlots[2])
+                    if (m != null)
+                        monsterList.Add(m);
+
+                foreach (Monster m in monsterSlots[1])
+                    if (m != null)
+                        monsterList.Add(m);
+            }
+            else
+            {
+                // Col 1 and 0 are front
+                foreach (Monster m in monsterSlots[1])
+                    if (m != null)
+                        monsterList.Add(m);
+
+                foreach (Monster m in monsterSlots[0])
+                    if (m != null)
+                        monsterList.Add(m);
+            }
+
+            if (monsterList.Count == 0)
+                return null;
+
+            int slotRoll = rnd.Next(0, monsterList.Count);
+            return monsterList[slotRoll];
+        }
+
+
+        /////////////
+        // Helpers //
+        /////////////
+        
         private bool ColumnIsEmpty(int col)
         {
             // Check column number, return wheter monster slots are empty
-            return false;
+            if (col < 0 || col >= monsterSlots.Count)
+            {
+                Debug.WriteLine("col must be within bounds: 0 - " + (monsterSlots.Count - 1));
+                return true;
+            }
+
+            foreach (Monster m in monsterSlots[col])
+                if (m != null)
+                    return false;
+
+            return true;
         }
 
         private bool MonsterIsBackRow(int col, int row)
@@ -125,38 +337,11 @@ namespace FF2_Monster_Sim
                 case "B":
                     // check col 3 empty
                     break;
-                case "C": 
+                case "C":
                     // Only one row, can't be considered a back row
                     return false;
             }
             return false;
-        }
-
-        public Monster GetMonsterAtPosition(int col, int row)
-        {
-            // Retrieve a monster from a given position
-            return new Monster();
-        }
-
-        public MonsterAction GetMonsterAction(int col, int row)
-        {
-            // Get the monster's action at a given position
-            return new MonsterAction();
-        }
-
-        public Monster GetFrontRowTarget()
-        {
-            // Find the 1-2 front rows
-            // Roll rnd to choose a monster within the rows
-            // Return it
-            return new Monster();
-        }
-
-        public Monster GeAnyTarget()
-        {
-            // Roll rnd to choose a monster within the rows
-            // Return it
-            return new Monster();
         }
 
     }
