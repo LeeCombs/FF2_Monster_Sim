@@ -112,9 +112,8 @@ namespace FF2_Monster_Sim
                     return;
             }
             this.type = type;
-            
         }
-        
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
@@ -170,6 +169,7 @@ namespace FF2_Monster_Sim
             {
                 if (mon != null)
                 {
+                    mon.Init = mon.Evasion += rnd.Next(0, 50);
                     Action action = new Action(mon);
                     MonsterAction monAct = mon.GetAction();
 
@@ -177,13 +177,16 @@ namespace FF2_Monster_Sim
                     {
                         action.Physical = true;
                         action.Targets.Add(sceneRef.GetFrontRowTarget());
+                        actList.Add(action);
                         continue;
                     }
                     else
                     {
                         // Get Spell
-                        Spell spell = SpellManager.GetSpellByName(monAct.Name);
+                        // Spell spell = SpellManager.GetSpellByName(monAct.Name);
+                        Spell spell = new Spell();
                         spell.Accuracy = monAct.Accuracy;
+                        action.Spell = spell;
 
                         switch (monAct.Target)
                         {
@@ -202,15 +205,14 @@ namespace FF2_Monster_Sim
                             default:
                                 Debug.WriteLine("Invalid monAct target: " + monAct.Target);
                                 continue;
-
                         }
+                        actList.Add(action);
                     }
                 }
             }
 
             return actList;
         }
-
 
         public Monster[] GetAllTargets()
         {
