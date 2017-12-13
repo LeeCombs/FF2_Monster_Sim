@@ -241,6 +241,7 @@ namespace FF2_Monster_Sim
         // public List<string> ItemDrops { get; set; }
 
         // In-battle effects
+        public int Init = 0;
         public Dictionary<Buff, int> Buffs { get; set; }
         public Dictionary<Debuff, int> Debuffs { get; set; } 
         public HashSet<TempStatus> TempStatuses { get; set; }
