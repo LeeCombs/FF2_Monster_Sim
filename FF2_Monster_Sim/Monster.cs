@@ -297,8 +297,11 @@ namespace FF2_Monster_Sim
             for (int i = 0; i < GetBuffStacks(Buff.Barrier); i++)
             {
                 // Ignore Ice unless bug fixes are in effect
-                if (!Globals.BUG_FIXES && i == 7) break;
-                if (barrResists[i] == element) return true;
+                if (!Globals.BUG_FIXES && i == 7)
+                    break;
+
+                if (barrResists[i] == element)
+                    return true;
             }
 
             return Resistances.Contains(element);
@@ -315,48 +318,95 @@ namespace FF2_Monster_Sim
 
         /// <summary>
         /// Get the monster's current action.
+        /// Will return a basic attack if it cannot perform any normal actions.
         /// </summary>
         public MonsterAction GetAction()
         {
             // Noting this here... Curse halves magic power, but that's not a base stat
-            
+            /**
+             * Considerations
+             * 
+             * Monster will never choose an ability it can't use
+             * If mp == 0 || inflicted by amnesia/mute, won't try to cast a spell
+             * if mp > 0, it can attempt to cast a spell that it doesn't have enough mp for
+             * if it cannot perform any listed action, it will attack, even if attack doesn't exist in their abilities
+             */
+
             // Odds per slot: 20, 20, 20, 10, 10, 10, 5, 5
-            int[] slotOdds = { 20, 40, 60, 70, 80, 90, 95, 100 };
-            int rndRoll = rnd.Next(0, 100);
-            for (int i = 0; i < slotOdds.Length; i++)
+            List<int[]> slotVals = new List<int[]>
             {
-                if (slotOdds[i] > rndRoll)
+                new int[] { 0, 20 },
+                new int[] { 1, 40 },
+                new int[] { 2, 60 },
+                new int[] { 3, 70 },
+                new int[] { 4, 80 },
+                new int[] { 5, 90 },
+                new int[] { 6, 95 },
+                new int[] { 7, 100 }
+            };
+
+            int rndRoll = rnd.Next(0, 100);
+
+            // Iterate through the available slots and pick one with a higher roll value
+            // If it's spell that cannot be cast, remove the slot and try again.
+            while (slotVals.Count > 0)
+            {
+                for (int i = 0; i < slotVals.Count; i++)
                 {
-                    return ActionList[i];
+                    if (slotVals[i][1] > rndRoll || i == slotVals.Count - 1)
+                    {
+                        MonsterAction act = ActionList[slotVals[i][0]];
+                        if (act.Name != "Attack")
+                        {
+                            // It's a spell. If it cannot be cast, remove the slot and try another action.
+                            if (MP <= 0 || HasPermStatus(PermStatus.Amnesia) || HasTempStatus(TempStatus.Mute))
+                            {
+                                slotVals.RemoveAt(i);
+                                break;
+                            }
+                            // Can't cast spells without sufficient MP
+                            if (MP < act.MPCost)
+                                return new MonsterAction("Nothing", 0, 0, 0, "SingleTarget");
+                        }
+                        return act;
+                    }
                 }
             }
-
-            Debug.WriteLine("Error retrieving action");
-            return new MonsterAction();
+            
+            // Default to basic attack if unable to perform any of the normal actions
+            return new MonsterAction("Attack", 0, 0, 0, "SingleTarget");
         }
         
         public void HealHP(int amount)
         {
-            if (amount < 0) Debug.WriteLine("Cannot heal a negative amount: " + amount);
-            else HP += amount;
+            if (amount < 0)
+                Debug.WriteLine("Cannot heal a negative amount: " + amount);
+            else
+                HP += amount;
         }
 
         public void HealMP(int amount)
         {
-            if (amount < 0) Debug.WriteLine("Cannot heal a negative amount: " + amount);
-            else MP += amount;
+            if (amount < 0)
+                Debug.WriteLine("Cannot heal a negative amount: " + amount);
+            else
+                MP += amount;
         }
 
         public void DamageHP(int amount)
         {
-            if (amount < 0) Debug.WriteLine("Cannot damage a negative amount: " + amount);
-            else HP -= amount;
+            if (amount < 0)
+                Debug.WriteLine("Cannot damage a negative amount: " + amount);
+            else
+                HP -= amount;
         }
 
         public void DamageMP(int amount)
         {
-            if (amount < 0) Debug.WriteLine("Cannot damage a negative amount: " + amount);
-            else MP -= amount;
+            if (amount < 0)
+                Debug.WriteLine("Cannot damage a negative amount: " + amount);
+            else
+                MP -= amount;
         }
 
         public void Kill()
@@ -413,7 +463,9 @@ namespace FF2_Monster_Sim
             if (nonStackingBuffs.Contains(buff))
             {
                 // Add the buff only if it doesn't exist currently
-                if (Buffs.ContainsKey(buff)) return false;
+                if (Buffs.ContainsKey(buff))
+                    return false;
+
                 Buffs.Add(buff, 0);
                 return true;
             }
@@ -425,15 +477,19 @@ namespace FF2_Monster_Sim
                 // Set the buff to the highest value between current and stacks
                 if (Buffs.TryGetValue(buff, out int value))
                 {
-                    if (value < stacks) Buffs[buff] = stacks;
+                    if (value < stacks)
+                        Buffs[buff] = stacks;
                 }
-                else Buffs.Add(buff, stacks);
+                else
+                    Buffs.Add(buff, stacks);
 
                 // Haste clears the Slow debuff
-                if (buff == Buff.Haste) RemoveDebuff(Debuff.Slow);
+                if (buff == Buff.Haste)
+                    RemoveDebuff(Debuff.Slow);
 
                 // Enforce max stacks of 8 for Aura and Barrier
-                if ((buff == Buff.Aura || buff == Buff.Barrier) && Buffs[buff] > 8) Buffs[buff] = 8;
+                if ((buff == Buff.Aura || buff == Buff.Barrier) && Buffs[buff] > 8)
+                    Buffs[buff] = 8;
 
                 // TODO: Determine what bool should be given if stacks is lower than the current value
                 return true;
@@ -445,10 +501,10 @@ namespace FF2_Monster_Sim
             {
                 // Add successes to existing buffs, else set it
                 if (Buffs.TryGetValue(buff, out int value))
-                {
                     Buffs[buff] += stacks;
-                }
-                else Buffs.Add(buff, stacks);
+                else
+                    Buffs.Add(buff, stacks);
+
                 Buffs[buff] = (Buffs[buff] % 256); // Overflow
                 return true;
             }
@@ -476,7 +532,8 @@ namespace FF2_Monster_Sim
         /// <returns>Stack value of the buff, 0 if not found.</returns>
         public int GetBuffStacks(Buff buff)
         {
-            if (Buffs.TryGetValue(buff, out int value)) return value;
+            if (Buffs.TryGetValue(buff, out int value))
+                return value;
             return 0;
         }
 
@@ -504,9 +561,11 @@ namespace FF2_Monster_Sim
                 // The highest stacked slow takes over
                 if (Debuffs.TryGetValue(debuff, out int value))
                 {
-                    if (value < stacks) Debuffs[debuff] = stacks;
+                    if (value < stacks)
+                        Debuffs[debuff] = stacks;
                 }
-                else Debuffs.Add(debuff, stacks);
+                else
+                    Debuffs.Add(debuff, stacks);
 
                 // Slow clears the Haste buff
                 RemoveBuff(Buff.Haste);
@@ -519,10 +578,9 @@ namespace FF2_Monster_Sim
             if (debuff == Debuff.Fear)
             {
                 if (Debuffs.TryGetValue(debuff, out int value))
-                {
                     Debuffs[debuff] += stacks;
-                }
-                else Debuffs[debuff] = stacks;
+                else
+                    Debuffs[debuff] = stacks;
                 return true;
             }
             
@@ -547,7 +605,8 @@ namespace FF2_Monster_Sim
         /// <returns>Stack value of the debuff, 0 if not found.</returns>
         public int GetDebuffStacks(Debuff debuff)
         {
-            if (Debuffs.TryGetValue(debuff, out int value)) return value;
+            if (Debuffs.TryGetValue(debuff, out int value))
+                return value;
             return 0;
         }
 

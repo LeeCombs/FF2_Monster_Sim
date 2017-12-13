@@ -65,7 +65,7 @@ namespace SimTests
             for (int i = 0; i < 8; i++)
             {
                 MonsterAction mAct = new MonsterAction();
-                mAct.Name = i.ToString();
+                mAct.Name = "Attack";
                 mAct.Level = i;
                 mAct.Accuracy = i;
                 mAct.MPCost = i;
