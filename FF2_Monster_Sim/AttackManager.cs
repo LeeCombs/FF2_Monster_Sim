@@ -7,19 +7,19 @@ namespace FF2_Monster_Sim
 {
     public struct AttackResult
     {
-        int Hits;
-        int Damage;
-        List<string> Results;
+        public int Hits;
+        public int Damage;
+        public List<string> Results;
 
         public AttackResult(int hits, int damage, List<string> results)
         {
-            Hits = hits;
+            Hits = Utils.EnforceStatCap(hits);
             Damage = damage;
-            Results = results;
+            Results = results ?? new List<string>();
         }
     }
 
-    class AttackManager
+    public class AttackManager
     {
         private static Random rnd;
         private const int CRIT_RATE = 5;
@@ -31,14 +31,14 @@ namespace FF2_Monster_Sim
         {
             { "Drain HP", "DRAN" },
             { "Drain MP", "ASPL" },
-            { "Poison", "" },
+            { "Poison", "" }, // TODO: There's no relevant spell for poisoning. Figure it out.
             { "Sleep", "SLEP" },
             { "Mute", "MUTE" },
             { "Mini", "MINI" },
             { "Paralysis", "STOP" },
             { "Confusion", "CHRM" },
             { "Blind", "BLND" },
-            { "Envenom", "" },
+            { "Envenom", "" }, // TODO: There's no relevant spell for poisoning. Figure it out.
             { "Curse", "CURS" },
             { "Amensia", "FOG" },
             { "Toad", "TOAD" },
@@ -72,6 +72,9 @@ namespace FF2_Monster_Sim
             rnd = new Random();
         }
 
+        /// <summary>
+        /// Get the result of one monster attacking another
+        /// </summary>
         public static AttackResult AttackMonster(Monster actor, Monster target)
         {
             // Get overall attack score. If actor has beneficial AURA stacks, add +20 to attack
@@ -99,17 +102,19 @@ namespace FF2_Monster_Sim
                 // Get damage and add critical bonus damage if rolled
                 damage += rnd.Next(attackScore, attackScore * 2 + 1) - target.Defense;
                 if (rnd.Next(100) < CRIT_RATE)
+                {
                     damage += attackScore;
-
+                    results.Add("Critical Hit!");
+                }
             }
 
-            if (actor.AttackEffects.Count == 0)
+            if (actor.AttackEffects.Count > 0)
             {
                 // Apply attack effects to the target
                 // TODO: I'm unsure of the logic behind status-touching, and will revisit later.
                 foreach (string effect in actor.AttackEffects)
                 {
-                    if (effect == "Drain HP")
+                    if (string.Equals(effect, "Drain HP"))
                     {
                         Spell drainHPSpell = SpellManager.GetSpellByName("DRAN");
                         SpellResult drainRes = SpellManager.CastSpell(actor, target, drainHPSpell, totalHits);
@@ -147,9 +152,14 @@ namespace FF2_Monster_Sim
                 }
             }
 
+            // Apply the damage and return the overall results
+            target.DamageHP(damage);
             return new AttackResult(totalHits, damage, results);
         }
 
+        /// <summary>
+        /// Return the total number of successful hits by the acting monster against a target
+        /// </summary>
         private static int GetTotalHits(Monster actor, Monster target)
         {
             int attacks = 0;
