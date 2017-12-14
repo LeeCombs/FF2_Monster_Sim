@@ -43,7 +43,7 @@ namespace SimTests
             target.MagicBlocks = 0;
 
             //// Test expected hits
-            int missThreshold = 15; // 1.5% (1% expected)
+            int missThreshold = 20; // 2% (1% expected)
             for (int i = 0; i < 1000; i++)
             {
                 AttackResult res = AttackManager.AttackMonster(actor, target);
@@ -53,7 +53,7 @@ namespace SimTests
             }
 
             // Ensure some misses happened, but not too many
-            Assert.AreNotEqual(15, missThreshold);
+            Assert.AreNotEqual(20, missThreshold);
             Assert.IsTrue(missThreshold > 0);
 
             //// Test expected damage, crit expectancy

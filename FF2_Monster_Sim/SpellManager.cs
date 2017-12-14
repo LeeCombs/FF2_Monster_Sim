@@ -76,10 +76,7 @@ namespace FF2_Monster_Sim
         public static Spell GetSpellByName(string name)
         {
             if (String.IsNullOrEmpty(name))
-            {
-                Debug.WriteLine("Null or Empty name supplied");
-                return null;
-            }
+                throw new ArgumentException("Invalid spell name supplied");
 
             foreach (dynamic data in spellData)
             {
@@ -100,9 +97,7 @@ namespace FF2_Monster_Sim
                 }
             }
 
-            // Return null if no match was found
-            Debug.WriteLine("No spell found by name: " + name);
-            return null;
+            throw new Exception("No spell found by name: " + name);
         }
 
         /// <summary>
@@ -112,6 +107,16 @@ namespace FF2_Monster_Sim
         /// <returns>Result of casting the spell</returns>
         public static SpellResult CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
         {
+            // Catch the errors first
+            if (caster == null)
+                throw new ArgumentNullException("Invalid actor provided");
+            if (target == null)
+                throw new ArgumentNullException("Invalid target provided");
+            if (spell == null)
+                throw new ArgumentNullException("Invalid spell provided");
+            if (level <= 0 || level > 16)
+                throw new ArgumentOutOfRangeException("Level out of range. Must be 1-16. Found: " + level);
+
             Debug.WriteLine("Casting spell: " + spell.Name + " " + level);
 
             // Helpers
@@ -127,9 +132,12 @@ namespace FF2_Monster_Sim
 
             // Reduce accuracy and power if multi-targetting
             int adjustedAccuracy = spell.Accuracy;
-            if (multiTarget) adjustedAccuracy = adjustedAccuracy / 2;
+            if (multiTarget)
+                adjustedAccuracy = adjustedAccuracy / 2;
+
             int adjustedPower = spell.Power;
-            if (multiTarget) adjustedPower = adjustedPower / 4;
+            if (multiTarget)
+                adjustedPower = adjustedPower / 4;
 
             // Check for absorption. No effect except HP gain. All spells calculate damage.
             if (target.IsAbsorbantTo(spell.Element))
@@ -434,8 +442,7 @@ namespace FF2_Monster_Sim
                     }
                     break;
                 default:
-                    Debug.WriteLine("Invalid spell effect found: " + spell.Effect);
-                    break;
+                    throw new Exception("Invalid spell effect found: " + spell.Effect);
             }
             return failedResult;
         }
