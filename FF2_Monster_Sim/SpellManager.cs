@@ -49,6 +49,9 @@ namespace FF2_Monster_Sim
         private static Random rnd;
         private static dynamic spellData;
 
+        // Generic messages
+        private const string FAILED_SPELL_MESSAGE = "Ineffective";
+
         public SpellManager()
         {
             //
@@ -120,7 +123,7 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("Casting spell: " + spell.Name + " " + level);
 
             // Helpers
-            SpellResult failedResult = new SpellResult(new List<string> { "Ineffective" });
+            SpellResult failedResult = new SpellResult(new List<string> { FAILED_SPELL_MESSAGE });
             SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.SuccessMessage });
 
             // If wall is high enough, the spell fails outright
@@ -275,7 +278,7 @@ namespace FF2_Monster_Sim
                     break;
                 case "TempStatus":
                     if (target.IsResistantTo(spell.Element))
-                        return new SpellResult(new List<string> { "Ineffective" });
+                        return failedResult;
 
                     if (target.IsWeakTo(spell.Element))
                     {
@@ -434,10 +437,6 @@ namespace FF2_Monster_Sim
                             // Deals ((20...40) - Defense) * level
                             if (caster.HP == caster.HPMax)
                                 return failedResult;
-
-                            break;
-                        default:
-                            Debug.WriteLine("Invalid spell found at special: " + spell.Name);
                             break;
                     }
                     break;

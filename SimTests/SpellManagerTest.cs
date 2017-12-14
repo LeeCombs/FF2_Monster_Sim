@@ -66,6 +66,9 @@ namespace SimTests
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => SpellManager.CastSpell(actor, target, spell, 0));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => SpellManager.CastSpell(actor, target, spell, 17));
 
+            spell.Effect = "Banana";
+            Assert.ThrowsException<Exception>(() => SpellManager.CastSpell(actor, target, spell, 1));
+
             // TODO: Determine which cases should be tested here that are not already tested
             // through the individual spell tests
         }
