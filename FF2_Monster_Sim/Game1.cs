@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace FF2_Monster_Sim
 {
@@ -18,8 +19,11 @@ namespace FF2_Monster_Sim
 
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
-        List<string> sceneOneNames = new List<string> { "Imp", "Eagle", "Goblin", "Balloon", "Bomb", "Brain", "Coctrice", "DesAngel" };
-        List<string> sceneTwoNames = new List<string> { "Molbor", "IceLiz", "G.Toad", "GrOgre", "Gigas", };
+        List<string> sceneOneNames = new List<string> { "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin" };
+        List<string> sceneTwoNames = new List<string> { "Molbor", "G.Molbor", "L.Nolbor", "Sargeant", "General", };
+
+        // Turn Logic
+        int turn = 0, round = 0;
 
         public Game1()
         {
@@ -107,6 +111,63 @@ namespace FF2_Monster_Sim
                 Exit();
 
             // TODO: Add your update logic here
+
+            round++;
+            Debug.WriteLine("Round: " + round);
+            turn = 0;
+            foreach (Action action in GetSortedActionArray())
+            {
+                turn++;
+                Debug.WriteLine("\nTurn: " + turn);
+                foreach (Monster target in action.Targets)
+                {
+                    if (target == null)
+                    {
+                        Debug.WriteLine("null target");
+                        continue;
+                    }
+
+                    Debug.WriteLine("\nName: " + action.Actor.Name);
+                    Thread.Sleep(1);
+                    Debug.WriteLine("Target: " + target.Name);
+                    Thread.Sleep(1);
+                    if (action.Physical)
+                    {
+                        Debug.WriteLine("Attack");
+                        AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
+                        
+                        Debug.WriteLine("Hits: " + atkRes.Hits);
+                        Thread.Sleep(1);
+                        Debug.WriteLine("Damage: " + atkRes.Damage);
+                        Thread.Sleep(1);
+
+                        foreach (string res in atkRes.Results)
+                        {
+                            Debug.WriteLine(res);
+                            Thread.Sleep(1);
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Spell");
+                        Thread.Sleep(1);
+                    }
+                }
+            }
+
+            Debug.WriteLine("Round end");
+
+            if (sceneOne.GetLiveCount() == 0)
+            {
+                Debug.WriteLine("Scene two wins!");
+                Thread.Sleep(100000);
+            }
+
+            if (sceneTwo.GetLiveCount() == 0)
+            {
+                Debug.WriteLine("Scene one wins!");
+                Thread.Sleep(100000);
+            }
 
             base.Update(gameTime);
         }

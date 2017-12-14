@@ -7,9 +7,9 @@ namespace FF2_Monster_Sim
 {
     public struct AttackResult
     {
-        int Hits;
-        int Damage;
-        List<string> Results;
+        public int Hits;
+        public int Damage;
+        public List<string> Results;
 
         public AttackResult(int hits, int damage, List<string> results)
         {
