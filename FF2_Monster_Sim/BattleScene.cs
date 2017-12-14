@@ -159,6 +159,10 @@ namespace FF2_Monster_Sim
         // Monster Getters //
         /////////////////////
 
+        /// <summary>
+        /// Generate and return a list of actions from active monsters
+        /// </summary>
+        /// <param name="sceneRef">The target scene to target monsters from</param>
         public List<Action> GetMonsterActions(BattleScene sceneRef)
         {
             // Get the monster's action at a given position
@@ -175,6 +179,7 @@ namespace FF2_Monster_Sim
 
                     if (monAct.Name == "Attack")
                     {
+                        // TODO: If monster is in back row, it will instead return 'nothing'
                         action.Physical = true;
                         action.Targets.Add(sceneRef.GetFrontRowTarget());
                         actList.Add(action);
@@ -213,7 +218,10 @@ namespace FF2_Monster_Sim
 
             return actList;
         }
-
+        
+        /// <summary>
+        /// Retrieve an array of all active monsters
+        /// </summary>
         public Monster[] GetAllTargets()
         {
             List<Monster> activeList = new List<Monster>();
@@ -232,6 +240,9 @@ namespace FF2_Monster_Sim
             return GetAllTargets().Length;
         }
 
+        /// <summary>
+        /// Retrieve a single random Monster from any slot
+        /// </summary>
         public Monster GetAnySingleTarget()
         {
             if (monsterSlots.Count == 0)
@@ -243,11 +254,9 @@ namespace FF2_Monster_Sim
             // Build a list of current monsters, choose one randomly and return it
             List<Monster> activeList = new List<Monster>();
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
-            {
                 foreach (Monster m in entry.Value)
                     if (m != null)
                         activeList.Add(m);
-            }
 
             if (activeList.Count == 0)
                 return null;
@@ -256,6 +265,9 @@ namespace FF2_Monster_Sim
             return activeList[slotRoll];
         }
 
+        /// <summary>
+        /// Retrieve a single random monster from the front rows
+        /// </summary>
         public Monster GetFrontRowTarget()
         {
             if (monsterSlots.Count == 0)
@@ -312,14 +324,14 @@ namespace FF2_Monster_Sim
         // Helpers //
         /////////////
         
+        /// <summary>
+        /// Check whether or not a column contains active monsters
+        /// </summary>
         private bool ColumnIsEmpty(int col)
         {
-            // Check column number, return wheter monster slots are empty
+            // If col is out of bounds, it's empty
             if (col < 0 || col >= monsterSlots.Count)
-            {
-                Debug.WriteLine("col must be within bounds: 0 - " + (monsterSlots.Count - 1));
                 return true;
-            }
 
             foreach (Monster m in monsterSlots[col])
                 if (m != null)
@@ -327,24 +339,6 @@ namespace FF2_Monster_Sim
 
             return true;
         }
-
-        private bool MonsterIsBackRow(int col, int row)
-        {
-            switch (type)
-            {
-                case "A":
-                    // Check col 3 empty
-                    // Check col 2 empty
-                    break;
-                case "B":
-                    // check col 3 empty
-                    break;
-                case "C":
-                    // Only one row, can't be considered a back row
-                    return false;
-            }
-            return false;
-        }
-
+        
     }
 }
