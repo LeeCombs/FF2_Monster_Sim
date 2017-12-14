@@ -22,11 +22,12 @@ namespace FF2_Monster_Sim
     class AttackManager
     {
         private static Random rnd;
+        private const int CRIT_RATE = 5;
 
         /// <summary>
         /// Helper to determine which spells to cast based on Status Touch effect
         /// </summary>
-        private Dictionary<string, string> touchToSpellMap = new Dictionary<string, string>
+        private static Dictionary<string, string> touchToSpellMap = new Dictionary<string, string>
         {
             { "Drain HP", "DRAN" },
             { "Drain MP", "ASPL" },
@@ -95,27 +96,54 @@ namespace FF2_Monster_Sim
             int damage = 0;
             for (int i = 0; i < totalHits; i++)
             {
-                // TODO: Check for a critical hit
-                damage += rnd.Next(attackScore, attackScore * 2 + 1);
+                // Get damage and add critical bonus damage if rolled
+                damage += rnd.Next(attackScore, attackScore * 2 + 1) - target.Defense;
+                if (rnd.Next(100) < CRIT_RATE)
+                    damage += attackScore;
 
-                if (actor.AttackEffects.Count == 0)
-                    continue;
+            }
 
+            if (actor.AttackEffects.Count == 0)
+            {
                 // Apply attack effects to the target
                 // TODO: I'm unsure of the logic behind status-touching, and will revisit later.
                 foreach (string effect in actor.AttackEffects)
                 {
                     if (effect == "Drain HP")
-                        Debug.WriteLine("Drain HP");
+                    {
+                        Spell drainHPSpell = SpellManager.GetSpellByName("DRAN");
+                        SpellResult drainRes = SpellManager.CastSpell(actor, target, drainHPSpell, totalHits);
+                    }
 
                     if (effect == "Drain MP")
-                        Debug.WriteLine("Drain MP");
+                    {
+                        Spell drainMPSpell = SpellManager.GetSpellByName("ASPL");
+                        SpellResult drainRes = SpellManager.CastSpell(actor, target, drainMPSpell, totalHits);
+                    }
 
                     if (Enum.TryParse<PermStatus>(effect, out PermStatus permStat))
-                        Debug.WriteLine("found permStat : " + permStat);
+                    {
+                        Spell pStatSpell = SpellManager.GetSpellByName(touchToSpellMap[effect]);
+                        SpellResult pStatRes = SpellManager.CastSpell(actor, target, pStatSpell, totalHits);
+
+                        // If one status spell hits, they are all applied. TODO: This is ugly. Un-ugly it
+                        if (pStatRes.Results[0] != "Ineffective")
+                            foreach (string effectNested in actor.AttackEffects)
+                                if (effect != effectNested)
+                                    target.AddPermStatus(permStat);
+                    }
 
                     if (Enum.TryParse<TempStatus>(effect, out TempStatus tempStat))
-                        Debug.WriteLine("found tempStat : " + tempStat);
+                    {
+                        Spell tStatSpell = SpellManager.GetSpellByName(touchToSpellMap[effect]);
+                        SpellResult tStatRes = SpellManager.CastSpell(actor, target, tStatSpell, totalHits);
+
+                        // If one status spell hits, they are all applied. TODO: This is ugly. Un-ugly it
+                        if (tStatRes.Results[0] != "Ineffective")
+                            foreach (string effectNested in actor.AttackEffects)
+                                if (effect != effectNested)
+                                    target.AddTempStatus(tempStat);
+                    }
                 }
             }
 
