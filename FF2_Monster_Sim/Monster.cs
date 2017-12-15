@@ -377,6 +377,42 @@ namespace FF2_Monster_Sim
             // Default to basic attack if unable to perform any of the normal actions
             return new MonsterAction("Attack", 0, 0, 0, "SingleTarget");
         }
+
+        /// <summary>
+        /// Roll and return total number of successful hits
+        /// </summary>
+        public int RollHits()
+        {
+            int hits = 0;
+            for (int i = 0; i < Hits; i++)
+                if (rnd.Next(0, 100) < Accuracy)
+                    hits++;
+            return hits;
+        }
+
+        /// <summary>
+        /// Roll and return total number of successful blocks
+        /// </summary>
+        public int RollBlocks()
+        {
+            int blocks = 0;
+            for (int i = 0; i < Blocks; i++)
+                if (rnd.Next(100) < Evasion)
+                    blocks++;
+            return blocks;
+        }
+
+        /// <summary>
+        /// Roll and return total number of successful magic blocks
+        /// </summary>
+        public int RollMagicBlocks()
+        {
+            int mBlocks = 0;
+            for (int i = 0; i < MagicBlocks; i++)
+                if (rnd.Next(100) < MagicEvasion)
+                    mBlocks++;
+            return mBlocks;
+        }
         
         public void HealHP(int amount)
         {

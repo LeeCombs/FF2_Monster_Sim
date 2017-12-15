@@ -158,17 +158,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         private static int GetTotalHits(Monster actor, Monster target)
         {
-            int attacks = 0;
-            for (int i = 0; i < actor.Hits; i++)
-                if (rnd.Next(0, 100) < actor.Accuracy)
-                    attacks++;
-
-            int blocks = 0;
-            for (int i = 0; i < target.Blocks; i++)
-                if (rnd.Next(0, 100) < target.Evasion)
-                    blocks++;
-
-            int totalHits = attacks - blocks;
+            int totalHits = actor.RollHits() - target.RollBlocks();
             return totalHits > 0 ? totalHits : 0; 
         }
     }

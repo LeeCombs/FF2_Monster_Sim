@@ -170,12 +170,12 @@ namespace FF2_Monster_Sim
                     if (target.IsWeakTo(spell.Element) && target.IsResistantTo(spell.Element))
                     {
                         // Damage as usual. Best guess at hits: level - blocks
-                        int rwHits = level - GetMagicBlocks(target);
+                        int rwHits = level - target.RollMagicBlocks();
                         return HandleDamageSpellResult(target, GetDamage(adjustedPower, rwHits));
                     }
 
                     // Normal logic
-                    int hits = level + GetSuccesses(level, adjustedAccuracy) - GetMagicBlocks(target);
+                    int hits = level + GetSpellSuccesses(level, adjustedAccuracy) - target.RollMagicBlocks();
                     return HandleDamageSpellResult(target, GetDamage(adjustedPower, hits));
                 case "Damage_Ultima":
                     // TODO: Ultima damage bug
@@ -188,7 +188,7 @@ namespace FF2_Monster_Sim
                         return HandleDamageSpellResult(target, GetDamage(adjustedPower, healHits));
                     }
 
-                    int totalHeal = GetDamage(adjustedPower, GetSuccesses(level, adjustedAccuracy));
+                    int totalHeal = GetDamage(adjustedPower, GetSpellSuccesses(level, adjustedAccuracy));
                     target.HealHP(totalHeal);
 
                     return new SpellResult(new List<string> { "HP up!" });
@@ -210,7 +210,7 @@ namespace FF2_Monster_Sim
                 case "Buff":
                     // Autohits, ignores magic resistance rolls
                     Buff buff = (Buff)Enum.Parse(typeof(Buff), spell.Status);
-                    int buffHits = GetSuccesses(level, adjustedAccuracy);
+                    int buffHits = GetSpellSuccesses(level, adjustedAccuracy);
 
                     if (buffHits == 0)
                         return failedResult;
@@ -464,7 +464,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Calculate how many successes are rolled (e.g. 5 rolls at 50% accuracy chance)
         /// </summary>
-        private static int GetSuccesses(int rolls, int accuracy)
+        private static int GetSpellSuccesses(int rolls, int accuracy)
         {
             int successes = 0;
             for (int i = 0; i < rolls; i++)
@@ -474,23 +474,11 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Calculate how many magic blocks a monster was able to perform (e.g. 5 blocks at 50% evasion chance)
-        /// </summary>
-        private static int GetMagicBlocks(Monster monster)
-        {
-            int successes = 0;
-            for (int i = 0; i < monster.MagicBlocks; i++)
-                if (rnd.Next(0, 100) < monster.MagicEvasion)
-                    successes++;
-            return successes;
-        }
-
-        /// <summary>
         /// Dumb little helper to help readability
         /// </summary>
         private static int GetHitsAgainstTarget(int level, int accuracy, Monster target)
         {
-            return GetSuccesses(level, accuracy) - GetMagicBlocks(target);
+            return GetSpellSuccesses(level, accuracy) - target.RollMagicBlocks();
         }
 
         /// <summary>
