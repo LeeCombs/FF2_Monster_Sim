@@ -136,9 +136,9 @@ namespace FF2_Monster_Sim
                         Debug.WriteLine("Attack");
                         AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
                         
-                        Debug.WriteLine("Hits: " + atkRes.Hits);
+                        Debug.WriteLine(atkRes.HitsMessage);
                         Thread.Sleep(1);
-                        Debug.WriteLine("Damage: " + atkRes.Damage);
+                        Debug.WriteLine(atkRes.DamageMessage);
                         Thread.Sleep(1);
 
                         foreach (string res in atkRes.Results)

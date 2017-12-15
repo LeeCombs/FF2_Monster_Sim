@@ -7,14 +7,15 @@ namespace FF2_Monster_Sim
 {
     public struct AttackResult
     {
-        public int Hits;
-        public int Damage;
+        public string HitsMessage;
+        public string DamageMessage;
         public List<string> Results;
 
         public AttackResult(int hits, int damage, List<string> results)
         {
-            Hits = Utils.EnforceStatCap(hits);
-            Damage = damage;
+            hits = Utils.EnforceStatCap(hits, 16);
+            HitsMessage = hits > 0 ? hits.ToString() + "xHit" : "Miss";
+            DamageMessage = damage.ToString() + " DMG";
             Results = results ?? new List<string>();
         }
     }
@@ -23,11 +24,13 @@ namespace FF2_Monster_Sim
     {
         private static Random rnd;
         private const int CRIT_RATE = 5;
+        private const int AURA_BONUS = 20;
+        private const string CRIT_MESSAGE = "Critical Hit!";
 
         /// <summary>
         /// Helper to determine which spells to cast based on Status Touch effect
         /// </summary>
-        private static Dictionary<string, string> touchToSpellMap = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> touchToSpellMap = new Dictionary<string, string>
         {
             { "Drain HP", "DRAN" },
             { "Drain MP", "ASPL" },
@@ -45,23 +48,7 @@ namespace FF2_Monster_Sim
             { "Petrify", "BRAK" },
             { "Death", "DETH" },
         };
-
-        /**
-         * TODO: 
-         * 
-         * Critical Hits
-         * - Bonus damage equal to attack score, not affected by defense
-         * - Unknown crit rate?
-         * 
-         * Status Effects
-         * - Can inflict multiple Temp or Perm statuses, but not both types
-         * - If attack connects, chance to apply status, regardless of damage or resistances
-         * - If an attack causes any ailment, it causes all of them (i.e. Malboros)
-         * 
-         * Drain Effects
-         * - Each hit, regardless of damage, apply normal drain logic
-         */
-
+        
         public AttackManager()
         {
             //
@@ -77,6 +64,12 @@ namespace FF2_Monster_Sim
         /// </summary>
         public static AttackResult AttackMonster(Monster actor, Monster target)
         {
+            // Catch them errors first and foremost
+            if (actor == null)
+                throw new ArgumentNullException("Invalid actor supplied");
+            if (target == null)
+                throw new ArgumentNullException("Invalid target supplied");
+            
             // Get overall attack score. If actor has beneficial AURA stacks, add +20 to attack
             int attackScore = actor.Strength;
             for (int i = 0; i < actor.GetBuffStacks(Buff.Aura); i++)
@@ -88,7 +81,7 @@ namespace FF2_Monster_Sim
                 // Attack bonus only applies once for a family match
                 if (target.Families.Contains((MonsterFamily)i))
                 {
-                    attackScore += 20;
+                    attackScore += AURA_BONUS;
                     break;
                 }
             }
@@ -96,6 +89,9 @@ namespace FF2_Monster_Sim
             // Determine total successful hits and overall damage. Apply status effects if necessary.
             List<string> results = new List<string>();
             int totalHits = GetTotalHits(actor, target);
+            if (totalHits == 0)
+                return new AttackResult(0, 0, new List<string>());
+
             int damage = 0;
             for (int i = 0; i < totalHits; i++)
             {
@@ -104,7 +100,7 @@ namespace FF2_Monster_Sim
                 if (rnd.Next(100) < CRIT_RATE)
                 {
                     damage += attackScore;
-                    results.Add("Critical Hit!");
+                    results.Add(CRIT_MESSAGE);
                 }
             }
 
