@@ -85,8 +85,7 @@ namespace SimTests
             Assert.AreNotEqual(75, critThreshold);
             Assert.IsTrue(critThreshold > 0);
 
-            //// TODO: Test aura buff effects
-            // Iterate through MonsterFamily enum
+            // Test Aura Buff damage bonus
             foreach (int i in Enum.GetValues(typeof(MonsterFamily)))
             {
                 MonsterFamily fam = (MonsterFamily)i;
@@ -124,8 +123,7 @@ namespace SimTests
             testDamageRange(actor, target, actor.Strength + 20, (actor.Strength * 3) + 60);
             target.Families.Clear();
             actor.RemoveBuff(Buff.Aura);
-
-
+            
             //// TODO: Test expected Results
 
             //// Test HP-drain effect

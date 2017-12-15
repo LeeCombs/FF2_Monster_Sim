@@ -233,29 +233,26 @@ namespace SimTests
             Monster monster = new Monster();
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
-            Assert.IsFalse(monster.AddBuff(Buff.Aura, -1));
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
-            Assert.IsFalse(monster.AddBuff(Buff.Berserk, 17));
             Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
+
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddBuff(Buff.Aura, -1));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddBuff(Buff.Aura, 17));
+            Assert.IsFalse(monster.AddBuff(Buff.Spirit, 1));
+            Assert.IsFalse(monster.AddBuff(Buff.Intelligence, 1));
         }
 
         [TestMethod]
         public void AddRemoveBuffTest()
         {
             Monster monster = new Monster();
-            AddRemoveBuff(monster, Buff.Aura);
-            AddRemoveBuff(monster, Buff.Barrier);
-            AddRemoveBuff(monster, Buff.Berserk);
-            AddRemoveBuff(monster, Buff.Blink);
-            AddRemoveBuff(monster, Buff.Haste);
-            AddRemoveBuff(monster, Buff.Imbibe);
-            AddRemoveBuff(monster, Buff.Protect);
-            AddRemoveBuff(monster, Buff.Shell);
-            AddRemoveBuff(monster, Buff.Wall);
-
-            // Skip below for now as they may be irrelevant
-            // AddRemoveBuff(monster, Buff.Spirit);
-            // AddRemoveBuff(monster, Buff.Intelligence);
+            foreach (Buff buff in Enum.GetValues(typeof(Buff)))
+            {
+                // Ignore spirit/intelligence as they're irrelevants to monsters
+                if (buff == Buff.Spirit || buff == Buff.Intelligence)
+                    continue;
+                AddRemoveBuff(monster, buff);
+            }
         }
         
         /// <summary>
@@ -562,6 +559,16 @@ namespace SimTests
         /////////////
         // Debuffs //
         /////////////
+
+        [TestMethod]
+        public void GeneralDebuffTest()
+        {
+            // Setup
+            Monster monster = new Monster();
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddDebuff(Debuff.Fear, -1));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddDebuff(Debuff.Fear, 17));
+        }
+
 
         [TestMethod]
         public void SlowTest()

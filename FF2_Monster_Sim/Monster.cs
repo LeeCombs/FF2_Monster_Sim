@@ -436,24 +436,14 @@ namespace FF2_Monster_Sim
         public bool AddBuff(Buff buff, int stacks)
         {
             if (stacks < 1 || stacks > 16)
-            {
-                Debug.WriteLine("Stacks must be within range 1 - 16. Found: " + stacks);
+                throw new ArgumentOutOfRangeException("Stacks must be within range 1 - 16. Found: " + stacks);
+            // Ignore Spirit and Intelligence for now as they're irrelevant
+            if (buff == Buff.Spirit || buff == Buff.Intelligence)
                 return false;
-            }
 
-            /* Notes TODO
+            /**
+             * Notes TODO
              * 
-             * Aura - Grants family-killing properties to main weapon
-             * 1 - Magic Beast
-             * 2 - Aquatic
-             * 3 - Earth
-             * 4 - Giants
-             * 5 - Spellcaster
-             * 6 - Dragons
-             * 7 - Were
-             * 8+ - Undead (Doesn't work)
-             * 
-             * Wall - Negates ALL spells up to it's level 
              * If wall exists and an instant KO spell is used, it succeeds
              */
 
@@ -509,9 +499,8 @@ namespace FF2_Monster_Sim
                 Buffs[buff] = (Buffs[buff] % 256); // Overflow
                 return true;
             }
-            
-            Debug.WriteLine("Buff not caught: " + buff);
-            return false;
+
+            throw new Exception("Invalid buff supplied: " + buff);
         }
         
         /// <summary>
@@ -551,10 +540,7 @@ namespace FF2_Monster_Sim
         public bool AddDebuff(Debuff debuff, int stacks)
         {
             if (stacks < 1 || stacks > 16)
-            {
-                Debug.WriteLine("Stacks must be within range 1 - 16. Found: " + stacks);
-                return false;
-            }
+                throw new ArgumentOutOfRangeException("Stacks must be within range 1 - 16. Found: " + stacks);
 
             // Slow doesn't stack
             if (debuff == Debuff.Slow)
@@ -585,8 +571,7 @@ namespace FF2_Monster_Sim
                 return true;
             }
             
-            Debug.WriteLine("Debuff not caught: " + debuff);
-            return false;
+            throw new Exception("Invalid debuff supplied: " + debuff);
         }
 
         /// <summary>
