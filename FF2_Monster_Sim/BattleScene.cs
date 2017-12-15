@@ -155,6 +155,18 @@ namespace FF2_Monster_Sim
                     entry.Value[i] = null;
         }
 
+        public void RemoveMonster(Monster monster)
+        {
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+                for (int i = 0; i < entry.Value.Length; i++)
+                    if (entry.Value[i] != null)
+                        if (Object.Equals(monster, entry.Value[i]))
+                        {
+                            entry.Value[i] = null;
+                            return;
+                        }
+        }
+
         /////////////////////
         // Monster Getters //
         /////////////////////
@@ -226,11 +238,9 @@ namespace FF2_Monster_Sim
         {
             List<Monster> activeList = new List<Monster>();
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
-            {
                 foreach (Monster m in entry.Value)
                     if (m != null)
                         activeList.Add(m);
-            }
             return activeList.ToArray();
         }
 

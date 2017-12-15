@@ -74,7 +74,8 @@ namespace FF2_Monster_Sim
             for (int i = 0; i < totalHits; i++)
             {
                 // Get damage and add critical bonus damage if rolled
-                damage += rnd.Next(attackScore, attackScore * 2 + 1) - target.Defense;
+                int dmgRoll = rnd.Next(attackScore, attackScore * 2 + 1) - target.Defense;
+                damage += dmgRoll > 0 ? dmgRoll : 0;
                 if (rnd.Next(100) < CRIT_RATE)
                 {
                     damage += attackScore;
@@ -148,6 +149,8 @@ namespace FF2_Monster_Sim
 
             // Apply the damage and return the overall results
             target.DamageHP(damage);
+            if (target.IsDead())
+                results.Add(target.Name + " fell");
             return new AttackResult(totalHits, damage, results);
         }
 

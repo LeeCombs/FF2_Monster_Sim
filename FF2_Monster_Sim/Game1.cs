@@ -24,6 +24,7 @@ namespace FF2_Monster_Sim
 
         // Turn Logic
         int turn = 0, round = 0;
+        Thread combatThread;
 
         public Game1()
         {
@@ -46,6 +47,8 @@ namespace FF2_Monster_Sim
 
             sceneOne = new BattleScene();
             sceneTwo = new BattleScene(type: "B", flipped: true);
+
+            combatThread = new Thread(CombatLoop);
 
             base.Initialize();
         }
@@ -70,6 +73,7 @@ namespace FF2_Monster_Sim
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneOneNames[i]);
                 if (monster == null) continue;
+                monster.scene = sceneOne;
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name));
                 sceneOneMonsters.Add(monster);
             }
@@ -80,15 +84,15 @@ namespace FF2_Monster_Sim
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneTwoNames[i]);
                 if (monster == null) continue;
-
+                monster.scene = sceneTwo;
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), true);
                 sceneTwoMonsters.Add(monster);
             }
             sceneTwo.PopulateScene(sceneTwoMonsters);
             foreach (Monster m in sceneTwo.GetAllTargets())
                 m.Position.X += 500;
-            
 
+            combatThread.Start();
         }
 
         /// <summary>
@@ -112,64 +116,73 @@ namespace FF2_Monster_Sim
 
             // TODO: Add your update logic here
 
-            round++;
-            Debug.WriteLine("Round: " + round);
-            turn = 0;
-            foreach (Action action in GetSortedActionArray())
+            base.Update(gameTime);
+        }
+
+        public void CombatLoop()
+        {
+            while (true)
             {
-                turn++;
-                Debug.WriteLine("\nTurn: " + turn);
-                foreach (Monster target in action.Targets)
+                round++;
+                Debug.WriteLine("Round: " + round);
+                turn = 0;
+                foreach (Action action in GetSortedActionArray())
                 {
-                    if (target == null)
+                    turn++;
+                    Debug.WriteLine("\nTurn: " + turn);
+                    foreach (Monster target in action.Targets)
                     {
-                        Debug.WriteLine("null target");
-                        continue;
-                    }
-
-                    Debug.WriteLine("\nName: " + action.Actor.Name);
-                    Thread.Sleep(1);
-                    Debug.WriteLine("Target: " + target.Name);
-                    Thread.Sleep(1);
-                    if (action.Physical)
-                    {
-                        Debug.WriteLine("Attack");
-                        AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
-                        
-                        Debug.WriteLine(atkRes.HitsMessage);
-                        Thread.Sleep(1);
-                        Debug.WriteLine(atkRes.DamageMessage);
-                        Thread.Sleep(1);
-
-                        foreach (string res in atkRes.Results)
+                        if (target == null)
                         {
-                            Debug.WriteLine(res);
-                            Thread.Sleep(1);
+                            Debug.WriteLine("null target");
+                            continue;
+                        }
+
+                        Debug.WriteLine("\nName: " + action.Actor.Name);
+                        Thread.Sleep(100);
+
+                        Debug.WriteLine("Target: " + target.Name);
+                        Thread.Sleep(100);
+
+                        if (action.Physical)
+                        {
+                            Debug.WriteLine("Attack");
+                            AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
+
+                            Debug.WriteLine(atkRes.HitsMessage);
+                            Thread.Sleep(100);
+
+                            Debug.WriteLine(atkRes.DamageMessage);
+                            Thread.Sleep(100);
+
+                            foreach (string res in atkRes.Results)
+                            {
+                                Debug.WriteLine(res);
+                                Thread.Sleep(100);
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Spell");
+                            Thread.Sleep(100);
                         }
                     }
-                    else
-                    {
-                        Debug.WriteLine("Spell");
-                        Thread.Sleep(1);
-                    }
+                }
+                Debug.WriteLine("Round end");
+
+
+                if (sceneOne.GetLiveCount() == 0)
+                {
+                    Debug.WriteLine("Scene two wins!");
+                    break;
+                }
+
+                if (sceneTwo.GetLiveCount() == 0)
+                {
+                    Debug.WriteLine("Scene one wins!");
+                    break;
                 }
             }
-
-            Debug.WriteLine("Round end");
-
-            if (sceneOne.GetLiveCount() == 0)
-            {
-                Debug.WriteLine("Scene two wins!");
-                Thread.Sleep(100000);
-            }
-
-            if (sceneTwo.GetLiveCount() == 0)
-            {
-                Debug.WriteLine("Scene one wins!");
-                Thread.Sleep(100000);
-            }
-
-            base.Update(gameTime);
         }
 
         /// <summary>

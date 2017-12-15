@@ -41,6 +41,9 @@ namespace FF2_Monster_Sim
 
     public class Monster
     {
+        // Testin'
+        public BattleScene scene;
+        
         private Random rnd;
         private bool flipped;
 
@@ -417,38 +420,40 @@ namespace FF2_Monster_Sim
         public void HealHP(int amount)
         {
             if (amount < 0)
-                Debug.WriteLine("Cannot heal a negative amount: " + amount);
-            else
-                HP += amount;
+                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+            HP += amount;
         }
 
         public void HealMP(int amount)
         {
             if (amount < 0)
-                Debug.WriteLine("Cannot heal a negative amount: " + amount);
-            else
-                MP += amount;
+                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+            MP += amount;
         }
 
         public void DamageHP(int amount)
         {
             if (amount < 0)
-                Debug.WriteLine("Cannot damage a negative amount: " + amount);
-            else
-                HP -= amount;
+                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+            HP -= amount;
+
+            if (HP <= 0)
+                Kill();
         }
 
         public void DamageMP(int amount)
         {
             if (amount < 0)
-                Debug.WriteLine("Cannot damage a negative amount: " + amount);
-            else
-                MP -= amount;
+                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+            MP -= amount;
         }
 
         public void Kill()
         {
             HP = 0;
+
+            if (scene != null)
+                scene.RemoveMonster(this);
             // TODO: Animation
             // TODO: Removal
         }
