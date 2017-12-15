@@ -26,28 +26,6 @@ namespace FF2_Monster_Sim
         private const int CRIT_RATE = 5;
         private const int AURA_BONUS = 20;
         private const string CRIT_MESSAGE = "Critical Hit!";
-
-        /// <summary>
-        /// Helper to determine which spells to cast based on Status Touch effect
-        /// </summary>
-        private static readonly Dictionary<string, string> touchToSpellMap = new Dictionary<string, string>
-        {
-            { "Drain HP", "DRAN" },
-            { "Drain MP", "ASPL" },
-            { "Poison", "" }, // TODO: There's no relevant spell for poisoning. Figure it out.
-            { "Sleep", "SLEP" },
-            { "Mute", "MUTE" },
-            { "Mini", "MINI" },
-            { "Paralysis", "STOP" },
-            { "Confusion", "CHRM" },
-            { "Blind", "BLND" },
-            { "Envenom", "" }, // TODO: There's no relevant spell for poisoning. Figure it out.
-            { "Curse", "CURS" },
-            { "Amensia", "FOG" },
-            { "Toad", "TOAD" },
-            { "Petrify", "BRAK" },
-            { "Death", "DETH" },
-        };
         
         public AttackManager()
         {
@@ -106,52 +84,76 @@ namespace FF2_Monster_Sim
 
             if (actor.AttackEffects.Count > 0)
             {
-                // Apply attack effects to the target
-                // TODO: I'm unsure of the logic behind status-touching, and will revisit later.
-                foreach (string effect in actor.AttackEffects)
+                int statusHits = totalHits - target.RollMagicBlocks();
+                if (statusHits > 0)
                 {
-                    if (string.Equals(effect, "Drain HP"))
+                    // Apply attack effects to the target
+                    // TODO: I'm unsure of the logic behind status-touching, and will revisit later.
+                    foreach (string effect in actor.AttackEffects)
                     {
-                        Spell drainHPSpell = SpellManager.GetSpellByName("DRAN");
-                        SpellResult drainRes = SpellManager.CastSpell(actor, target, drainHPSpell, totalHits);
+                        // TODO: Figure out about message returns
+                        if (string.Equals(effect, "Drain HP"))
+                        {
+                            int hpAmt = target.HPMax / 16;
+                            int dranAmt = hpAmt * statusHits;
+
+                            // Opposite effect vs. Undead
+                            if (target.Families.Contains(MonsterFamily.Undead))
+                            {
+                                actor.DamageHP(dranAmt);
+                                target.HealHP(dranAmt);
+                            }
+                            else
+                            {
+                                actor.HealHP(dranAmt);
+                                target.DamageHP(dranAmt);
+                            }
+                            break;
+                        }
+
+                        // TODO: Figure out about message returns
+                        if (string.Equals(effect, "Drain MP"))
+                        {
+                            int mpAmt = target.MPMax / 16;
+                            int asplAmt = mpAmt * statusHits;
+
+                            // Opposite effect vs. Undead
+                            if (target.Families.Contains(MonsterFamily.Undead))
+                            {
+                                actor.DamageMP(asplAmt);
+                                target.HealMP(asplAmt);
+                            }
+                            else
+                            {
+                                actor.HealMP(asplAmt);
+                                target.DamageMP(asplAmt);
+                            }
+                            break;
+                        }
+
+                        if (Enum.TryParse<PermStatus>(effect, out PermStatus permStat))
+                        {
+                            target.AddPermStatus(permStat);
+                            continue;
+                        }
+
+                        if (Enum.TryParse<TempStatus>(effect, out TempStatus tempStat))
+                        {
+                            target.AddTempStatus(tempStat);
+                            continue;
+                        }
                     }
-
-                    if (effect == "Drain MP")
-                    {
-                        Spell drainMPSpell = SpellManager.GetSpellByName("ASPL");
-                        SpellResult drainRes = SpellManager.CastSpell(actor, target, drainMPSpell, totalHits);
-                    }
-
-                    if (Enum.TryParse<PermStatus>(effect, out PermStatus permStat))
-                    {
-                        Spell pStatSpell = SpellManager.GetSpellByName(touchToSpellMap[effect]);
-                        SpellResult pStatRes = SpellManager.CastSpell(actor, target, pStatSpell, totalHits);
-
-                        // If one status spell hits, they are all applied. TODO: This is ugly. Un-ugly it
-                        if (pStatRes.Results[0] != "Ineffective")
-                            foreach (string effectNested in actor.AttackEffects)
-                                if (effect != effectNested)
-                                    target.AddPermStatus(permStat);
-                    }
-
-                    if (Enum.TryParse<TempStatus>(effect, out TempStatus tempStat))
-                    {
-                        Spell tStatSpell = SpellManager.GetSpellByName(touchToSpellMap[effect]);
-                        SpellResult tStatRes = SpellManager.CastSpell(actor, target, tStatSpell, totalHits);
-
-                        // If one status spell hits, they are all applied. TODO: This is ugly. Un-ugly it
-                        if (tStatRes.Results[0] != "Ineffective")
-                            foreach (string effectNested in actor.AttackEffects)
-                                if (effect != effectNested)
-                                    target.AddTempStatus(tempStat);
-                    }
-                }
-            }
+                } // End statusHits > 0
+            } // End attackEffects.Count > 0
 
             // Apply the damage and return the overall results
             target.DamageHP(damage);
             return new AttackResult(totalHits, damage, results);
         }
+
+        /////////////
+        // Helpers //
+        /////////////
 
         /// <summary>
         /// Return the total number of successful hits by the acting monster against a target

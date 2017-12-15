@@ -85,7 +85,7 @@ namespace SimTests
             Assert.AreNotEqual(75, critThreshold);
             Assert.IsTrue(critThreshold > 0);
 
-            // Test Aura Buff damage bonus
+            //// Test Aura Buff damage bonus
             foreach (int i in Enum.GetValues(typeof(MonsterFamily)))
             {
                 MonsterFamily fam = (MonsterFamily)i;
@@ -124,7 +124,6 @@ namespace SimTests
             target.Families.Clear();
             actor.RemoveBuff(Buff.Aura);
             
-            //// TODO: Test expected Results
 
             //// Test HP-drain effect
             actor.HP = 1;
@@ -134,10 +133,18 @@ namespace SimTests
             actor.AttackEffects.Add("Drain HP");
 
             AttackManager.AttackMonster(actor, target);
-            // Assert.IsTrue(target.HP < 100);
-            // Assert.IsTrue(actor.HP > 1);
-            // TODO: DRAN doesn't ever hit due to 0 accuracy
+            Assert.IsTrue(actor.HP > 1);
+            Assert.IsTrue(target.HP < 100);
+
+            // Ensure an undead target reverses the drain
+            actor.HP = 100;
+            target.HP = 1;
+            target.Families.Add(MonsterFamily.Undead);
+            AttackManager.AttackMonster(actor, target);
+            Assert.IsTrue(actor.HP < 100);
+            Assert.IsTrue(target.HP > 1);
             actor.AttackEffects.Clear();
+            target.Families.Clear();
 
             //// Test MP-drain effect
             actor.MP = 1;
@@ -145,13 +152,21 @@ namespace SimTests
             actor.AttackEffects.Add("Drain MP");
 
             AttackManager.AttackMonster(actor, target);
-            // Assert.IsTrue(target.MP < 100);
-            // Assert.IsTrue(actor.MP > 1);
-            // TODO: ASPL doesn't ever hit due to 0 accuracy
+            Assert.IsTrue(actor.MP > 1);
+            Assert.IsTrue(target.MP < 100);
+
+            // Ensure an undead target reverses the drain
+            actor.MP = 100;
+            target.MP = 1;
+            target.Families.Add(MonsterFamily.Undead);
+            AttackManager.AttackMonster(actor, target);
+            Assert.IsTrue(actor.MP < 100);
+            Assert.IsTrue(target.MP > 1);
             actor.AttackEffects.Clear();
+            target.Families.Clear();
 
             //// TODO: Test touch-status effects
-
+            //// TODO: Test expected Results
         }
 
         /////////////
