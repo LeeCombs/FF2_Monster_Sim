@@ -26,45 +26,147 @@ namespace SimTests
             AttackResult atkResult = new AttackResult();
         }
 
+        /////////////////////////
+        // AttackMonster Tests //
+        /////////////////////////
+
         [TestMethod]
-        public void AttackMonsterTest()
+        public void AttackMonsterInputsTest()
         {
             // Setup
             Monster actor = new Monster();
-            actor.HP = actor.HPMax = actor.MP = actor.MPMax = 100;
-            actor.Hits = 1;
-            actor.Accuracy = 99;
-            actor.Strength = 10;
-
             Monster target = new Monster();
-            target.HP = target.HPMax = target.MP = target.MPMax = 100;
-            target.Defense = 0;
-            target.Blocks = 0;
-            target.MagicBlocks = 0;
 
-            //// Test valid input
+            // Test valid input
             Assert.IsNotNull(AttackManager.AttackMonster(actor, target));
 
-            //// Test invalid inputs
+            // Test invalid inputs
             Assert.ThrowsException<ArgumentNullException>(() => AttackManager.AttackMonster(null, target));
             Assert.ThrowsException<ArgumentNullException>(() => AttackManager.AttackMonster(actor, null));
             Assert.ThrowsException<ArgumentNullException>(() => AttackManager.AttackMonster(null, null));
+        }
 
-            //// Test expected hit messages and miss threshold
-            int missThreshold = 20; // 2% (1% expected)
-            for (int i = 0; i < 1000; i++)
+        [TestMethod]
+        public void DrainHPTouchTest()
+        {
+            // Setup
+            Monster actor = new Monster
             {
-                AttackResult res = AttackManager.AttackMonster(actor, target);
-                if (String.Equals(res.HitsMessage, "Miss"))
-                    missThreshold--;
-                else
-                    Assert.IsTrue(String.Equals(res.HitsMessage, "0xHit") || String.Equals(res.HitsMessage, "1xHit"));
-            }
-            // Ensure some misses happened, but not too many
-            Assert.AreNotEqual(20, missThreshold);
-            Assert.IsTrue(missThreshold > 0);
+                HPMax = 1000,
+                HP = 1,
+                Hits = 10,
+                Accuracy = 99,
+                Strength = 10
+            };
+            actor.AttackEffects.Add("Drain HP");
 
-            //// Test expected damage, crit expectancy
+            Monster target = new Monster
+            {
+                HPMax = 1600,
+                HP = 1600
+            };
+
+            // Test normal logic
+            AttackManager.AttackMonster(actor, target);
+            Assert.IsTrue(actor.HP > 1);
+            Assert.IsTrue(target.HP < target.HPMax);
+
+            // Ensure an undead target reverses the drain
+            actor.HP = actor.HPMax;
+            target.HP = 1;
+            target.Families.Add(MonsterFamily.Undead);
+
+            AttackManager.AttackMonster(actor, target);
+            Assert.IsTrue(actor.HP < actor.HPMax);
+            Assert.IsTrue(target.HP > 1);
+            target.Families.Clear();
+
+            // Ensure that the drain effect alone deals 1/16th max HP damage per hit
+            target.HP = target.HPMax;
+            AttackResult atkRes = AttackManager.AttackMonster(actor, target);
+            int hits = int.Parse(atkRes.HitsMessage.Split('x')[0]);
+            Assert.AreNotEqual(1600 - (hits * 100), target.HP);
+
+            actor.Strength = 0;
+            target.HP = target.HPMax;
+            atkRes = AttackManager.AttackMonster(actor, target);
+            hits = int.Parse(atkRes.HitsMessage.Split('x')[0]);
+            Assert.AreEqual(1600 - (hits * 100), target.HP);
+        }
+
+
+        [TestMethod]
+        public void DrainMPTouchTest()
+        {
+            // Setup
+            Monster actor = new Monster
+            {
+                MPMax = 1000,
+                MP = 1,
+                Hits = 10,
+                Accuracy = 99,
+                Strength = 0
+            };
+            actor.AttackEffects.Add("Drain MP");
+
+            Monster target = new Monster
+            {
+                MPMax = 1600,
+                MP = 1600
+            };
+
+            // Test normal logic
+            AttackManager.AttackMonster(actor, target);
+            Assert.IsTrue(actor.MP > 1);
+            Assert.IsTrue(target.MP < target.MPMax);
+
+            // Ensure an undead target reverses the drain
+            actor.MP = actor.MPMax;
+            target.MP = 1;
+            target.Families.Add(MonsterFamily.Undead);
+
+            AttackManager.AttackMonster(actor, target);
+            Assert.IsTrue(actor.MP < actor.MPMax);
+            Assert.IsTrue(target.MP > 1);
+            target.Families.Clear();
+
+            // Ensure that the drain effect alone deals 1/16th max MP damage per hit
+            target.MP = target.MPMax;
+            AttackResult atkRes = AttackManager.AttackMonster(actor, target);
+            int hits = int.Parse(atkRes.HitsMessage.Split('x')[0]);
+            Assert.AreEqual(1600 - (hits * 100), target.MP);
+        }
+
+        [TestMethod]
+        public void PermStatusTouchTest()
+        {
+            // Setup
+            Monster actor = new Monster();
+            Monster target = new Monster();
+        }
+
+        [TestMethod]
+        public void TempStatusTouchTest()
+        {
+            // Setup
+            Monster actor = new Monster();
+            Monster target = new Monster();
+        }
+
+        [TestMethod]
+        public void ExpectedDamageAndCritsTest()
+        {
+            // Setup
+            Monster actor = new Monster
+            {
+                Hits = 1,
+                Accuracy = 99,
+                Strength = 10
+            };
+
+            Monster target = new Monster();
+
+            // Test expected damage, crit expectancy
             int critThreshold = 75; // 7.5% (5% expected)
             for (int i = 0; i < 1000; i++)
             {
@@ -84,8 +186,44 @@ namespace SimTests
             // Ensure some crits happened, but not too many
             Assert.AreNotEqual(75, critThreshold);
             Assert.IsTrue(critThreshold > 0);
+        }
 
-            //// Test Aura Buff damage bonus
+        [TestMethod]
+        public void ExpectedHitsTest()
+        {
+            // Setup
+            Monster actor = new Monster
+            {
+                Hits = 1,
+                Accuracy = 99
+            };
+
+            Monster target = new Monster();
+
+            // Test expected hit messages and miss threshold
+            int missThreshold = 20; // 2% (1% expected)
+            for (int i = 0; i < 1000; i++)
+            {
+                AttackResult res = AttackManager.AttackMonster(actor, target);
+                if (String.Equals(res.HitsMessage, "Miss"))
+                    missThreshold--;
+                else
+                    Assert.IsTrue(String.Equals(res.HitsMessage, "1xHit"));
+            }
+
+            // Ensure some misses happened, but not too many
+            Assert.AreNotEqual(20, missThreshold);
+            Assert.IsTrue(missThreshold > 0);
+        }
+
+        [TestMethod]
+        public void AuraStacksTest()
+        {
+            // Setup
+            Monster actor = new Monster();
+            Monster target = new Monster();
+
+            // Test Aura Buff damage bonus
             foreach (int i in Enum.GetValues(typeof(MonsterFamily)))
             {
                 MonsterFamily fam = (MonsterFamily)i;
@@ -123,50 +261,6 @@ namespace SimTests
             testDamageRange(actor, target, actor.Strength + 20, (actor.Strength * 3) + 60);
             target.Families.Clear();
             actor.RemoveBuff(Buff.Aura);
-            
-
-            //// Test HP-drain effect
-            actor.HP = 1;
-            target.HP = 100;
-            actor.Hits = 10;
-            actor.Strength = 0;
-            actor.AttackEffects.Add("Drain HP");
-
-            AttackManager.AttackMonster(actor, target);
-            Assert.IsTrue(actor.HP > 1);
-            Assert.IsTrue(target.HP < 100);
-
-            // Ensure an undead target reverses the drain
-            actor.HP = 100;
-            target.HP = 1;
-            target.Families.Add(MonsterFamily.Undead);
-            AttackManager.AttackMonster(actor, target);
-            Assert.IsTrue(actor.HP < 100);
-            Assert.IsTrue(target.HP > 1);
-            actor.AttackEffects.Clear();
-            target.Families.Clear();
-
-            //// Test MP-drain effect
-            actor.MP = 1;
-            target.MP = 100;
-            actor.AttackEffects.Add("Drain MP");
-
-            AttackManager.AttackMonster(actor, target);
-            Assert.IsTrue(actor.MP > 1);
-            Assert.IsTrue(target.MP < 100);
-
-            // Ensure an undead target reverses the drain
-            actor.MP = 100;
-            target.MP = 1;
-            target.Families.Add(MonsterFamily.Undead);
-            AttackManager.AttackMonster(actor, target);
-            Assert.IsTrue(actor.MP < 100);
-            Assert.IsTrue(target.MP > 1);
-            actor.AttackEffects.Clear();
-            target.Families.Clear();
-
-            //// TODO: Test touch-status effects
-            //// TODO: Test expected Results
         }
 
         /////////////
