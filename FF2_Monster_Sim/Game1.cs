@@ -14,8 +14,6 @@ namespace FF2_Monster_Sim
     public class Game1 : Game
     {
 
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
@@ -26,11 +24,21 @@ namespace FF2_Monster_Sim
         int turn = 0, round = 0;
         Thread combatThread;
 
+        // Graphics
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+
+        // Manager(s)
+        TextManager textManager;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
+
+        // Scene Layout
+
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -44,6 +52,8 @@ namespace FF2_Monster_Sim
             MonsterManager.Initialize();
             SpellManager.Initialize();
             AttackManager.Initialize();
+
+            textManager = new TextManager();
 
             sceneOne = new BattleScene();
             sceneTwo = new BattleScene(type: "B", flipped: true);
@@ -93,6 +103,17 @@ namespace FF2_Monster_Sim
                 m.Position.X += 500;
 
             combatThread.Start();
+
+            // Text Manager
+
+            List<Texture2D> textures = new List<Texture2D>();
+
+            textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
+            textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
+            textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
+            textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
+            textures.Add(Content.Load<Texture2D>("Graphics\\ResultsBox"));
+            textManager.Initialize(0, 0, textures.ToArray());
         }
 
         /// <summary>
@@ -117,6 +138,24 @@ namespace FF2_Monster_Sim
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+        }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            sceneOne.Draw(spriteBatch);
+            sceneTwo.Draw(spriteBatch);
+            textManager.Draw(spriteBatch);
+            spriteBatch.End();
+
+            base.Draw(gameTime);
         }
 
         public void CombatLoop()
@@ -183,23 +222,6 @@ namespace FF2_Monster_Sim
                     break;
                 }
             }
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            sceneOne.Draw(spriteBatch);
-            sceneTwo.Draw(spriteBatch);
-            spriteBatch.End();
-
-            base.Draw(gameTime);
         }
 
         /////////////

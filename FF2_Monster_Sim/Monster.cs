@@ -250,6 +250,11 @@ namespace FF2_Monster_Sim
         public HashSet<TempStatus> TempStatuses { get; set; }
         public HashSet<PermStatus> PermStatuses { get; set; }
 
+
+        //////////////////
+        // Initializers //
+        //////////////////
+
         public Monster()
         {
             ActionList = new List<MonsterAction>();
