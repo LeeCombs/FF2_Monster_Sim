@@ -30,6 +30,7 @@ namespace FF2_Monster_Sim
 
         // Manager(s)
         TextManager textManager;
+        SpriteFont font;
 
         public Game1()
         {
@@ -83,8 +84,9 @@ namespace FF2_Monster_Sim
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneOneNames[i]);
                 if (monster == null) continue;
-                monster.scene = sceneOne;
+
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name));
+                monster.scene = sceneOne;
                 sceneOneMonsters.Add(monster);
             }
             sceneOne.PopulateScene(sceneOneMonsters);
@@ -94,8 +96,9 @@ namespace FF2_Monster_Sim
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneTwoNames[i]);
                 if (monster == null) continue;
-                monster.scene = sceneTwo;
+
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), true);
+                monster.scene = sceneTwo;
                 sceneTwoMonsters.Add(monster);
             }
             sceneTwo.PopulateScene(sceneTwoMonsters);
@@ -107,13 +110,15 @@ namespace FF2_Monster_Sim
             // Text Manager
 
             List<Texture2D> textures = new List<Texture2D>();
-
             textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\ResultsBox"));
             textManager.Initialize(0, 0, textures.ToArray());
+
+            // Font
+            font = Content.Load<SpriteFont>("Graphics/Font");
         }
 
         /// <summary>
@@ -153,6 +158,10 @@ namespace FF2_Monster_Sim
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
             textManager.Draw(spriteBatch);
+
+            Vector2 pos = new Vector2(200, 200);
+            spriteBatch.DrawString(font, "Boobs", pos, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
