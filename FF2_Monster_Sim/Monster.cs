@@ -483,6 +483,7 @@ namespace FF2_Monster_Sim
         {
             if (stacks < 1 || stacks > 16)
                 throw new ArgumentOutOfRangeException("Stacks must be within range 1 - 16. Found: " + stacks);
+
             // Ignore Spirit and Intelligence for now as they're irrelevant
             if (buff == Buff.Spirit || buff == Buff.Intelligence)
                 return false;

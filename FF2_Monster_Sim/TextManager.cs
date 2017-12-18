@@ -12,22 +12,28 @@ namespace FF2_Monster_Sim
     class TextManager
     {
         private int x, y;
-        private Texture2D actorBox, hitsBox, targetsBox, dmgBox, resultsBox;
+        private Textbox actorBox, hitsBox, targetsBox, dmgBox, resultsBox;
 
         public TextManager()
         {
             //
         }
 
-        public void Initialize(int x, int y, Texture2D[] textures)
+        public void Initialize(int x, int y, Texture2D[] textures, SpriteFont font)
         {
             this.x = x;
             this.y = y;
-            actorBox = textures[0];
-            targetsBox = textures[2];
-            hitsBox = textures[1];
-            dmgBox = textures[3];
-            resultsBox = textures[4];
+            actorBox = new Textbox();
+            hitsBox = new Textbox();
+            targetsBox = new Textbox();
+            dmgBox = new Textbox();
+            resultsBox = new Textbox();
+
+            actorBox.Initialize(new   Vector2(x, y), textures[0], font);
+            hitsBox.Initialize(new    Vector2(x, y + 50), textures[1], font);
+            targetsBox.Initialize(new Vector2(x, y + 100), textures[2], font);
+            dmgBox.Initialize(new     Vector2(x, y + 150), textures[3], font);
+            resultsBox.Initialize(new Vector2(x, y + 200), textures[4], font);
         }
 
         public void LoadContent()
@@ -37,12 +43,11 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            SpriteEffects s = SpriteEffects.None;
-            spriteBatch.Draw(actorBox,   new Vector2(x, y), null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
-            spriteBatch.Draw(hitsBox,    new Vector2(x, y + 50), null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
-            spriteBatch.Draw(targetsBox, new Vector2(x, y + 100), null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
-            spriteBatch.Draw(dmgBox,     new Vector2(x, y + 150), null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
-            spriteBatch.Draw(resultsBox, new Vector2(x, y + 200), null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
+            actorBox.Draw(spriteBatch);
+            hitsBox.Draw(spriteBatch);
+            targetsBox.Draw(spriteBatch);
+            dmgBox.Draw(spriteBatch);
+            resultsBox.Draw(spriteBatch);
         }
     }
 }

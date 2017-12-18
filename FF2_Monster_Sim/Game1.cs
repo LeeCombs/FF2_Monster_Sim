@@ -105,20 +105,21 @@ namespace FF2_Monster_Sim
             foreach (Monster m in sceneTwo.GetAllTargets())
                 m.Position.X += 500;
 
+            // Threading
             combatThread.Start();
 
-            // Text Manager
+            // Font
+            font = Content.Load<SpriteFont>("Graphics/Font");
 
+            // Text Manager
             List<Texture2D> textures = new List<Texture2D>();
             textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
             textures.Add(Content.Load<Texture2D>("Graphics\\ResultsBox"));
-            textManager.Initialize(0, 0, textures.ToArray());
+            textManager.Initialize(0, 0, textures.ToArray(), font);
 
-            // Font
-            font = Content.Load<SpriteFont>("Graphics/Font");
         }
 
         /// <summary>
@@ -160,7 +161,7 @@ namespace FF2_Monster_Sim
             textManager.Draw(spriteBatch);
 
             Vector2 pos = new Vector2(200, 200);
-            spriteBatch.DrawString(font, "Boobs", pos, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, "Test String", pos, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
 
             spriteBatch.End();
 
