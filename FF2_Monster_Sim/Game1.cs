@@ -110,15 +110,18 @@ namespace FF2_Monster_Sim
 
             // Font
             font = Content.Load<SpriteFont>("Graphics/Font");
-
+            
             // Text Manager
-            List<Texture2D> textures = new List<Texture2D>();
-            textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
-            textures.Add(Content.Load<Texture2D>("Graphics\\ActorBox"));
-            textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
-            textures.Add(Content.Load<Texture2D>("Graphics\\DmgHitBox"));
-            textures.Add(Content.Load<Texture2D>("Graphics\\ResultsBox"));
-            textManager.Initialize(0, 0, textures.ToArray(), font);
+            Texture2D[] textures = 
+            {
+                Content.Load<Texture2D>("Graphics\\ActorBox"),
+                Content.Load<Texture2D>("Graphics\\ActorBox"),
+                Content.Load<Texture2D>("Graphics\\DmgHitBox"),
+                Content.Load<Texture2D>("Graphics\\DmgHitBox"),
+                Content.Load<Texture2D>("Graphics\\ResultsBox")
+            };
+            textManager.Initialize(0, 0);
+            textManager.LoadContent(textures.ToArray(), font);
 
         }
 

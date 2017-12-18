@@ -78,7 +78,7 @@ namespace SimTests
             monster.Absorbs.Remove(Element.None);  // Monsters cannot absorb the fabled None element
 
             // For 0 accuracy spells, just being absorbent is good enough
-            if (spell.Accuracy == 0 && monster.IsAbsorbantTo(spell.Element)) return true;
+            if (spell.Accuracy == 0 && monster.IsAbsorbentTo(spell.Element)) return true;
 
             // If it can hit the monster, ensure sure it heals them
             monster.HPMax = 1000;

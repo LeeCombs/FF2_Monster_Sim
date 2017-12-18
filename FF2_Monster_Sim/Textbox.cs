@@ -25,16 +25,15 @@ namespace FF2_Monster_Sim
         // Monogame //
         //////////////
 
-        public void Initialize(Vector2 position, Texture2D graphic, SpriteFont font)
+        public void Initialize(Vector2 position)
         {
             this.position = position;
-            this.graphic = graphic;
-            this.font = font;
         }
 
-        public void LoadContent()
+        public void LoadContent(Texture2D graphic, SpriteFont font)
         {
-            //
+            this.graphic = graphic;
+            this.font = font;
         }
 
         public void Draw(SpriteBatch spriteBatch)

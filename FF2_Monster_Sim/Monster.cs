@@ -41,25 +41,35 @@ namespace FF2_Monster_Sim
 
     public class Monster
     {
-        // Testin'
+        // Etc.
         public BattleScene scene;
-        
         private Random rnd;
-        private bool flipped;
 
-        // Sprite Stuff
-        public Texture2D MonsterTexture;
+        private const int FEAR_VALUE = 20;
+        private const int BERSERK_VALUE = 5;
+        private const int IMBIBE_VALUE = 10;
+        private const int PROTECT_VALUE = 0;
+
+        //////////////
+        // Monogame //
+        //////////////
+
+        private bool flipped;
+        private Texture2D texture;
         public Vector2 Position;
         public int Width
         {
-            get { return MonsterTexture.Width; }
+            get { return texture.Width; }
         }
         public int Height
         {
-            get { return MonsterTexture.Height; }
+            get { return texture.Height; }
         }
 
-        // Stats
+        //////////////////
+        // Combat Stats //
+        //////////////////
+
         public string Name { get; set; }
         public List<string> AlternateNames { get; set; }
 
@@ -70,7 +80,9 @@ namespace FF2_Monster_Sim
             get { return hp; }
             set
             {
-                if (HPMax == -1) HPMax = Utils.EnforceStatCap(value, 65535);
+                // Set HPMax if not already set
+                if (HPMax == -1)
+                    HPMax = Utils.EnforceStatCap(value, 65535);
                 hp = Utils.EnforceStatCap(value, HPMax);
             }
         }
@@ -82,7 +94,9 @@ namespace FF2_Monster_Sim
             get { return mp; }
             set
             {
-                if (MPMax == -1) MPMax = Utils.EnforceStatCap(value, 65535);
+                // Set MPMax if not already set
+                if (MPMax == -1)
+                    MPMax = Utils.EnforceStatCap(value, 65535);
                 mp = Utils.EnforceStatCap(value, MPMax);
             }
         }
@@ -96,15 +110,15 @@ namespace FF2_Monster_Sim
                 int totalStrength = strength;
 
                 // Halve strength if afflicted with Curse. Note: Int division
-                if (PermStatuses.Contains(PermStatus.Curse)) totalStrength = totalStrength / 2;
+                if (PermStatuses.Contains(PermStatus.Curse))
+                    totalStrength = totalStrength / 2;
 
                 // Add Berserk stacks (5 per) and Imbibe stacks (10 per)
                 int totalBuff = 0;
-                if (Buffs.ContainsKey(Buff.Berserk)) totalBuff += (Buffs[Buff.Berserk] * 5);
-                if (Buffs.ContainsKey(Buff.Imbibe)) totalBuff += (Buffs[Buff.Imbibe] * 10);
+                totalBuff += (GetBuffStacks(Buff.Berserk) * BERSERK_VALUE);
+                totalBuff += (GetBuffStacks(Buff.Imbibe) * IMBIBE_VALUE);
                 totalStrength += (totalBuff % 256); // Overflow
-
-                return (totalStrength > 255) ? 255 : totalStrength; // Cap at 255
+                return Utils.EnforceStatCap(totalStrength);
             }
             set { strength = Utils.EnforceStatCap(value); }
         }
@@ -115,18 +129,11 @@ namespace FF2_Monster_Sim
             get
             {
                 // TODO: Determine what happens between Haste and Slow if they both exist. They shouldn't.
+                // Add haste stacks and remove slow
                 int totalHits = hits;
-
-                // Add Haste stacks to total hits, or remove slow stacks
-                int totalStacks = 0;
-                if (Buffs.ContainsKey(Buff.Haste)) totalStacks = Buffs[Buff.Haste];
-                if (totalStacks > 16) totalStacks = 16; // 16-stack maximum for Haste
-                totalHits += totalStacks;
-                
-                if (Debuffs.ContainsKey(Debuff.Slow)) totalHits -= Debuffs[Debuff.Slow];
-                if (totalHits < 1) totalHits = 1; // Always a 1 hit minimum
-
-                return totalHits;
+                totalHits += GetBuffStacks(Buff.Haste);
+                totalHits -= GetDebuffStacks(Debuff.Slow);
+                return Utils.EnforceStatCap(totalHits, min: 1, max: 32);
             }
             set { hits = Utils.EnforceStatCap(value, min: 1, max: 16); }
         }
@@ -138,7 +145,8 @@ namespace FF2_Monster_Sim
             {
                 // Halve accuracy if afflicted with darkness. Note: Int division
                 int totalAccuracy = accuracy;
-                if (PermStatuses.Contains(PermStatus.Darkness)) totalAccuracy = totalAccuracy / 2;
+                if (HasPermStatus(PermStatus.Darkness))
+                    totalAccuracy = totalAccuracy / 2;
                 return totalAccuracy;
             }
             set { accuracy = Utils.EnforceStatCap(value, 99); }
@@ -150,18 +158,13 @@ namespace FF2_Monster_Sim
             get
             {
                 // TODO: Determine calculation order for Curse and Protect
-                int totalDefense = defense;
-
-                // Halve defense if afflicted with Curse. Note: Int division
-                if (PermStatuses.Contains(PermStatus.Curse)) totalDefense = totalDefense / 2;
-
                 // TODO: Adds 1/4 caster's spirit per Protect stack. Spirit doesn't exist on Monsters...
-                if (Buffs.ContainsKey(Buff.Protect))
-                {
-                    // totalDefense += (Buffs[Buff.Protect] * (spirit/4));
-                }
-
-                return totalDefense;
+                // Halve defense if afflicted with Curse. Note: Int division
+                int totalDefense = defense;
+                if (HasPermStatus(PermStatus.Curse))
+                    totalDefense = totalDefense / 2;
+                totalDefense += GetBuffStacks(Buff.Protect) * PROTECT_VALUE;
+                return Utils.EnforceStatCap(totalDefense);
             }
             set { defense = Utils.EnforceStatCap(value); }
         }
@@ -173,10 +176,8 @@ namespace FF2_Monster_Sim
             {
                 // Add Blink stacks to blocks
                 int totalBlocks = blocks;
-                int totalBuff = 0;
-                if (Buffs.ContainsKey(Buff.Blink)) totalBuff = Buffs[Buff.Blink];
-                totalBlocks += (totalBuff % 256); // Overflow
-                return (totalBlocks > 255) ? 255 : totalBlocks; // Cap at 255
+                totalBlocks += GetBuffStacks(Buff.Blink);
+                return Utils.EnforceStatCap(totalBlocks);
             }
             set { blocks = Utils.EnforceStatCap(value); }
         }
@@ -188,7 +189,8 @@ namespace FF2_Monster_Sim
             {
                 // Cannot evade if afflicted by sleep or paralysis
                 int totalEvasion = evasion;
-                if (TempStatuses.Contains(TempStatus.Sleep) || TempStatuses.Contains(TempStatus.Paralysis)) totalEvasion = 0;
+                if (HasTempStatus(TempStatus.Sleep) || HasTempStatus(TempStatus.Paralysis))
+                    totalEvasion = 0;
                 return totalEvasion;
             }
             set { evasion = Utils.EnforceStatCap(value, 99); }
@@ -201,10 +203,8 @@ namespace FF2_Monster_Sim
             {
                 // Add Shell stacks to magic blocks
                 int totalMagicBlocks = magicBlocks;
-                int totalBuff = 0;
-                if (Buffs.ContainsKey(Buff.Shell)) totalBuff = Buffs[Buff.Shell];
-                totalMagicBlocks += (totalBuff % 256); // Overflow
-                return (totalMagicBlocks > 255) ? 255 : totalMagicBlocks; // Cap at 255
+                totalMagicBlocks += GetBuffStacks(Buff.Shell);
+                return Utils.EnforceStatCap(totalMagicBlocks);
             }
             set { magicBlocks = Utils.EnforceStatCap(value); }
         }
@@ -223,10 +223,9 @@ namespace FF2_Monster_Sim
             {
                 // Add Fear stacks * Fear Power (20), with debuff overflow check
                 int totalFear = fear;
-                int totalDebuff = 0;
-                if (Debuffs.ContainsKey(Debuff.Fear)) totalDebuff = (Debuffs[Debuff.Fear] * 20);
+                int totalDebuff = GetDebuffStacks(Debuff.Fear) * FEAR_VALUE;
                 totalFear += (totalDebuff % 256); // Overflow
-                return (totalFear > 255) ? 255 : totalFear; // Cap at 255
+                return Utils.EnforceStatCap(totalFear);
             }
             set { fear = Utils.EnforceStatCap(value); }
         }
@@ -249,11 +248,8 @@ namespace FF2_Monster_Sim
         public Dictionary<Debuff, int> Debuffs { get; set; } 
         public HashSet<TempStatus> TempStatuses { get; set; }
         public HashSet<PermStatus> PermStatuses { get; set; }
+        
 
-
-        //////////////////
-        // Initializers //
-        //////////////////
 
         public Monster()
         {
@@ -272,14 +268,18 @@ namespace FF2_Monster_Sim
             rnd = new Random();
         }
 
-        public void Initialize(Texture2D texture, bool flip = false)
+        //////////////////////
+        // Monogame Methods //
+        //////////////////////
+
+        public void Initialize(Texture2D texture, bool flipped = false)
         {
-            MonsterTexture = texture;
-            flipped = flip;
             Position = new Vector2();
+            this.flipped = flipped;
+            this.texture = texture;
         }
 
-        public void Update()
+        public void LoadContent()
         {
             //
         }
@@ -287,8 +287,14 @@ namespace FF2_Monster_Sim
         public void Draw(SpriteBatch spriteBatch)
         {
             SpriteEffects s = SpriteEffects.None;
-            if (flipped) s = SpriteEffects.FlipHorizontally;
-            spriteBatch.Draw(MonsterTexture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
+            if (flipped)
+                s = SpriteEffects.FlipHorizontally;
+            spriteBatch.Draw(texture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
+        }
+
+        public void Update()
+        {
+            //
         }
 
         ////////////////////
@@ -316,7 +322,7 @@ namespace FF2_Monster_Sim
             return Resistances.Contains(element);
         }
 
-        public bool IsAbsorbantTo(Element element)
+        public bool IsAbsorbentTo(Element element)
         {
             return Absorbs.Contains(element);
         }
@@ -523,7 +529,11 @@ namespace FF2_Monster_Sim
 
                 // Haste clears the Slow debuff
                 if (buff == Buff.Haste)
+                {
                     RemoveDebuff(Debuff.Slow);
+                    if (Buffs[buff] > 16)
+                        Buffs[buff] = 16;
+                }
 
                 // Enforce max stacks of 8 for Aura and Barrier
                 if ((buff == Buff.Aura || buff == Buff.Barrier) && Buffs[buff] > 8)
@@ -570,7 +580,7 @@ namespace FF2_Monster_Sim
         public int GetBuffStacks(Buff buff)
         {
             if (Buffs.TryGetValue(buff, out int value))
-                return value;
+                return value % 256; // Overflow
             return 0;
         }
 
@@ -639,7 +649,7 @@ namespace FF2_Monster_Sim
         public int GetDebuffStacks(Debuff debuff)
         {
             if (Debuffs.TryGetValue(debuff, out int value))
-                return value;
+                return value % 256; // Overflow
             return 0;
         }
 

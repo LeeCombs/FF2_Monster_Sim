@@ -13,32 +13,33 @@ namespace FF2_Monster_Sim
     {
         private int x, y;
         private Textbox actorBox, hitsBox, targetsBox, dmgBox, resultsBox;
+        private Textbox[] textboxes;
 
         public TextManager()
         {
             //
         }
 
-        public void Initialize(int x, int y, Texture2D[] textures, SpriteFont font)
+        public void Initialize(int x, int y)
         {
             this.x = x;
             this.y = y;
+
             actorBox = new Textbox();
             hitsBox = new Textbox();
             targetsBox = new Textbox();
             dmgBox = new Textbox();
             resultsBox = new Textbox();
+            textboxes = new Textbox[]{ actorBox, hitsBox, targetsBox, dmgBox, resultsBox };
 
-            actorBox.Initialize(new   Vector2(x, y), textures[0], font);
-            hitsBox.Initialize(new    Vector2(x, y + 50), textures[1], font);
-            targetsBox.Initialize(new Vector2(x, y + 100), textures[2], font);
-            dmgBox.Initialize(new     Vector2(x, y + 150), textures[3], font);
-            resultsBox.Initialize(new Vector2(x, y + 200), textures[4], font);
+            for (int i = 0; i < 5; i++)
+                textboxes[i].Initialize(new Vector2(x, y + (i * 50)));
         }
 
-        public void LoadContent()
+        public void LoadContent(Texture2D[] textures, SpriteFont font)
         {
-            //
+            for (int i = 0; i < 5; i++)
+                textboxes[i].LoadContent(textures[i], font);
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -143,7 +143,7 @@ namespace FF2_Monster_Sim
                 adjustedPower = adjustedPower / 4;
 
             // Check for absorption. No effect except HP gain. All spells calculate damage.
-            if (target.IsAbsorbantTo(spell.Element))
+            if (target.IsAbsorbentTo(spell.Element))
             {
                 int totalHeal = GetDamage(adjustedAccuracy, level);
                 Debug.WriteLine("Healing: " + totalHeal);
