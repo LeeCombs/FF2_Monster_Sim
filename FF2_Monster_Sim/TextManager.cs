@@ -12,28 +12,41 @@ namespace FF2_Monster_Sim
     class TextManager
     {
         private int x, y;
-        private Textbox actorBox, hitsBox, targetsBox, dmgBox, resultsBox;
+        private Textbox actorBox, hitsBox, targetBox, dmgBox, resultsBox;
         private Textbox[] textboxes;
+        private Vector2[] positions;
 
         public TextManager()
         {
             //
         }
 
+        //////////////
+        // Monogame //
+        //////////////
+
         public void Initialize(int x, int y)
         {
             this.x = x;
             this.y = y;
 
+            positions = new Vector2[] {
+                new Vector2(x, y),
+                new Vector2(x + 144, y),
+                new Vector2(x, y + 50),
+                new Vector2(x + 144, y + 50),
+                new Vector2(x, y + 100)
+            };
+
             actorBox = new Textbox();
             hitsBox = new Textbox();
-            targetsBox = new Textbox();
+            targetBox = new Textbox();
             dmgBox = new Textbox();
             resultsBox = new Textbox();
-            textboxes = new Textbox[]{ actorBox, hitsBox, targetsBox, dmgBox, resultsBox };
+            textboxes = new Textbox[]{ actorBox, hitsBox, targetBox, dmgBox, resultsBox };
 
             for (int i = 0; i < 5; i++)
-                textboxes[i].Initialize(new Vector2(x, y + (i * 50)));
+                textboxes[i].Initialize(positions[i]);
         }
 
         public void LoadContent(Texture2D[] textures, SpriteFont font)
@@ -46,9 +59,60 @@ namespace FF2_Monster_Sim
         {
             actorBox.Draw(spriteBatch);
             hitsBox.Draw(spriteBatch);
-            targetsBox.Draw(spriteBatch);
+            targetBox.Draw(spriteBatch);
             dmgBox.Draw(spriteBatch);
             resultsBox.Draw(spriteBatch);
+        }
+
+        /////////////
+        // Publics //
+        /////////////
+
+        public void SetActorText(string text)
+        {
+            SetTextBox(actorBox, text);
+            if (text == "") actorBox.IsVisible = false;
+        }
+
+        public void SetTargetText(string text)
+        {
+            SetTextBox(targetBox, text);
+            if (text == "") targetBox.IsVisible = false;
+        }
+
+        public void SetHitsText(string text)
+        {
+            SetTextBox(hitsBox, text);
+            if (text == "") hitsBox.IsVisible = false;
+        }
+
+        public void SetDamageText(string text)
+        {
+            SetTextBox(dmgBox, text);
+            if (text == "") dmgBox.IsVisible = false;
+        }
+
+        public void SetResultsText(string text)
+        {
+            SetTextBox(resultsBox, text);
+            if (text == "") resultsBox.IsVisible = false;
+        }
+        
+        /////////////
+        // Helpers //
+        /////////////
+
+        private void SetTextBox(Textbox textbox, string text)
+        {
+            textbox.IsVisible = true;
+            textbox.Text = text;
+        }
+
+        private void TearDownTextBox(Textbox textbox)
+        {
+            // Animate
+            textbox.IsVisible = false;
+            textbox.Text = "";
         }
     }
 }

@@ -708,5 +708,10 @@ namespace FF2_Monster_Sim
         {
             return PermStatuses.Contains(permStatus);
         }
+
+        /////////////
+        // Helpers //
+        /////////////
+
     }
 }

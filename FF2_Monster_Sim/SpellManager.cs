@@ -57,6 +57,12 @@ namespace FF2_Monster_Sim
             //
         }
 
+
+        //////////////
+        // Monogame //
+        //////////////
+
+
         public static void Initialize()
         {
             rnd = new Random();

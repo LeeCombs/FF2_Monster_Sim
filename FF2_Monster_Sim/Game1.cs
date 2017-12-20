@@ -13,16 +13,19 @@ namespace FF2_Monster_Sim
     /// </summary>
     public class Game1 : Game
     {
-
-
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
-        List<string> sceneOneNames = new List<string> { "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin" };
-        List<string> sceneTwoNames = new List<string> { "Molbor", "G.Molbor", "L.Nolbor", "Sargeant", "General", };
+        List<string> sceneOneNames = new List<string> {
+            "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin"
+        };
+        List<string> sceneTwoNames = new List<string> {
+            "Molbor", "Sargeant", "Sargeant", "Sargeant", "General"
+        };
 
         // Turn Logic
         int turn = 0, round = 0;
         Thread combatThread;
+        private int gameTick = 250;
 
         // Graphics
         GraphicsDeviceManager graphics;
@@ -83,7 +86,8 @@ namespace FF2_Monster_Sim
             for (int i = 0; i < sceneOneNames.Count; i++)
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneOneNames[i]);
-                if (monster == null) continue;
+                if (monster == null)
+                    continue;
 
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name));
                 monster.scene = sceneOne;
@@ -95,7 +99,8 @@ namespace FF2_Monster_Sim
             for (int i = 0; i < sceneTwoNames.Count; i++)
             {
                 Monster monster = MonsterManager.GetMonsterByName(sceneTwoNames[i]);
-                if (monster == null) continue;
+                if (monster == null)
+                    continue;
 
                 monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), true);
                 monster.scene = sceneTwo;
@@ -105,9 +110,6 @@ namespace FF2_Monster_Sim
             foreach (Monster m in sceneTwo.GetAllTargets())
                 m.Position.X += 500;
 
-            // Threading
-            combatThread.Start();
-
             // Font
             font = Content.Load<SpriteFont>("Graphics/Font");
             
@@ -115,13 +117,16 @@ namespace FF2_Monster_Sim
             Texture2D[] textures = 
             {
                 Content.Load<Texture2D>("Graphics\\ActorBox"),
-                Content.Load<Texture2D>("Graphics\\ActorBox"),
                 Content.Load<Texture2D>("Graphics\\DmgHitBox"),
+                Content.Load<Texture2D>("Graphics\\ActorBox"),
                 Content.Load<Texture2D>("Graphics\\DmgHitBox"),
                 Content.Load<Texture2D>("Graphics\\ResultsBox")
             };
-            textManager.Initialize(0, 0);
+            textManager.Initialize(0, 250);
             textManager.LoadContent(textures.ToArray(), font);
+
+            // Threading
+            combatThread.Start();
 
         }
 
@@ -162,10 +167,6 @@ namespace FF2_Monster_Sim
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
             textManager.Draw(spriteBatch);
-
-            Vector2 pos = new Vector2(200, 200);
-            spriteBatch.DrawString(font, "Test String", pos, Color.White, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -190,35 +191,49 @@ namespace FF2_Monster_Sim
                             continue;
                         }
 
-                        Debug.WriteLine("\nName: " + action.Actor.Name);
-                        Thread.Sleep(100);
+                        textManager.SetActorText(action.Actor.Name);
+                        Thread.Sleep(gameTick);
 
-                        Debug.WriteLine("Target: " + target.Name);
-                        Thread.Sleep(100);
+                        textManager.SetTargetText(target.Name);
+                        Thread.Sleep(gameTick);
 
                         if (action.Physical)
                         {
-                            Debug.WriteLine("Attack");
+
+                            if (target.IsDead()) ;
+                            {
+                                textManager.SetResultsText("Ineffective");
+                                continue;
+                            }
+
                             AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
 
-                            Debug.WriteLine(atkRes.HitsMessage);
-                            Thread.Sleep(100);
+                            textManager.SetHitsText(atkRes.HitsMessage);
+                            Thread.Sleep(gameTick);
 
-                            Debug.WriteLine(atkRes.DamageMessage);
-                            Thread.Sleep(100);
+                            textManager.SetDamageText(atkRes.DamageMessage);
+                            Thread.Sleep(gameTick);
 
                             foreach (string res in atkRes.Results)
                             {
-                                Debug.WriteLine(res);
-                                Thread.Sleep(100);
+                                textManager.SetResultsText(res);
+                                Thread.Sleep(gameTick);
                             }
+                            break;
                         }
                         else
                         {
-                            Debug.WriteLine("Spell");
-                            Thread.Sleep(100);
+                            Thread.Sleep(gameTick);
                         }
                     }
+                    // Turn end
+                    Thread.Sleep(gameTick*2);
+                    textManager.SetActorText("");
+                    textManager.SetTargetText("");
+                    textManager.SetHitsText("");
+                    textManager.SetDamageText("");
+                    textManager.SetResultsText("");
+                    Thread.Sleep(gameTick);
                 }
                 Debug.WriteLine("Round end");
 

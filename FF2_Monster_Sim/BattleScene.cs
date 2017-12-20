@@ -349,6 +349,5 @@ namespace FF2_Monster_Sim
 
             return true;
         }
-        
     }
 }

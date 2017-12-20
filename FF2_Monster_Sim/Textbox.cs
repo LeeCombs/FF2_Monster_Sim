@@ -8,17 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FF2_Monster_Sim
 {
-    class Textbox
+    public class Textbox
     {
         private Vector2 position;
         private Texture2D graphic;
         private SpriteFont font;
-        public string text = "";
 
-        public bool isVisible = true;
+        public bool IsVisible = false;
+        public string Text = "";
 
         public Textbox()
         {
+            //
         }
 
         //////////////
@@ -38,13 +39,25 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(graphic, position, Color.White);
-            spriteBatch.DrawString(font, text, position, Color.White);
+            if (IsVisible)
+            {
+                spriteBatch.Draw(graphic, position, Color.White);
+                Vector2 pos = new Vector2(position.X + 15, position.Y + 30);
+                spriteBatch.DrawString(font, Text, pos, Color.White);
+            }
         }
 
         public void Update(GameTime gameTime)
         {
             //
         }
+
+        /////////////
+        // Publics //
+        /////////////
+
+        /////////////
+        // Helpers //
+        /////////////
     }
 }
