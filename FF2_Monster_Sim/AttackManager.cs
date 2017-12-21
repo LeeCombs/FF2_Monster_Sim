@@ -34,16 +34,51 @@ namespace FF2_Monster_Sim
         private const int CRIT_RATE = 5;
         private const int AURA_BONUS = 20;
         private const string CRIT_MESSAGE = "Critical Hit!";
-        
+
+        /// <summary>
+        /// Helper to map temp status effect messages to their type
+        /// </summary>
+        private static readonly Dictionary<TempStatus, string> tempStatusMessageDict = new Dictionary<TempStatus, string>
+        {
+            { TempStatus.Confuse, "CONF_MESSAGE" },
+            { TempStatus.Mini, "MINI_MESSAGE" },
+            { TempStatus.Mute, "MUTE_MESSAGE" },
+            { TempStatus.Paralysis, "PARA_MESSAGE" },
+            { TempStatus.Sleep, "SLEEP_MESSAGE" },
+            { TempStatus.Venom, "VENOM_MESSAGE" }
+        };
+
+        /// <summary>
+        /// Helper to map temp status effect messages to their type
+        /// </summary>
+        private static readonly Dictionary<PermStatus, string> permStatusMessageDict = new Dictionary<PermStatus, string>
+        {
+            { PermStatus.Amnesia, "AMNESIA_MESSAGE" },
+            { PermStatus.Curse, "CURSE_MESSAGE" },
+            { PermStatus.Darkness, "DARK_MESSAGE" },
+            { PermStatus.KO, "KO_MESSAGE" },
+            { PermStatus.Poison, "PSN_MESSAGE" },
+            { PermStatus.Stone, "STONE_MESSAGE" },
+            { PermStatus.Toad, "TOAD_MESSAGE" }
+        };
+
         public AttackManager()
         {
             //
         }
 
+        //////////////
+        // Monogame //
+        //////////////
+
         public static void Initialize()
         {
             rnd = new Random();
         }
+
+        /////////////
+        // Publics //
+        /////////////
 
         /// <summary>
         /// Get the result of one monster attacking another
@@ -103,7 +138,6 @@ namespace FF2_Monster_Sim
                 if (statusHits > 0)
                 {
                     // Apply attack effects to the target
-                    // TODO: I'm unsure of the logic behind status-touching, and will revisit later.
                     foreach (string effect in actor.AttackEffects)
                     {
                         // TODO: Figure out about message returns
@@ -146,15 +180,18 @@ namespace FF2_Monster_Sim
                             break;
                         }
 
+                        // Apply all status effects to the target
                         if (Enum.TryParse<PermStatus>(effect, out PermStatus permStat))
                         {
                             target.AddPermStatus(permStat);
+                            results.Add(permStatusMessageDict[permStat]);
                             continue;
                         }
 
                         if (Enum.TryParse<TempStatus>(effect, out TempStatus tempStat))
                         {
                             target.AddTempStatus(tempStat);
+                            results.Add(tempStatusMessageDict[tempStat]);
                             continue;
                         }
                     }

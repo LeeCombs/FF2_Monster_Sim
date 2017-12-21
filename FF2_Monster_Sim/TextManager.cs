@@ -97,11 +97,17 @@ namespace FF2_Monster_Sim
             SetTextBox(resultsBox, text);
         }
         
+        /// <summary>
+        /// Removes and hides the results textbox
+        /// </summary>
         public void TearDownResults()
         {
             TearDownTextBox(resultsBox);
         }
 
+        /// <summary>
+        /// Returns whether there is text to tear down, and tears it down
+        /// </summary>
         public bool TearDownText()
         {
             if (textboxStack.Count == 0)
@@ -114,7 +120,10 @@ namespace FF2_Monster_Sim
         /////////////
         // Helpers //
         /////////////
-
+        
+        /// <summary>
+        /// Set a textbox's text, make it visuble, and add it to the stack
+        /// </summary>
         private void SetTextBox(Textbox textbox, string text)
         {
             textbox.IsVisible = true;
@@ -122,9 +131,12 @@ namespace FF2_Monster_Sim
             textboxStack.Push(textbox);
         }
 
+        /// <summary>
+        /// Remove the textbox's text and make it invisible
+        /// </summary>
         private void TearDownTextBox(Textbox textbox)
         {
-            // Animate
+            // Animate?
             textbox.IsVisible = false;
             textbox.Text = "";
         }

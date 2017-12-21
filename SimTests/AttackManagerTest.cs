@@ -172,7 +172,7 @@ namespace SimTests
             {
                 AttackResult atkRes = AttackManager.AttackMonster(actor, target);
                 // Ignore misses
-                if (!String.Equals(atkRes.HitsMessage, "Miss"))
+                if (!String.Equals(atkRes.DamageMessage, "Miss"))
                 {
                     // Damage range is (str...str*2+str);
                     // Extract the damage value from the damage message ("xxx DMG");
@@ -205,7 +205,7 @@ namespace SimTests
             for (int i = 0; i < 1000; i++)
             {
                 AttackResult res = AttackManager.AttackMonster(actor, target);
-                if (String.Equals(res.HitsMessage, "Miss"))
+                if (String.Equals(res.DamageMessage, "Miss"))
                     missThreshold--;
                 else
                     Assert.IsTrue(String.Equals(res.HitsMessage, "1xHit"));
@@ -274,7 +274,7 @@ namespace SimTests
             {
                 AttackResult atkRes = AttackManager.AttackMonster(actor, target);
                 // Ignore misses
-                if (!String.Equals(atkRes.HitsMessage, "Miss"))
+                if (!String.Equals(atkRes.DamageMessage, "Miss"))
                 {
                     // Extract the damage value from the damage message ("xxx DMG");
                     int dmg = int.Parse(atkRes.DamageMessage.Split()[0]);

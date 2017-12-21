@@ -19,7 +19,7 @@ namespace FF2_Monster_Sim
             "Goblin", "Goblin", "LegEater", "LegEater", "VmpThorn", "VmpThorn", "Hornet", "Hornet"
         };
         List<string> sceneTwoNames = new List<string> {
-            "Molbor", "Sargeant", "Sargeant", "Sargeant", "General"
+            "G.Molbor", "G.Molbor", "L.Molbor", "L.Molbor", "G.Molbor", "G.Molbor"
         };
 
         // Turn Logic
