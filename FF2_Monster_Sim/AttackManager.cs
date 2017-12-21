@@ -14,8 +14,16 @@ namespace FF2_Monster_Sim
         public AttackResult(int hits, int damage, List<string> results)
         {
             hits = Utils.EnforceStatCap(hits, 16);
-            HitsMessage = hits > 0 ? hits.ToString() + "xHit" : "Miss";
-            DamageMessage = damage.ToString() + " DMG";
+            if (hits == 0)
+            {
+                HitsMessage = null;
+                DamageMessage = "Miss";
+            }
+            else
+            {
+                HitsMessage = hits > 0 ? hits.ToString() + "xHit" : "Miss";
+                DamageMessage = damage.ToString() + " DMG";
+            }
             Results = results ?? new List<string>();
         }
     }

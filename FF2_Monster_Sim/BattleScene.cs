@@ -12,6 +12,7 @@ namespace FF2_Monster_Sim
         public Monster Actor;
         public List<Monster> Targets;
         public bool Physical;
+        public bool Nothing;
         public Spell Spell;
 
         public Action(Monster actor)
@@ -19,6 +20,7 @@ namespace FF2_Monster_Sim
             Actor = actor;
             Targets = new List<Monster>();
             Physical = false;
+            Nothing = false;
             Spell = null;
         }
     }
@@ -114,6 +116,20 @@ namespace FF2_Monster_Sim
             this.type = type;
         }
 
+        //////////////
+        // Monogame //
+        //////////////
+
+        public void Initialize()
+        {
+            //
+        }
+
+        public void LoadContent()
+        {
+            //
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
@@ -127,6 +143,10 @@ namespace FF2_Monster_Sim
                 }
             }
         }
+        
+        /////////////
+        // Publics //
+        /////////////
 
         public void PopulateScene(List<Monster> monsters)
         {
@@ -192,6 +212,14 @@ namespace FF2_Monster_Sim
                     if (monAct.Name == "Attack")
                     {
                         // TODO: If monster is in back row, it will instead return 'nothing'
+                        if (MonsterIsBackRow(mon))
+                        {
+                            action.Nothing = true;
+                            action.Targets.Add(mon);
+                            actList.Add(action);
+                            continue;
+                        }
+
                         action.Physical = true;
                         action.Targets.Add(sceneRef.GetFrontRowTarget());
                         actList.Add(action);
@@ -328,11 +356,36 @@ namespace FF2_Monster_Sim
             int slotRoll = rnd.Next(0, monsterList.Count);
             return monsterList[slotRoll];
         }
-
-
+        
         /////////////
         // Helpers //
         /////////////
+
+        private bool MonsterIsBackRow(Monster monster)
+        {
+            // Columns 3 and 4 are always front row
+            // If another column is found, check 2-3 columns ahead of it for emptiness
+            Debug.WriteLine("Monsterisbackrow");
+            int col = GetMonsterColumn(monster);
+            Debug.WriteLine("col: " + col);
+
+            if (col == 3 || col == 2)
+                return false;
+            if (col == 1 && ColumnIsEmpty(3))
+                return false;
+            if (col == 1 && ColumnIsEmpty(3) && ColumnIsEmpty(2))
+                return false;
+            return true;
+        }
+
+        private int GetMonsterColumn(Monster monster)
+        {
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+                foreach (Monster m in entry.Value)
+                    if (Object.Equals(m, monster))
+                        return entry.Key;
+            return -1;
+        }
         
         /// <summary>
         /// Check whether or not a column contains active monsters

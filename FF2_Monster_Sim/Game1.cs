@@ -16,7 +16,7 @@ namespace FF2_Monster_Sim
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
         List<string> sceneOneNames = new List<string> {
-            "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin", "Goblin"
+            "Goblin", "Goblin", "LegEater", "LegEater", "VmpThorn", "VmpThorn", "Hornet", "Hornet"
         };
         List<string> sceneTwoNames = new List<string> {
             "Molbor", "Sargeant", "Sargeant", "Sargeant", "General"
@@ -183,6 +183,10 @@ namespace FF2_Monster_Sim
                 {
                     turn++;
                     Debug.WriteLine("\nTurn: " + turn);
+
+                    if (action.Actor == null || action.Actor.IsDead())
+                        continue;
+
                     foreach (Monster target in action.Targets)
                     {
                         if (target == null)
@@ -194,13 +198,18 @@ namespace FF2_Monster_Sim
                         textManager.SetActorText(action.Actor.Name);
                         Thread.Sleep(gameTick);
 
+                        if (action.Nothing)
+                        {
+                            textManager.SetResultsText("Nothing");
+                            continue;
+                        }
+
                         textManager.SetTargetText(target.Name);
                         Thread.Sleep(gameTick);
 
                         if (action.Physical)
                         {
-
-                            if (target.IsDead()) ;
+                            if (target.IsDead())
                             {
                                 textManager.SetResultsText("Ineffective");
                                 continue;
@@ -208,8 +217,15 @@ namespace FF2_Monster_Sim
 
                             AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
 
+                            if (string.Equals(atkRes.DamageMessage, "Miss"))
+                            {
+                                textManager.SetDamageText("Miss");
+                                continue;
+                            }
+
                             textManager.SetHitsText(atkRes.HitsMessage);
                             Thread.Sleep(gameTick);
+
 
                             textManager.SetDamageText(atkRes.DamageMessage);
                             Thread.Sleep(gameTick);
@@ -223,6 +239,8 @@ namespace FF2_Monster_Sim
                         }
                         else
                         {
+                            // Casting a spell
+                            textManager.SetHitsText("Spell");
                             Thread.Sleep(gameTick);
                         }
                     }
