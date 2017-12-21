@@ -230,11 +230,19 @@ namespace FF2_Monster_Sim
                             textManager.SetDamageText(atkRes.DamageMessage);
                             Thread.Sleep(gameTick);
 
-                            foreach (string res in atkRes.Results)
+                            for (int i = 0; i < atkRes.Results.Count; i++)
                             {
+                                string res = atkRes.Results[i];
                                 textManager.SetResultsText(res);
-                                Thread.Sleep(gameTick);
+                                if (i < atkRes.Results.Count - 1)
+                                {
+                                    // Do a mini-tear down to prep for the next message(s)
+                                    Thread.Sleep(gameTick * 2);
+                                    textManager.TearDownResults();
+                                    Thread.Sleep(100);
+                                }
                             }
+                            
                             break;
                         }
                         else
@@ -244,14 +252,10 @@ namespace FF2_Monster_Sim
                             Thread.Sleep(gameTick);
                         }
                     }
-                    // Turn end
-                    Thread.Sleep(gameTick*2);
-                    textManager.SetActorText("");
-                    textManager.SetTargetText("");
-                    textManager.SetHitsText("");
-                    textManager.SetDamageText("");
-                    textManager.SetResultsText("");
-                    Thread.Sleep(gameTick);
+                    // Turn end, clean up text display
+                    Thread.Sleep(gameTick * 2);
+                    while (textManager.TearDownText())
+                        Thread.Sleep(100);
                 }
                 Debug.WriteLine("Round end");
 

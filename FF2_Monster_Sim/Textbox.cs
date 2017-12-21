@@ -42,7 +42,7 @@ namespace FF2_Monster_Sim
             if (IsVisible)
             {
                 spriteBatch.Draw(graphic, position, Color.White);
-                Vector2 pos = new Vector2(position.X + 15, position.Y + 30);
+                Vector2 pos = new Vector2(position.X + 15, position.Y + 25);
                 spriteBatch.DrawString(font, Text, pos, Color.White);
             }
         }

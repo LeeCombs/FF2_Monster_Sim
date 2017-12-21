@@ -16,6 +16,8 @@ namespace FF2_Monster_Sim
         private Textbox[] textboxes;
         private Vector2[] positions;
 
+        private Stack<Textbox> textboxStack;
+
         public TextManager()
         {
             //
@@ -47,6 +49,8 @@ namespace FF2_Monster_Sim
 
             for (int i = 0; i < 5; i++)
                 textboxes[i].Initialize(positions[i]);
+
+            textboxStack = new Stack<Textbox>();
         }
 
         public void LoadContent(Texture2D[] textures, SpriteFont font)
@@ -71,31 +75,40 @@ namespace FF2_Monster_Sim
         public void SetActorText(string text)
         {
             SetTextBox(actorBox, text);
-            if (text == "") actorBox.IsVisible = false;
         }
 
         public void SetTargetText(string text)
         {
             SetTextBox(targetBox, text);
-            if (text == "") targetBox.IsVisible = false;
         }
 
         public void SetHitsText(string text)
         {
             SetTextBox(hitsBox, text);
-            if (text == "") hitsBox.IsVisible = false;
         }
 
         public void SetDamageText(string text)
         {
             SetTextBox(dmgBox, text);
-            if (text == "") dmgBox.IsVisible = false;
         }
 
         public void SetResultsText(string text)
         {
             SetTextBox(resultsBox, text);
-            if (text == "") resultsBox.IsVisible = false;
+        }
+        
+        public void TearDownResults()
+        {
+            TearDownTextBox(resultsBox);
+        }
+
+        public bool TearDownText()
+        {
+            if (textboxStack.Count == 0)
+                return false;
+
+            TearDownTextBox(textboxStack.Pop());
+            return true;
         }
         
         /////////////
@@ -106,6 +119,7 @@ namespace FF2_Monster_Sim
         {
             textbox.IsVisible = true;
             textbox.Text = text;
+            textboxStack.Push(textbox);
         }
 
         private void TearDownTextBox(Textbox textbox)

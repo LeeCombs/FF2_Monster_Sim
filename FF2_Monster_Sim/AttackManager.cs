@@ -79,6 +79,7 @@ namespace FF2_Monster_Sim
                 return new AttackResult(0, 0, new List<string>());
 
             int damage = 0;
+            bool critFlag = false;
             for (int i = 0; i < totalHits; i++)
             {
                 // Get damage and add critical bonus damage if rolled
@@ -87,7 +88,12 @@ namespace FF2_Monster_Sim
                 if (rnd.Next(100) < CRIT_RATE)
                 {
                     damage += attackScore;
-                    results.Add(CRIT_MESSAGE);
+                    // Only add the crit message once
+                    if (!critFlag)
+                    {
+                        critFlag = true;
+                        results.Add(CRIT_MESSAGE);
+                    }
                 }
             }
 
