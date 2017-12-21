@@ -54,6 +54,8 @@
     <Compile Include="MonsterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpellTest.cs" />
+    <Compile Include="TextManagerTest.cs" />
+    <Compile Include="TextboxTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -286,7 +286,6 @@ namespace FF2_Monster_Sim
                             Thread.Sleep(gameTick * 2);
                             while (textManager.TearDownText())
                                 Thread.Sleep(100);
-
                         }
                     }
                     // Turn end, clean up text display
@@ -295,7 +294,6 @@ namespace FF2_Monster_Sim
                         Thread.Sleep(100);
                 }
                 Debug.WriteLine("Round end");
-
 
                 if (sceneOne.GetLiveCount() == 0)
                 {

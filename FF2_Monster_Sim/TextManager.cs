@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace FF2_Monster_Sim
 {
 
-    class TextManager
+    public class TextManager
     {
         private int x, y;
         private Textbox actorBox, hitsBox, targetBox, dmgBox, resultsBox;
@@ -74,26 +74,36 @@ namespace FF2_Monster_Sim
 
         public void SetActorText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("Invalid actor string supplied");
             SetTextBox(actorBox, text);
         }
 
         public void SetTargetText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("Invalid target string supplied");
             SetTextBox(targetBox, text);
         }
 
         public void SetHitsText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("Invalid hits string supplied");
             SetTextBox(hitsBox, text);
         }
 
         public void SetDamageText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("Invalid damage string supplied");
             SetTextBox(dmgBox, text);
         }
 
         public void SetResultsText(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("Invalid results string supplied");
             SetTextBox(resultsBox, text);
         }
         
@@ -102,7 +112,8 @@ namespace FF2_Monster_Sim
         /// </summary>
         public void TearDownResults()
         {
-            TearDownTextBox(resultsBox);
+            // Just pop the stack, results should always be on the top
+            TearDownTextBox(textboxStack.Pop());
         }
 
         /// <summary>
@@ -137,6 +148,7 @@ namespace FF2_Monster_Sim
         private void TearDownTextBox(Textbox textbox)
         {
             // Animate?
+            // Ensure the texbtox is removed from the stack?
             textbox.IsVisible = false;
             textbox.Text = "";
         }
