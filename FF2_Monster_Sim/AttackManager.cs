@@ -21,7 +21,7 @@ namespace FF2_Monster_Sim
             }
             else
             {
-                HitsMessage = hits > 0 ? hits.ToString() + "xHit" : "Miss";
+                HitsMessage = hits.ToString() + "xHit";
                 DamageMessage = damage.ToString() + " DMG";
             }
             Results = results ?? new List<string>();

@@ -16,10 +16,10 @@ namespace FF2_Monster_Sim
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
         List<string> sceneOneNames = new List<string> {
-            "Goblin", "Goblin", "LegEater", "LegEater", "VmpThorn", "VmpThorn", "Hornet", "Hornet"
+            "Goblin", "Fiend", "LegEater", "LegEater", "Column", "VmpThorn", "Hornet", "Hornet"
         };
         List<string> sceneTwoNames = new List<string> {
-            "G.Molbor", "G.Molbor", "L.Molbor", "L.Molbor", "G.Molbor", "G.Molbor"
+            "Sorcerer", "Wizard", "Lamia", "Satan"
         };
 
         // Turn Logic
@@ -172,7 +172,11 @@ namespace FF2_Monster_Sim
             base.Draw(gameTime);
         }
 
-        public void CombatLoop()
+        ////////////////
+        // Game Logic //
+        ////////////////
+
+        private void CombatLoop()
         {
             while (true)
             {
@@ -194,6 +198,9 @@ namespace FF2_Monster_Sim
                             Debug.WriteLine("null target");
                             continue;
                         }
+
+                        if (action.Spell != null && target.IsDead())
+                            continue;
 
                         textManager.SetActorText(action.Actor.Name);
                         Thread.Sleep(gameTick);
@@ -248,8 +255,38 @@ namespace FF2_Monster_Sim
                         else
                         {
                             // Casting a spell
-                            textManager.SetHitsText("Spell");
+                            textManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
                             Thread.Sleep(gameTick);
+
+                            if (target.IsDead())
+                                continue;
+
+                            SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
+
+                            if (spellRes.Damage >= 0)
+                            {
+                                textManager.SetDamageText(spellRes.Damage.ToString());
+                                Thread.Sleep(gameTick);
+                            }
+
+                            for (int i = 0; i < spellRes.Results.Count; i++)
+                            {
+                                string res = spellRes.Results[i];
+                                textManager.SetResultsText(res);
+                                if (i < spellRes.Results.Count - 1)
+                                {
+                                    // Do a mini-tear down to prep for the next message(s)
+                                    Thread.Sleep(gameTick * 2);
+                                    textManager.TearDownResults();
+                                    Thread.Sleep(100);
+                                }
+                            }
+
+                            // Tear down between each target
+                            Thread.Sleep(gameTick * 2);
+                            while (textManager.TearDownText())
+                                Thread.Sleep(100);
+
                         }
                     }
                     // Turn end, clean up text display

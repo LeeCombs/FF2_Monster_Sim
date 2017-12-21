@@ -14,6 +14,7 @@ namespace FF2_Monster_Sim
         public bool Physical;
         public bool Nothing;
         public Spell Spell;
+        public int SpellLevel;
 
         public Action(Monster actor)
         {
@@ -22,6 +23,7 @@ namespace FF2_Monster_Sim
             Physical = false;
             Nothing = false;
             Spell = null;
+            SpellLevel = 0;
         }
     }
 
@@ -187,10 +189,6 @@ namespace FF2_Monster_Sim
                         }
         }
 
-        /////////////////////
-        // Monster Getters //
-        /////////////////////
-
         /// <summary>
         /// Generate and return a list of actions from active monsters
         /// </summary>
@@ -229,9 +227,10 @@ namespace FF2_Monster_Sim
                     {
                         // Get Spell
                         // Spell spell = SpellManager.GetSpellByName(monAct.Name);
-                        Spell spell = new Spell();
+                        Spell spell = SpellManager.GetSpellByName(monAct.Name);
                         spell.Accuracy = monAct.Accuracy;
                         action.Spell = spell;
+                        action.SpellLevel = monAct.Level;
 
                         switch (monAct.Target)
                         {
