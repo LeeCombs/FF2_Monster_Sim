@@ -19,7 +19,7 @@ namespace FF2_Monster_Sim
         public int Power
         {
             get { return power; }
-            set { power = Utils.EnforceStatCap(value); }
+            set { power = Utils.EnforceNumCap(value, 255); }
         }
 
         private int accuracy;
@@ -29,8 +29,7 @@ namespace FF2_Monster_Sim
             set
             {
                 // Accuracy for spells is explicitly not capped
-                accuracy = value;
-                if (accuracy < 0) accuracy = 0;
+                accuracy = value < 0 ? 0 : value;
             }
         }
         

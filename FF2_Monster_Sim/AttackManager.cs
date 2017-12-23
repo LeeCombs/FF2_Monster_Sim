@@ -13,7 +13,7 @@ namespace FF2_Monster_Sim
 
         public AttackResult(int hits, int damage, List<string> results)
         {
-            hits = Utils.EnforceStatCap(hits, 16);
+            hits = Utils.EnforceNumCap(hits, 16);
             if (hits == 0)
             {
                 HitsMessage = null;

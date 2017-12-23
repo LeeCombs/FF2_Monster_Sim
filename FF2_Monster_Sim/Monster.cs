@@ -82,8 +82,8 @@ namespace FF2_Monster_Sim
             {
                 // Set HPMax if not already set
                 if (HPMax == -1)
-                    HPMax = Utils.EnforceStatCap(value, 65535);
-                hp = Utils.EnforceStatCap(value, HPMax);
+                    HPMax = Utils.EnforceNumCap(value, 65535);
+                hp = Utils.EnforceNumCap(value, HPMax);
             }
         }
 
@@ -96,8 +96,8 @@ namespace FF2_Monster_Sim
             {
                 // Set MPMax if not already set
                 if (MPMax == -1)
-                    MPMax = Utils.EnforceStatCap(value, 65535);
-                mp = Utils.EnforceStatCap(value, MPMax);
+                    MPMax = Utils.EnforceNumCap(value, 65535);
+                mp = Utils.EnforceNumCap(value, MPMax);
             }
         }
 
@@ -118,9 +118,9 @@ namespace FF2_Monster_Sim
                 totalBuff += (GetBuffStacks(Buff.Berserk) * BERSERK_VALUE);
                 totalBuff += (GetBuffStacks(Buff.Imbibe) * IMBIBE_VALUE);
                 totalStrength += (totalBuff % 256); // Overflow
-                return Utils.EnforceStatCap(totalStrength);
+                return Utils.EnforceNumCap(totalStrength, 255);
             }
-            set { strength = Utils.EnforceStatCap(value); }
+            set { strength = Utils.EnforceNumCap(value, 255); }
         }
 
         private int hits;
@@ -133,9 +133,9 @@ namespace FF2_Monster_Sim
                 int totalHits = hits;
                 totalHits += GetBuffStacks(Buff.Haste);
                 totalHits -= GetDebuffStacks(Debuff.Slow);
-                return Utils.EnforceStatCap(totalHits, min: 1, max: 32);
+                return Utils.EnforceNumCap(totalHits, 1, 32);
             }
-            set { hits = Utils.EnforceStatCap(value, min: 1, max: 16); }
+            set { hits = Utils.EnforceNumCap(value, 1, 16); }
         }
 
         private int accuracy;
@@ -149,7 +149,7 @@ namespace FF2_Monster_Sim
                     totalAccuracy = totalAccuracy / 2;
                 return totalAccuracy;
             }
-            set { accuracy = Utils.EnforceStatCap(value, 99); }
+            set { accuracy = Utils.EnforceNumCap(value, 99); }
         }
 
         private int defense;
@@ -164,9 +164,9 @@ namespace FF2_Monster_Sim
                 if (HasPermStatus(PermStatus.Curse))
                     totalDefense = totalDefense / 2;
                 totalDefense += GetBuffStacks(Buff.Protect) * PROTECT_VALUE;
-                return Utils.EnforceStatCap(totalDefense);
+                return Utils.EnforceNumCap(totalDefense, 255);
             }
-            set { defense = Utils.EnforceStatCap(value); }
+            set { defense = Utils.EnforceNumCap(value, 255); }
         }
 
         private int blocks;
@@ -177,9 +177,9 @@ namespace FF2_Monster_Sim
                 // Add Blink stacks to blocks
                 int totalBlocks = blocks;
                 totalBlocks += GetBuffStacks(Buff.Blink);
-                return Utils.EnforceStatCap(totalBlocks);
+                return Utils.EnforceNumCap(totalBlocks, 255);
             }
-            set { blocks = Utils.EnforceStatCap(value); }
+            set { blocks = Utils.EnforceNumCap(value, 255); }
         }
 
         private int evasion;
@@ -193,7 +193,7 @@ namespace FF2_Monster_Sim
                     totalEvasion = 0;
                 return totalEvasion;
             }
-            set { evasion = Utils.EnforceStatCap(value, 99); }
+            set { evasion = Utils.EnforceNumCap(value, 99); }
         }
 
         private int magicBlocks;
@@ -204,16 +204,16 @@ namespace FF2_Monster_Sim
                 // Add Shell stacks to magic blocks
                 int totalMagicBlocks = magicBlocks;
                 totalMagicBlocks += GetBuffStacks(Buff.Shell);
-                return Utils.EnforceStatCap(totalMagicBlocks);
+                return Utils.EnforceNumCap(totalMagicBlocks, 255);
             }
-            set { magicBlocks = Utils.EnforceStatCap(value); }
+            set { magicBlocks = Utils.EnforceNumCap(value, 255); }
         }
 
         private int magicEvasion;
         public int MagicEvasion
         {
             get { return magicEvasion; }
-            set { magicEvasion = Utils.EnforceStatCap(value, 99); }
+            set { magicEvasion = Utils.EnforceNumCap(value, 99); }
         }
 
         private int fear;
@@ -225,9 +225,9 @@ namespace FF2_Monster_Sim
                 int totalFear = fear;
                 int totalDebuff = GetDebuffStacks(Debuff.Fear) * FEAR_VALUE;
                 totalFear += (totalDebuff % 256); // Overflow
-                return Utils.EnforceStatCap(totalFear);
+                return Utils.EnforceNumCap(totalFear, 255);
             }
-            set { fear = Utils.EnforceStatCap(value); }
+            set { fear = Utils.EnforceNumCap(value, 255); }
         }
 
         public List<MonsterAction> ActionList { get; set; }

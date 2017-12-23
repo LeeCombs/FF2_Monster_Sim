@@ -17,28 +17,34 @@ namespace FF2_Monster_Sim
         public static List<string> StringToStringList(string str)
         {
             if (String.IsNullOrEmpty(str))
-            {
                 return new List<string>(); // Consider returning null instead of an empty list?
-            }
 
             // Trim brackets, split on commas, upper case entries, and return it
             string trim = str.Substring(1, str.Length - 2);
-            if (String.IsNullOrEmpty(trim)) return new List<string>();
+            if (String.IsNullOrEmpty(trim))
+                return new List<string>();
             return trim.Split(',').Select(x => x.ToUpper()).ToList();
         }
 
         /// <summary>
-        /// Get the capped value of a given stat (0 - max)
+        /// Get the capped value of a given number (min - max)
         /// </summary>
-        /// <param name="stat"></param>
-        /// <param name="max">The highest value for the stat</param>
-        /// <param name="max">The lowest value for the stat</param>
-        /// <returns></returns>
-        public static int EnforceStatCap(int stat, int max = 255, int min = 0)
+        public static int EnforceNumCap(int num, int min, int max)
         {
-            if (stat < min) return min;
-            if (stat > max) return max;
-            return stat;
+            if (num < min)
+                return min;
+            if (num > max)
+                return max;
+            return num;
+        }
+
+        public static int EnforceNumCap(int num, int max)
+        {
+            if (num < 0)
+                return 0;
+            if (num > max)
+                return max;
+            return num;
         }
 
         /// <summary>
