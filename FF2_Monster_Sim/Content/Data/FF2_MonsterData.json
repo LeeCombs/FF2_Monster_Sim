@@ -1196,7 +1196,16 @@
    "resist": ["Mind"],
    "absorb": [],
    "weak": ["Ice"],
-   "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"},{"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"}],
+   "attackList": [
+	   {"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"},
+	   {"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"}
+   ],
    "attackEffect": ["Amnesia"]
  },
  {

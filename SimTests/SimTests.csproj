@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonsterManagerTest.cs" />
     <Compile Include="SpellManagerTest.cs" />
     <Compile Include="BattleSceneTest.cs" />
     <Compile Include="AttackManagerTest.cs" />

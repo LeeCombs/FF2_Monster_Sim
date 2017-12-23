@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace FF2_Monster_Sim
 {
-    class Utils
+    public class Utils
     {
         /// <summary>
         /// Converts a string-representation of an array, to the List of strings it represents
@@ -39,6 +39,14 @@ namespace FF2_Monster_Sim
             if (stat < min) return min;
             if (stat > max) return max;
             return stat;
+        }
+
+        /// <summary>
+        /// Returns whether a number is within a given range
+        /// </summary>
+        public static bool NumIsWithinRange(int number, int min, int max)
+        {
+            return (number >= min && number <= max);
         }
     }
 }

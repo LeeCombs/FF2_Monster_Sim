@@ -12,11 +12,14 @@ namespace FF2_Monster_Sim
     public static class MonsterManager
     {
         private static dynamic monsterData;
-        
+
+        //////////////
+        // Monogame //
+        //////////////
 
         public static void Initialize()
         {
-            Debug.WriteLine("monster init");
+            //
         }
 
         public static void LoadContent()
@@ -25,10 +28,13 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_MonsterData.json");
             monsterData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_MonsterData.json"));
-
-            Debug.WriteLine("Name list len: " + GetMonsterNames().Count);
+            Debug.WriteLine("Loaded: " + GetMonsterNames().Count + " monsters");
         }
-        
+
+        /////////////
+        // Publics //
+        /////////////
+
         /// <summary>
         /// Retrieve a Monster object using the supplied name
         /// </summary>
@@ -37,10 +43,7 @@ namespace FF2_Monster_Sim
         public static Monster GetMonsterByName(string name)
         {
             if (String.IsNullOrEmpty(name))
-            {
-                Debug.WriteLine("Null or Empty name supplied");
-                return null;
-            }
+                throw new ArgumentException("Invalid monster name supplied");
 
             // Look through monster data and pick the matching monster by name
             foreach (dynamic data in monsterData)
@@ -79,9 +82,8 @@ namespace FF2_Monster_Sim
                     return mon;
                 }
             }
-            
-            Debug.WriteLine("No monster found by name: " + name);
-            return null;
+
+            throw new Exception("No monster found by name: " + name);
         }
 
         /// <summary>
