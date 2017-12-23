@@ -18,19 +18,19 @@
 "DETH","Black","PermStatus",5,10,"KO","Death",10000,5000,"Collapsed"
 "WARP","Black","PermStatus",5,10,"KO","Dimension",1500,750,"Collapsed"
 "BSRK","Black","Buff",5,50,"Berserk","None",10000,5000,"Att. up!"
-"HAST","Black","Buff",-1,50,"Haste","None",20000,10000,"Multi Att. up!"
-"AURA","Black","Buff",-1,50,"Aura","None",0,7500,"MULTIPLE"
+"HAST","Black","Buff",0,50,"Haste","None",20000,10000,"Multi Att. up!"
+"AURA","Black","Buff",0,50,"Aura","None",0,7500,"MULTIPLE"
 
 "CURE","White","Heal",20,50,,"None",200,50,"Hp up!"
-"LIFE","White","Revive",-1,50,,"None",1500,750,"???"
+"LIFE","White","Revive",0,50,,"None",1500,750,"???"
 "PEEP","White","CureTempStatus",2,50,,"None",800,400,"MULTIPLE"
 "HEAL","White","CurePermStatus",1,50,,"None",800,400,"MULTIPLE"
-"BARR","White","Buff",-1,50,"Barrier","None",8000,4000,"MULTIPLE"
-"BLNK","White","Buff",-1,50,"Blink","None",400,200,"Easy to dodge"
-"SAFE","White","Buff",-1,50,"Protect","None",400,200,"Def up!"
-"SHEL","White","Buff",-1,50,"Shell","None",400,200,"M.Def up!"
-"WALL","White","Buff",-1,50,"Wall","None",8000,4000,"Wall"
-"DSPL","White","Debuff",-1,40,,"None",3000,1500,"MULTIPLE"
+"BARR","White","Buff",0,50,"Barrier","None",8000,4000,"MULTIPLE"
+"BLNK","White","Buff",0,50,"Blink","None",400,200,"Easy to dodge"
+"SAFE","White","Buff",0,50,"Protect","None",400,200,"Def up!"
+"SHEL","White","Buff",0,50,"Shell","None",400,200,"M.Def up!"
+"WALL","White","Buff",0,50,"Wall","None",8000,4000,"Wall"
+"DSPL","White","Debuff",0,40,,"None",3000,1500,"MULTIPLE"
 "MINI","White","TempStatus",5,20,"Mini","Dimension",3000,1500,"Shrank"
 "MUTE","White","TempStatus",5,30,"Mute","Body",800,400,"Muted"
 "ANTI","White","Special",5,40,,"Mind",1500,750,"MP went down"
@@ -43,13 +43,13 @@
 "UTLM","White","Damage_Ultima",100,50,,"None",0,1,
 
 "CURE_S","Special","ItemHeal",30,100,,"None",0,0,
-"EyeD","Special","ItemCure",-1,100,,"None",0,0,
-"Anti","Special","ItemCure",-1,100,,"None",0,0,
-"Cross","Special","ItemCure",-1,100,,"None",0,0,
-"Hammr","Special","ItemCure",-1,100,,"None",0,0,
-"Kiss","Special","ItemCure",-1,100,,"None",0,0,
-"Needle","Special","ItemCure",-1,100,,"None",0,0,
-"Revi","Special","ItemRevive",-1,100,,"None",0,0,
+"EyeD","Special","ItemCure",0,100,,"None",0,0,
+"Anti","Special","ItemCure",0,100,,"None",0,0,
+"Cross","Special","ItemCure",0,100,,"None",0,0,
+"Hammr","Special","ItemCure",0,100,,"None",0,0,
+"Kiss","Special","ItemCure",0,100,,"None",0,0,
+"Needle","Special","ItemCure",0,100,,"None",0,0,
+"Revi","Special","ItemRevive",0,100,,"None",0,0,
 "Ether","Special","ItemHeal",20,100,,"None",0,0,
 "Elixir","Special","ItemHeal",100,100,,"None",0,0,
 "Drink","Special","Buff",10,100,"Imbibe","None",0,0,"Att. up!"
@@ -57,9 +57,9 @@
 "ICE_S","Special","Damage",20,50,,"Ice",0,0,
 "BOLT_S","Special","Damage",20,50,,"Lightning",0,0,
 "Mist","Special","Damage",20,50,,"Poison",0,0,
-"Breath","Special","PermStatus",-1,50,"Stone","Dimension",0,0,"Stopped"
-"Glare","Special","PermStatus",-1,50,"Stone","Dimension",0,0,"Stopped"
-"Wink","Special","TempStatus",-1,50,"Confuse","Mind",0,0,"Confused"
+"Breath","Special","PermStatus",0,50,"Stone","Dimension",0,0,"Stopped"
+"Glare","Special","PermStatus",0,50,"Stone","Dimension",0,0,"Stopped"
+"Wink","Special","TempStatus",0,50,"Confuse","Mind",0,0,"Confused"
 "Blast","Special","Special",20,50,,"None",0,0,
 "Quake","Special","Damage_2",20,50,,"Dimension",0,0,
 "Tnad","Special","Damage_2",20,50,,"Mind",0,0,
@@ -67,7 +67,7 @@
 "Glic","Special","ItemCure",30,50,,"None",0,0,
 "Bow","Special","Damage_3",7,30,,"None",0,0,
 "Rock","Special","Damage_3",15,30,,"None",0,0,
-"Blast_2","Special","TempStatus",-1,50,"Paralysis","None",0,0,"Paralyzed"
+"Blast_2","Special","TempStatus",0,50,"Paralysis","None",0,0,"Paralyzed"
 "Meteo","Special","Damage_3",70,100,,"None",0,0,
-"Spirit","Special","Buff",-1,100,"Spirit","None",0,0,
-"Intelligence","Special","Buff",-1,100,"Intelligence","None",0,0,"INT up!"
+"Spirit","Special","Buff",0,100,"Spirit","None",0,0,
+"Intelligence","Special","Buff",0,100,"Intelligence","None",0,0,"INT up!"

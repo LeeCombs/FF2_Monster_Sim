@@ -56,13 +56,11 @@ namespace FF2_Monster_Sim
         {
             //
         }
-
-
+        
         //////////////
         // Monogame //
         //////////////
-
-
+        
         public static void Initialize()
         {
             rnd = new Random();
@@ -77,6 +75,10 @@ namespace FF2_Monster_Sim
 
             Monster monster = MonsterManager.GetMonsterByName("Wizard");
         }
+
+        /////////////
+        // Publics //
+        /////////////
 
         /// <summary>
         /// Retrieve a Spell object by name. Returns null if invalid.

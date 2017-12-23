@@ -17,6 +17,12 @@ namespace SimTests
         }
 
         [TestMethod]
+        public void MonsterActionTest()
+        {
+            // TODO
+        }
+
+        [TestMethod]
         public void MonsterAttackListTest()
         {
             // Setup a dummy monster with known moves
@@ -189,15 +195,14 @@ namespace SimTests
         [TestMethod]
         public void GeneralBuffTest()
         {
-            // Ensure invalid inputs don't add the buff (specific buff does not matter)
+            // Setup
             Monster monster = new Monster();
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Aura));
-            Assert.AreEqual(0, monster.GetBuffStacks(Buff.Berserk));
 
+            // Test invalid arguments
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddBuff(Buff.Aura, -1));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddBuff(Buff.Aura, 17));
+
+            // Spirit and Intelligence are currently irrelevant to monsters and should be ignored
             Assert.IsFalse(monster.AddBuff(Buff.Spirit, 1));
             Assert.IsFalse(monster.AddBuff(Buff.Intelligence, 1));
         }
@@ -525,6 +530,8 @@ namespace SimTests
         {
             // Setup
             Monster monster = new Monster();
+
+            // Test invalid arguments
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddDebuff(Debuff.Fear, -1));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => monster.AddDebuff(Debuff.Fear, 17));
         }

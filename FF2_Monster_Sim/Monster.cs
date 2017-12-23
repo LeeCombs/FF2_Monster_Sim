@@ -241,16 +241,17 @@ namespace FF2_Monster_Sim
         // public int Level { get; set; }
         // public List<string> GilDrops { get; set; }
         // public List<string> ItemDrops { get; set; }
+        
+        ////////////////////
+        // Battle Effects //
+        ////////////////////
 
-        // In-battle effects
         public int Init = 0;
         public Dictionary<Buff, int> Buffs { get; set; }
         public Dictionary<Debuff, int> Debuffs { get; set; } 
         public HashSet<TempStatus> TempStatuses { get; set; }
         public HashSet<PermStatus> PermStatuses { get; set; }
         
-
-
         public Monster()
         {
             ActionList = new List<MonsterAction>();
@@ -268,9 +269,9 @@ namespace FF2_Monster_Sim
             rnd = new Random();
         }
 
-        //////////////////////
-        // Monogame Methods //
-        //////////////////////
+        //////////////
+        // Monogame //
+        //////////////
 
         public void Initialize(Texture2D texture, bool flipped = false)
         {
@@ -466,7 +467,6 @@ namespace FF2_Monster_Sim
             if (scene != null)
                 scene.RemoveMonster(this);
             // TODO: Animation
-            // TODO: Removal
         }
 
         public bool IsDead()
@@ -477,7 +477,7 @@ namespace FF2_Monster_Sim
 
         ///////////
         // Buffs //
-       ////////////
+        ///////////
 
         /// <summary>
         /// Attempt to add a Buff to the Monster
@@ -584,9 +584,9 @@ namespace FF2_Monster_Sim
             return 0;
         }
 
-        ////////////
-        // Debuff //
-        ////////////
+        /////////////
+        // Debuffs //
+        /////////////
 
         /// <summary>
         /// Attempt to add a Debuff to the Monster
@@ -653,9 +653,9 @@ namespace FF2_Monster_Sim
             return 0;
         }
 
-        /////////////////
-        // Temp Status //
-        /////////////////
+        ///////////////////
+        // Temp Statuses //
+        ///////////////////
 
         /// <summary>
         /// Attempt to add a temporary status to the monster. 
@@ -681,9 +681,9 @@ namespace FF2_Monster_Sim
             return TempStatuses.Contains(tempStatus);
         }
 
-        /////////////////
-        // Perm Status //
-        /////////////////
+        ///////////////////
+        // Perm Statuses //
+        ///////////////////
 
         /// <summary>
         /// Attempt to add a permanent status to the monster. 

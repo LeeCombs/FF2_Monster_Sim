@@ -22,7 +22,7 @@ namespace SimTests
         [TestMethod]
         public void SpellResultTest()
         {
-            // Ensure AttackResult acts as expected and things stay within bounds
+            // Ensure spellResults act as expected and things stay within bounds
             SpellResult spellRes = new SpellResult();
         }
 
@@ -79,6 +79,29 @@ namespace SimTests
             // Test that this returns a HashSet of spell names
             Assert.IsNotNull(SpellManager.GetSpellNames());
             Assert.AreNotEqual(0, SpellManager.GetSpellNames().Count);
+        }
+        
+        [TestMethod]
+        public void SpellDataTest()
+        {
+            foreach (String name in SpellManager.GetSpellNames())
+            {
+                Spell spell = SpellManager.GetSpellByName(name);
+                Assert.IsNotNull(spell);
+                Assert.IsFalse(String.IsNullOrEmpty(spell.Name));
+                Assert.IsNotNull(spell.SpellType);
+                Assert.IsFalse(String.IsNullOrEmpty(spell.Effect));
+                
+                Assert.IsTrue(Utils.NumIsWithinRange(spell.Power, 0, 255));
+                Assert.IsTrue(spell.Accuracy >= 0);
+                Assert.IsNotNull(spell.Status);
+                Assert.IsNotNull(spell.Element);
+                Assert.IsNotNull(spell.SuccessMessage);
+
+                // Necessary?
+                Assert.IsTrue(spell.Price >= 0);
+                Assert.IsTrue(spell.Value >= 0);
+            }
         }
     }
 }

@@ -30,19 +30,19 @@ namespace SimTests
             // Test that monsters properly load with known stats from data
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
 
-            Assert.AreEqual(6, monster.HP);
-            Assert.AreEqual(6, monster.HPMax);
-            Assert.AreEqual(0, monster.MP);
-            Assert.AreEqual(0, monster.MPMax);
-            Assert.AreEqual(4, monster.Strength);
-            Assert.AreEqual(0, monster.Defense);
+            Assert.AreEqual(6,   monster.HP);
+            Assert.AreEqual(6,   monster.HPMax);
+            Assert.AreEqual(0,   monster.MP);
+            Assert.AreEqual(0,   monster.MPMax);
+            Assert.AreEqual(4,   monster.Strength);
+            Assert.AreEqual(0,   monster.Defense);
             Assert.AreEqual(180, monster.Fear);
-            Assert.AreEqual(1, monster.Hits);
-            Assert.AreEqual(0, monster.Blocks);
-            Assert.AreEqual(1, monster.MagicBlocks);
-            Assert.AreEqual(60, monster.Accuracy);
-            Assert.AreEqual(0, monster.Evasion);
-            Assert.AreEqual(50, monster.MagicEvasion);
+            Assert.AreEqual(1,   monster.Hits);
+            Assert.AreEqual(0,   monster.Blocks);
+            Assert.AreEqual(1,   monster.MagicBlocks);
+            Assert.AreEqual(60,  monster.Accuracy);
+            Assert.AreEqual(0,   monster.Evasion);
+            Assert.AreEqual(50,  monster.MagicEvasion);
 
             HashSet<MonsterFamily> familySet = new HashSet<MonsterFamily>() { MonsterFamily.Earth };
             Assert.IsTrue(monster.Families.SetEquals(familySet));
@@ -55,15 +55,17 @@ namespace SimTests
             HashSet<string> atkEffectList = new HashSet<string>() { };
             Assert.IsTrue(monster.AttackEffects.SetEquals(atkEffectList));
 
+            // Create an all-attack actionList to compare against
             MonsterAction attack = new MonsterAction("Attack", 0, 0, 0, "SingleTarget");
             List<MonsterAction> actionList = new List<MonsterAction>();
-            for (int i = 0; i < 8; i++) actionList.Add(attack);
+            for (int i = 0; i < 8; i++)
+                actionList.Add(attack);
             Assert.IsTrue(monster.ActionList.SequenceEqual(actionList));
 
             // gildrops
             // itemdrops
         }
-        
+
         [TestMethod]
         public void MonsterDataTest()
         {
