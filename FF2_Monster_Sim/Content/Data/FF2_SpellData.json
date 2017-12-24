@@ -350,7 +350,7 @@
  {
    "name": "DSPL",
    "type": "White",
-   "effect": "Debuff",
+   "effect": "Dispel",
    "power": 0,
    "accuracy": 40,
    "status": "",

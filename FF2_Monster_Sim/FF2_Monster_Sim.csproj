@@ -51,6 +51,7 @@
     <Compile Include="Monster.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoundManager.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="SpellManager.cs" />
     <Compile Include="Textbox.cs" />

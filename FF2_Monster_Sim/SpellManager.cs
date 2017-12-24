@@ -279,7 +279,6 @@ namespace FF2_Monster_Sim
                     {
                         Debuff debuff = (Debuff)Enum.Parse(typeof(Debuff), spell.Status);
                         target.AddDebuff(debuff, debuffHits);
-                        // TODO: DSPL has unique results messages based on # of successes
                         return statusSuccessResult;
                     }
 
@@ -362,6 +361,9 @@ namespace FF2_Monster_Sim
 
                     // TODO: If nothing is cured, is ineffective returned?
                     return new SpellResult(healMsgs);
+                case "Dispel":
+                    //
+                    break;
                 case "Special":
                     // Spells that have unique effects: DRAN, ASPL, CHNG, ANTI, Blast
                     switch (spell.Name.ToUpper())

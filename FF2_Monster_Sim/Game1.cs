@@ -1,10 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 namespace FF2_Monster_Sim
 {
@@ -25,7 +27,7 @@ namespace FF2_Monster_Sim
         // Turn Logic
         int turn = 0, round = 0;
         Thread combatThread;
-        private int gameTick = 250;
+        private int gameTick = 150;
 
         // Graphics
         GraphicsDeviceManager graphics;
@@ -34,6 +36,7 @@ namespace FF2_Monster_Sim
         // Manager(s)
         TextManager textManager;
         SpriteFont font;
+        
 
         public Game1()
         {
@@ -56,8 +59,10 @@ namespace FF2_Monster_Sim
             MonsterManager.Initialize();
             SpellManager.Initialize();
             AttackManager.Initialize();
+            SoundManager.Initialize();
 
             textManager = new TextManager();
+            textManager.Initialize(0, 250);
 
             sceneOne = new BattleScene();
             sceneTwo = new BattleScene(type: "B", flipped: true);
@@ -75,13 +80,12 @@ namespace FF2_Monster_Sim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // Init Managers
+            
+            // TODO: use this.Content to load your game content here
             MonsterManager.LoadContent();
             SpellManager.LoadContent();
-
-            // TODO: use this.Content to load your game content here
-
+            SoundManager.LoadContent(Content);
+            
             List<Monster> sceneOneMonsters = new List<Monster>();
             for (int i = 0; i < sceneOneNames.Count; i++)
             {
@@ -122,12 +126,10 @@ namespace FF2_Monster_Sim
                 Content.Load<Texture2D>("Graphics\\DmgHitBox"),
                 Content.Load<Texture2D>("Graphics\\ResultsBox")
             };
-            textManager.Initialize(0, 250);
             textManager.LoadContent(textures.ToArray(), font);
 
             // Threading
             combatThread.Start();
-
         }
 
         /// <summary>
@@ -178,6 +180,9 @@ namespace FF2_Monster_Sim
 
         private void CombatLoop()
         {
+            SoundManager.PlayBattleMusic();
+            Thread.Sleep(2000);
+
             while (true)
             {
                 round++;
@@ -292,20 +297,16 @@ namespace FF2_Monster_Sim
                     Thread.Sleep(gameTick * 2);
                     while (textManager.TearDownText())
                         Thread.Sleep(100);
+
+                    // Check for end of battle
+                    if (sceneOne.GetLiveCount() == 0 || sceneTwo.GetLiveCount() == 0)
+                    {
+                        Debug.WriteLine("Battle over");
+                        SoundManager.PlayVictoryMusic();
+                        return;
+                    }
                 }
                 Debug.WriteLine("Round end");
-
-                if (sceneOne.GetLiveCount() == 0)
-                {
-                    Debug.WriteLine("Scene two wins!");
-                    break;
-                }
-
-                if (sceneTwo.GetLiveCount() == 0)
-                {
-                    Debug.WriteLine("Scene one wins!");
-                    break;
-                }
             }
         }
 
