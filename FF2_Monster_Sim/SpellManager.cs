@@ -448,6 +448,11 @@ namespace FF2_Monster_Sim
                             break;
                     }
                     break;
+                // The below are currently unused
+                case "ItemHeal":
+                case "ItemCure":
+                case "ItemRevive":
+                    break;
                 default:
                     throw new Exception("Invalid spell effect found: " + spell.Effect);
             }

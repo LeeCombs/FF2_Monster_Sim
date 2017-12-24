@@ -101,6 +101,10 @@ namespace SimTests
                 // Necessary?
                 Assert.IsTrue(spell.Price >= 0);
                 Assert.IsTrue(spell.Value >= 0);
+
+                // Cast the spell and ensure nothing pops up
+                Monster mon = new Monster();
+                SpellManager.CastSpell(mon, mon, spell, 1);
             }
         }
     }

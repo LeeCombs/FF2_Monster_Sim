@@ -74,11 +74,13 @@ namespace SimTests
         {
             // Create a monster that absorbs all elements
             Monster monster = new Monster();
-            foreach (Element e in Enum.GetValues(typeof(Element))) monster.Absorbs.Add(e);
+            foreach (Element e in Enum.GetValues(typeof(Element)))
+                monster.Absorbs.Add(e);
             monster.Absorbs.Remove(Element.None);  // Monsters cannot absorb the fabled None element
 
             // For 0 accuracy spells, just being absorbent is good enough
-            if (spell.Accuracy == 0 && monster.IsAbsorbentTo(spell.Element)) return true;
+            if (spell.Accuracy == 0 && monster.IsAbsorbentTo(spell.Element))
+                return true;
 
             // If it can hit the monster, ensure sure it heals them
             monster.HPMax = 1000;
@@ -100,7 +102,8 @@ namespace SimTests
         {
             // Create a monster that resists all elements
             Monster monster = new Monster();
-            foreach (Element e in Enum.GetValues(typeof(Element))) monster.Resistances.Add(e);
+            foreach (Element e in Enum.GetValues(typeof(Element)))
+                monster.Resistances.Add(e);
             monster.Resistances.Remove(Element.None);  // Monsters cannot resist the fabled None element
 
             // Cast the spell a ton of times and make sure the monster isn't inflicted with the status
@@ -108,14 +111,16 @@ namespace SimTests
             {
                 TempStatus tempStatus = (TempStatus)Enum.Parse(typeof(TempStatus), (string)spell.Status);
                 Assert.IsFalse(monster.HasTempStatus(tempStatus));
-                for (int i = 0; i < 10; i++) SpellManager.CastSpell(monster, monster, spell, 16);
+                for (int i = 0; i < 10; i++)
+                    SpellManager.CastSpell(monster, monster, spell, 16);
                 return !monster.HasTempStatus(tempStatus); // Opposite. If inflicted, it didn't resist
             }
             if (String.Equals(spell.Effect.ToUpper(), "PERMSTATUS"))
             {
                 PermStatus permStatus = (PermStatus)Enum.Parse(typeof(PermStatus), (string)spell.Status);
                 Assert.IsFalse(monster.HasPermStatus(permStatus));
-                for (int i = 0; i < 10; i++) SpellManager.CastSpell(monster, monster, spell, 16);
+                for (int i = 0; i < 10; i++)
+                    SpellManager.CastSpell(monster, monster, spell, 16);
                 return !monster.HasPermStatus(permStatus); // Opposite. If inflicted, it didn't resist
             }
 
@@ -132,7 +137,8 @@ namespace SimTests
         {
             // Create a monster that is weak to all elements
             Monster monster = new Monster();
-            foreach (Element e in Enum.GetValues(typeof(Element))) monster.Weaknesses.Add(e);
+            foreach (Element e in Enum.GetValues(typeof(Element)))
+                monster.Weaknesses.Add(e);
             monster.Weaknesses.Remove(Element.None);  // Monsters cannot be weak to the fabled None element
 
             // Set spell's accuracy to 0, which normally would not allow it to hit, and make sure it hits on a single cast
@@ -166,9 +172,8 @@ namespace SimTests
             SpellResult res = SpellManager.CastSpell(monster, monster, spell, 16);
 
             if (spell.Status == "KO")
-            {
                 return string.Equals("Bob fell", res.Results[0]) && string.Equals(spell.SuccessMessage, res.Results[1]);
-            }
+
             return string.Equals(spell.SuccessMessage, res.Results[0]);
         }
 
@@ -278,7 +283,8 @@ namespace SimTests
                 Assert.AreEqual(0, monster.GetBuffStacks(buff));
 
                 // AURA and BARR have unique messages and are covered in other tests
-                if (spell.Name == "AURA" || spell.Name == "BARR") continue;
+                if (spell.Name == "AURA" || spell.Name == "BARR")
+                    continue;
                 Assert.AreEqual(spell.SuccessMessage, res.Results[0]);
             }
         }
@@ -336,10 +342,13 @@ namespace SimTests
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
             {
-                foreach (PermStatus stat in permStatOrder) monster.AddPermStatus(stat);
+                foreach (PermStatus stat in permStatOrder)
+                    monster.AddPermStatus(stat);
                 SpellManager.CastSpell(monster, monster, spell, i + 1);
-                for (int j = 0; j < (i < 7 ? i : 7); j++) Assert.IsFalse(monster.HasPermStatus(permStatOrder[j]));
-                for (int k = i + 1; k < permStatOrder.Length; k++) Assert.IsTrue(monster.HasPermStatus(permStatOrder[k]));
+                for (int j = 0; j < (i < 7 ? i : 7); j++)
+                    Assert.IsFalse(monster.HasPermStatus(permStatOrder[j]));
+                for (int k = i + 1; k < permStatOrder.Length; k++)
+                    Assert.IsTrue(monster.HasPermStatus(permStatOrder[k]));
             }
 
             // Check that results messages return expected values
@@ -352,10 +361,12 @@ namespace SimTests
 
             // Ensure multiple results messages are returned if multiple statuses are cured
             PermStatus[] multStat = { PermStatus.Amnesia, PermStatus.Poison, PermStatus.Curse };
-            foreach (PermStatus status in multStat) monster.AddPermStatus(status);
+            foreach (PermStatus status in multStat)
+                monster.AddPermStatus(status);
             SpellResult res = SpellManager.CastSpell(monster, monster, spell, 16);
             Assert.AreEqual(3, res.Results.Count);
-            foreach (PermStatus status in multStat) Assert.IsTrue(res.Results.Contains(expectedMessages[status]));
+            foreach (PermStatus status in multStat)
+                Assert.IsTrue(res.Results.Contains(expectedMessages[status]));
         }
 
         [TestMethod]
@@ -377,12 +388,15 @@ namespace SimTests
             // Cast spells up to max spell level, and check that only the proper statuses are removed
             for (int i = 0; i < 16; i++)
             {
-                foreach (TempStatus stat in tempStatOrder) monster.AddTempStatus(stat);
+                foreach (TempStatus stat in tempStatOrder)
+                    monster.AddTempStatus(stat);
                 SpellManager.CastSpell(monster, monster, spell, i + 1);
                 // Level 1 removes both Venom and Sleep
                 Assert.IsFalse(monster.HasTempStatus(tempStatOrder[0]));
-                for (int j = 1; j < (i < 5 ? i : 5); j++) Assert.IsFalse(monster.HasTempStatus(tempStatOrder[j]));
-                for (int k = i + 1; k < tempStatOrder.Length; k++) Assert.IsTrue(monster.HasTempStatus(tempStatOrder[k]));
+                for (int j = 1; j < (i < 5 ? i : 5); j++)
+                    Assert.IsFalse(monster.HasTempStatus(tempStatOrder[j]));
+                for (int k = i + 1; k < tempStatOrder.Length; k++)
+                    Assert.IsTrue(monster.HasTempStatus(tempStatOrder[k]));
             }
 
             // Check that results messages return expected values
@@ -395,10 +409,12 @@ namespace SimTests
 
             // Ensure multiple results messages are returned if multiple statuses are cured
             TempStatus[] multStat = { TempStatus.Confuse, TempStatus.Sleep, TempStatus.Venom };
-            foreach (TempStatus status in multStat) monster.AddTempStatus(status);
+            foreach (TempStatus status in multStat)
+                monster.AddTempStatus(status);
             SpellResult res = SpellManager.CastSpell(monster, monster, spell, 16);
             Assert.AreEqual(3, res.Results.Count);
-            foreach (TempStatus status in multStat) Assert.IsTrue(res.Results.Contains(expectedMessages[status]));
+            foreach (TempStatus status in multStat)
+                Assert.IsTrue(res.Results.Contains(expectedMessages[status]));
         }
 
         [TestMethod]
@@ -418,7 +434,8 @@ namespace SimTests
             Assert.IsTrue(monster.HP <= monster.HPMax);
 
             // Try to over-heal the target, ensure HP doesn't exceed HPMax
-            for (int i = 0; i < 50; i++) SpellManager.CastSpell(monster, monster, spell, 16);
+            for (int i = 0; i < 50; i++)
+                SpellManager.CastSpell(monster, monster, spell, 16);
             Assert.IsTrue(monster.HP > 1);
             Assert.IsTrue(monster.HP <= monster.HPMax);
 
@@ -473,7 +490,8 @@ namespace SimTests
             Spell spell = SpellManager.GetSpellByName("BARR");
             spell.Accuracy = 255;
             string[] expectedMessages = { "Fire", "Soul", "Bolt", "Death", "Poison", "Critical Hit!", "Ice" };
-            for (int i = 0; i < expectedMessages.Length; i++) expectedMessages[i] += " Df";
+            for (int i = 0; i < expectedMessages.Length; i++)
+                expectedMessages[i] += " Df";
 
             // Test SpellResult messages and ensure they're there and in order
             // Iterate starting at index n and move towards the end, testing in that order
@@ -483,9 +501,7 @@ namespace SimTests
                 int startIndex = (expectedMessages.Length - 1) - i;
                 int endIndex = (expectedMessages.Length - 1);
                 for (int j = startIndex, ii = 0; j <= endIndex; j++, ii++)
-                {
                     Assert.AreEqual(expectedMessages[j], res.Results[ii]);
-                }
             }
         }
 
@@ -497,7 +513,8 @@ namespace SimTests
             Spell spell = SpellManager.GetSpellByName("AURA");
             spell.Accuracy = 255;
             string[] expectedMessages = { "Red", "Orange", "Blue", "Black", "Green", "Yellow", "White" };
-            for (int i = 0; i < expectedMessages.Length; i++) expectedMessages[i] += " Aura";
+            for (int i = 0; i < expectedMessages.Length; i++)
+                expectedMessages[i] += " Aura";
 
             // Test SpellResult messages and ensure they're there and in order
             // Iterate starting at index n and move towards the end, testing in that order
@@ -507,9 +524,7 @@ namespace SimTests
                 int startIndex = (expectedMessages.Length - 1) - i;
                 int endIndex = (expectedMessages.Length - 1);
                 for (int j = startIndex, ii = 0; j <= endIndex; j++, ii++)
-                {
                     Assert.AreEqual(expectedMessages[j], res.Results[ii]);
-                }
             }
         }
 
@@ -520,7 +535,8 @@ namespace SimTests
             Monster monster = new Monster();
             Spell spell = SpellManager.GetSpellByName("DSPL");
             string[] expectedMessages = { "Chng", "Fire", "Soul", "Bolt", "Prot", "Poison", "Body", "Ice" };
-            for (int i = 0; i < expectedMessages.Length; i++) expectedMessages[i] += " def. dn";
+            for (int i = 0; i < expectedMessages.Length; i++)
+                expectedMessages[i] += " def. dn";
 
             // Even though DSPL in non-functional in the NES version, ensure messages are returned properly
             // TODO: That ^
