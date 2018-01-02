@@ -27,7 +27,7 @@ namespace FF2_Monster_Sim
         // Turn Logic
         int turn = 0, round = 0;
         Thread combatThread;
-        private int gameTick = 150;
+        private int gameTick = 150, teardownTick = 100;
 
         // Graphics
         GraphicsDeviceManager graphics;
@@ -86,6 +86,9 @@ namespace FF2_Monster_Sim
             SpellManager.LoadContent();
             SoundManager.LoadContent(Content);
             
+            // TODO: Loading monsters should be handled by the scene itself?
+            // Or, should monsters be generated and supplied to the scene as it is currently?
+
             List<Monster> sceneOneMonsters = new List<Monster>();
             for (int i = 0; i < sceneOneNames.Count; i++)
             {
@@ -193,16 +196,15 @@ namespace FF2_Monster_Sim
                     turn++;
                     Debug.WriteLine("\nTurn: " + turn);
 
+                    // If an actor was killed before it's turn, ignore the turn
                     if (action.Actor == null || action.Actor.IsDead())
                         continue;
 
                     foreach (Monster target in action.Targets)
                     {
+                        // Ignore invalid target and spells against the dead
                         if (target == null)
-                        {
-                            Debug.WriteLine("null target");
                             continue;
-                        }
 
                         if (action.Spell != null && target.IsDead())
                             continue;
@@ -221,12 +223,14 @@ namespace FF2_Monster_Sim
 
                         if (action.Physical)
                         {
+                            // Physical attacks can target the dead, but are ineffective
                             if (target.IsDead())
                             {
                                 textManager.SetResultsText("Ineffective");
                                 continue;
                             }
 
+                            // Apply the attack and display the results
                             AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
 
                             if (string.Equals(atkRes.DamageMessage, "Miss"))
@@ -238,20 +242,19 @@ namespace FF2_Monster_Sim
                             textManager.SetHitsText(atkRes.HitsMessage);
                             Thread.Sleep(gameTick);
 
-
                             textManager.SetDamageText(atkRes.DamageMessage);
                             Thread.Sleep(gameTick);
 
+                            // Display each result, tearing down existing results as needed
                             for (int i = 0; i < atkRes.Results.Count; i++)
                             {
                                 string res = atkRes.Results[i];
                                 textManager.SetResultsText(res);
                                 if (i < atkRes.Results.Count - 1)
                                 {
-                                    // Do a mini-tear down to prep for the next message(s)
                                     Thread.Sleep(gameTick * 2);
                                     textManager.TearDownResults();
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(teardownTick);
                                 }
                             }
                             
@@ -263,9 +266,7 @@ namespace FF2_Monster_Sim
                             textManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
                             Thread.Sleep(gameTick);
 
-                            if (target.IsDead())
-                                continue;
-
+                            // Cast the spell and display the results
                             SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
 
                             if (spellRes.Damage >= 0)
@@ -274,35 +275,39 @@ namespace FF2_Monster_Sim
                                 Thread.Sleep(gameTick);
                             }
 
+                            // Display each result, tearing down existing results as needed
                             for (int i = 0; i < spellRes.Results.Count; i++)
                             {
                                 string res = spellRes.Results[i];
                                 textManager.SetResultsText(res);
                                 if (i < spellRes.Results.Count - 1)
                                 {
-                                    // Do a mini-tear down to prep for the next message(s)
                                     Thread.Sleep(gameTick * 2);
                                     textManager.TearDownResults();
-                                    Thread.Sleep(100);
+                                    Thread.Sleep(teardownTick);
                                 }
                             }
 
                             // Tear down between each target
                             Thread.Sleep(gameTick * 2);
                             while (textManager.TearDownText())
-                                Thread.Sleep(100);
+                                Thread.Sleep(teardownTick);
                         }
                     }
                     // Turn end, clean up text display
                     Thread.Sleep(gameTick * 2);
                     while (textManager.TearDownText())
-                        Thread.Sleep(100);
+                        Thread.Sleep(teardownTick);
 
                     // Check for end of battle
                     if (sceneOne.GetLiveCount() == 0 || sceneTwo.GetLiveCount() == 0)
                     {
                         Debug.WriteLine("Battle over");
                         SoundManager.PlayVictoryMusic();
+
+                        // TODO: Write battle results data to a file, or database, or something
+                        // Just log it and determine how to store said data.
+
                         return;
                     }
                 }
