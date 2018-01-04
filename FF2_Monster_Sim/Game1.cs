@@ -42,6 +42,10 @@ namespace FF2_Monster_Sim
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 1008;
+            graphics.PreferredBackBufferHeight = 604;
+            graphics.ApplyChanges();
         }
 
         // Scene Layout
@@ -62,7 +66,7 @@ namespace FF2_Monster_Sim
             SoundManager.Initialize();
 
             textManager = new TextManager();
-            textManager.Initialize(0, 250);
+            textManager.Initialize(360, 413);
 
             sceneOne = new BattleScene();
             sceneTwo = new BattleScene(type: "B", flipped: true);

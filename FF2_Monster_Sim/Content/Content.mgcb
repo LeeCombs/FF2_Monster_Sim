@@ -1549,18 +1549,6 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/DmgHitBox.png
 
-#begin Graphics/NamesBox.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Graphics/NamesBox.png
-
 #begin Graphics/ResultsBox.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1573,7 +1561,14 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/ResultsBox.png
 
-#begin Graphics/StatsBox.png
+#begin Graphics/Font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Graphics/Font.spritefont
+
+#begin Graphics/GameArea.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1583,12 +1578,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/StatsBox.png
-
-#begin Graphics/Font.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Graphics/Font.spritefont
+/build:Graphics/GameArea.png
 

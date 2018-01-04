@@ -60,9 +60,12 @@ monodroid*.msi
 /packages/
 /.vs/
 
-/FF2_Monster_Sim/.vs/
-/FF2_Monster_Sim/packages/
-/FF2_Monster_Sim/Content/Graphics/
-/FF2_Monster_Sim/Content/Sounds/
-/FF2_Monster_Sim/Content/Music/
+FF2_Monster_Sim/.vs/
+FF2_Monster_Sim/packages/
+FF2_Monster_Sim/Content/Graphics/Backdrops/
+FF2_Monster_Sim/Content/Graphics/Monsters/
+FF2_Monster_Sim/Content/Graphics/Font.spritefont
+FF2_Monster_Sim/Content/Graphics/Font.ttf
+FF2_Monster_Sim/Content/Sounds/
+FF2_Monster_Sim/Content/Music/
 *.csv#
