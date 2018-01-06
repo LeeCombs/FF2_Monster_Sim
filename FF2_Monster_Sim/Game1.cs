@@ -34,9 +34,7 @@ namespace FF2_Monster_Sim
         SpriteBatch spriteBatch;
 
         // Manager(s)
-        TextManager textManager;
         SpriteFont font;
-        
 
         public Game1()
         {
@@ -64,12 +62,10 @@ namespace FF2_Monster_Sim
             SpellManager.Initialize();
             AttackManager.Initialize();
             SoundManager.Initialize();
+            TextManager.Initialize(360, 413);
 
-            textManager = new TextManager();
-            textManager.Initialize(360, 413);
-
-            sceneOne = new BattleScene();
-            sceneTwo = new BattleScene(type: "B", flipped: true);
+            sceneOne = new BattleScene(50, 139);
+            sceneTwo = new BattleScene(657, 139, "B", true);
 
             combatThread = new Thread(CombatLoop);
 
@@ -133,7 +129,7 @@ namespace FF2_Monster_Sim
                 Content.Load<Texture2D>("Graphics\\DmgHitBox"),
                 Content.Load<Texture2D>("Graphics\\ResultsBox")
             };
-            textManager.LoadContent(textures.ToArray(), font);
+            TextManager.LoadContent(textures.ToArray(), font);
 
             // Threading
             combatThread.Start();
@@ -175,7 +171,7 @@ namespace FF2_Monster_Sim
             spriteBatch.Begin();
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
-            textManager.Draw(spriteBatch);
+            TextManager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -213,16 +209,16 @@ namespace FF2_Monster_Sim
                         if (action.Spell != null && target.IsDead())
                             continue;
 
-                        textManager.SetActorText(action.Actor.Name);
+                        TextManager.SetActorText(action.Actor.Name);
                         Thread.Sleep(gameTick);
 
                         if (action.Nothing)
                         {
-                            textManager.SetResultsText("Nothing");
+                            TextManager.SetResultsText("Nothing");
                             continue;
                         }
 
-                        textManager.SetTargetText(target.Name);
+                        TextManager.SetTargetText(target.Name);
                         Thread.Sleep(gameTick);
 
                         if (action.Physical)
@@ -230,7 +226,7 @@ namespace FF2_Monster_Sim
                             // Physical attacks can target the dead, but are ineffective
                             if (target.IsDead())
                             {
-                                textManager.SetResultsText("Ineffective");
+                                TextManager.SetResultsText("Ineffective");
                                 continue;
                             }
 
@@ -239,25 +235,25 @@ namespace FF2_Monster_Sim
 
                             if (string.Equals(atkRes.DamageMessage, "Miss"))
                             {
-                                textManager.SetDamageText("Miss");
+                                TextManager.SetDamageText("Miss");
                                 continue;
                             }
 
-                            textManager.SetHitsText(atkRes.HitsMessage);
+                            TextManager.SetHitsText(atkRes.HitsMessage);
                             Thread.Sleep(gameTick);
 
-                            textManager.SetDamageText(atkRes.DamageMessage);
+                            TextManager.SetDamageText(atkRes.DamageMessage);
                             Thread.Sleep(gameTick);
 
                             // Display each result, tearing down existing results as needed
                             for (int i = 0; i < atkRes.Results.Count; i++)
                             {
                                 string res = atkRes.Results[i];
-                                textManager.SetResultsText(res);
+                                TextManager.SetResultsText(res);
                                 if (i < atkRes.Results.Count - 1)
                                 {
                                     Thread.Sleep(gameTick * 2);
-                                    textManager.TearDownResults();
+                                    TextManager.TearDownResults();
                                     Thread.Sleep(teardownTick);
                                 }
                             }
@@ -267,7 +263,7 @@ namespace FF2_Monster_Sim
                         else
                         {
                             // Casting a spell
-                            textManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
+                            TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
                             Thread.Sleep(gameTick);
 
                             // Cast the spell and display the results
@@ -275,7 +271,7 @@ namespace FF2_Monster_Sim
 
                             if (spellRes.Damage >= 0)
                             {
-                                textManager.SetDamageText(spellRes.Damage.ToString());
+                                TextManager.SetDamageText(spellRes.Damage.ToString());
                                 Thread.Sleep(gameTick);
                             }
 
@@ -283,24 +279,24 @@ namespace FF2_Monster_Sim
                             for (int i = 0; i < spellRes.Results.Count; i++)
                             {
                                 string res = spellRes.Results[i];
-                                textManager.SetResultsText(res);
+                                TextManager.SetResultsText(res);
                                 if (i < spellRes.Results.Count - 1)
                                 {
                                     Thread.Sleep(gameTick * 2);
-                                    textManager.TearDownResults();
+                                    TextManager.TearDownResults();
                                     Thread.Sleep(teardownTick);
                                 }
                             }
 
                             // Tear down between each target
                             Thread.Sleep(gameTick * 2);
-                            while (textManager.TearDownText())
+                            while (TextManager.TearDownText())
                                 Thread.Sleep(teardownTick);
                         }
                     }
                     // Turn end, clean up text display
                     Thread.Sleep(gameTick * 2);
-                    while (textManager.TearDownText())
+                    while (TextManager.TearDownText())
                         Thread.Sleep(teardownTick);
 
                     // Check for end of battle

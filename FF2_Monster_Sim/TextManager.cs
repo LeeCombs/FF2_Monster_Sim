@@ -9,28 +9,24 @@ using Microsoft.Xna.Framework.Graphics;
 namespace FF2_Monster_Sim
 {
 
-    public class TextManager
+    public static class TextManager
     {
-        private int x, y;
-        private Textbox actorBox, hitsBox, targetBox, dmgBox, resultsBox;
-        private Textbox[] textboxes;
-        private Vector2[] positions;
+        private static int X, Y;
+        private static Textbox actorBox, hitsBox, targetBox, dmgBox, resultsBox;
+        private static Textbox[] textboxes;
+        private static Vector2[] positions;
 
-        private Stack<Textbox> textboxStack;
-
-        public TextManager()
-        {
-            //
-        }
+        private static Stack<Textbox> textboxStack;
+        
 
         //////////////
         // Monogame //
         //////////////
 
-        public void Initialize(int x, int y)
+        public static void Initialize(int x, int y)
         {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
 
             positions = new Vector2[] {
                 new Vector2(x, y),
@@ -53,13 +49,13 @@ namespace FF2_Monster_Sim
             textboxStack = new Stack<Textbox>();
         }
 
-        public void LoadContent(Texture2D[] textures, SpriteFont font)
+        public static void LoadContent(Texture2D[] textures, SpriteFont font)
         {
             for (int i = 0; i < 5; i++)
                 textboxes[i].LoadContent(textures[i], font);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public static void Draw(SpriteBatch spriteBatch)
         {
             actorBox.Draw(spriteBatch);
             hitsBox.Draw(spriteBatch);
@@ -72,35 +68,35 @@ namespace FF2_Monster_Sim
         // Publics //
         /////////////
 
-        public void SetActorText(string text)
+        public static void SetActorText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("Invalid actor string supplied");
             SetTextBox(actorBox, text);
         }
 
-        public void SetTargetText(string text)
+        public static void SetTargetText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("Invalid target string supplied");
             SetTextBox(targetBox, text);
         }
 
-        public void SetHitsText(string text)
+        public static void SetHitsText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("Invalid hits string supplied");
             SetTextBox(hitsBox, text);
         }
 
-        public void SetDamageText(string text)
+        public static void SetDamageText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("Invalid damage string supplied");
             SetTextBox(dmgBox, text);
         }
 
-        public void SetResultsText(string text)
+        public static void SetResultsText(string text)
         {
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("Invalid results string supplied");
@@ -110,7 +106,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Removes and hides the results textbox
         /// </summary>
-        public void TearDownResults()
+        public static void TearDownResults()
         {
             // Just pop the stack, results should always be on the top
             TearDownTextBox(textboxStack.Pop());
@@ -119,7 +115,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Returns whether there is text to tear down, and tears it down
         /// </summary>
-        public bool TearDownText()
+        public static bool TearDownText()
         {
             if (textboxStack.Count == 0)
                 return false;
@@ -135,7 +131,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Set a textbox's text, make it visuble, and add it to the stack
         /// </summary>
-        private void SetTextBox(Textbox textbox, string text)
+        private static void SetTextBox(Textbox textbox, string text)
         {
             textbox.IsVisible = true;
             textbox.Text = text;
@@ -145,7 +141,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Remove the textbox's text and make it invisible
         /// </summary>
-        private void TearDownTextBox(Textbox textbox)
+        private static void TearDownTextBox(Textbox textbox)
         {
             // Animate?
             // Ensure the texbtox is removed from the stack?
