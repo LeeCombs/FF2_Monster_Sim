@@ -93,7 +93,7 @@ namespace FF2_Monster_Sim
                         Monster[] monsters = { null, null };
                         monsterSlots[i] = monsters;
 
-                        Vector2[] positions = { new Vector2(75 * i, 0), new Vector2(75 * i, 100) };
+                        Vector2[] positions = { new Vector2(X + 75 * i, Y + 0), new Vector2(X + 75 * i, Y + 100) };
                         slotPositions[i] = positions;
                     }
                     break;
@@ -103,13 +103,13 @@ namespace FF2_Monster_Sim
                         Monster[] monsters = { null, null };
                         monsterSlots[i] = monsters;
 
-                        Vector2[] positions = { new Vector2(100 * i, 0), new Vector2(100 * i, 100) };
+                        Vector2[] positions = { new Vector2(X + 100 * i, Y + 0), new Vector2(X + 100 * i, Y + 100) };
                         slotPositions[i] = positions;
                     }
                     break;
                 case "C": // Only one slot
                     monsterSlots[0] = new Monster[]{ null };
-                    slotPositions[0] = new Vector2[]{ new Vector2() };
+                    slotPositions[0] = new Vector2[]{ new Vector2(X, Y) };
                     break;
                 default:
                     Debug.WriteLine("Scene type must be A, B, or C");

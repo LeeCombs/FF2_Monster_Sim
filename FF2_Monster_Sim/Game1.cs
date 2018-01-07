@@ -21,20 +21,19 @@ namespace FF2_Monster_Sim
             "Goblin", "Fiend", "LegEater", "LegEater", "Column", "VmpThorn", "Hornet", "Hornet"
         };
         List<string> sceneTwoNames = new List<string> {
-            "Sorcerer", "Wizard", "Lamia", "Satan"
+            "Goblin", "Fiend", "LegEater", "LegEater", "Column", "VmpThorn", "Hornet", "Hornet"
         };
 
         // Turn Logic
-        int turn = 0, round = 0;
-        Thread combatThread;
+        private int turn = 0, round = 0;
+        private Thread combatThread;
         private int gameTick = 150, teardownTick = 100;
 
         // Graphics
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-
-        // Manager(s)
-        SpriteFont font;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private Texture2D gameBackground;
+        private SpriteFont font;
 
         public Game1()
         {
@@ -65,7 +64,7 @@ namespace FF2_Monster_Sim
             TextManager.Initialize(360, 413);
 
             sceneOne = new BattleScene(50, 139);
-            sceneTwo = new BattleScene(657, 139, "B", true);
+            sceneTwo = new BattleScene(165, 139, "A", true); // TODO: Why is X not 657??
 
             combatThread = new Thread(CombatLoop);
 
@@ -117,7 +116,8 @@ namespace FF2_Monster_Sim
             foreach (Monster m in sceneTwo.GetAllTargets())
                 m.Position.X += 500;
 
-            // Font
+            // Graphics
+            gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");
             font = Content.Load<SpriteFont>("Graphics/Font");
             
             // Text Manager
@@ -169,6 +169,7 @@ namespace FF2_Monster_Sim
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+            spriteBatch.Draw(gameBackground, new Vector2(), Color.White);
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
             TextManager.Draw(spriteBatch);
@@ -183,6 +184,9 @@ namespace FF2_Monster_Sim
 
         private void CombatLoop()
         {
+            // TODO: Sanity check. Ensure that battles don't run on forever. Enforce a round limit
+            // Perhaps 100-200? If monsters heal their targets more than they can damage, gotta stop it.
+
             SoundManager.PlayBattleMusic();
             Thread.Sleep(2000);
 

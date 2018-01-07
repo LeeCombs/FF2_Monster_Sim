@@ -17,7 +17,14 @@ namespace FF2_Monster_Sim
         private static Vector2[] positions;
 
         private static Stack<Textbox> textboxStack;
-        
+
+        // 16, 444 - 670, 444
+        private static string sceneOneText;
+        private static string sceneTwoText;
+
+        private static SpriteFont spriteFont;
+
+
 
         //////////////
         // Monogame //
@@ -31,9 +38,9 @@ namespace FF2_Monster_Sim
             positions = new Vector2[] {
                 new Vector2(x, y),
                 new Vector2(x + 144, y),
-                new Vector2(x, y + 50),
-                new Vector2(x + 144, y + 50),
-                new Vector2(x, y + 100)
+                new Vector2(x, y + 64),
+                new Vector2(x + 144, y + 64),
+                new Vector2(x, y + 128)
             };
 
             actorBox = new Textbox();
@@ -47,12 +54,23 @@ namespace FF2_Monster_Sim
                 textboxes[i].Initialize(positions[i]);
 
             textboxStack = new Stack<Textbox>();
+
+            sceneOneText = sceneTwoText = 
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535\n" +
+                "MonsName -- 65535 -- 65535";
         }
 
         public static void LoadContent(Texture2D[] textures, SpriteFont font)
         {
             for (int i = 0; i < 5; i++)
                 textboxes[i].LoadContent(textures[i], font);
+            spriteFont = font;
         }
 
         public static void Draw(SpriteBatch spriteBatch)
@@ -62,6 +80,8 @@ namespace FF2_Monster_Sim
             targetBox.Draw(spriteBatch);
             dmgBox.Draw(spriteBatch);
             resultsBox.Draw(spriteBatch);
+            spriteBatch.DrawString(spriteFont, sceneOneText, new Vector2(14, 444), Color.White);
+            spriteBatch.DrawString(spriteFont, sceneTwoText, new Vector2(662, 444), Color.White);
         }
 
         /////////////
