@@ -76,18 +76,18 @@ namespace SimTests
                 Assert.IsNotNull(monster.Name);
 
                 // Stat ranges
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.HP,           0, 65535));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.HPMax,        0, 65535));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MP,           0, 65535));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MPMax,        0, 65535));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Strength,     0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Defense,      0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Blocks,       0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Evasion,      0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicBlocks,  0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Accuracy,     0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicEvasion, 0, 255));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Fear,         0, 255));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.HP,           0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.HPMax,        0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MP,           0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MPMax,        0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Strength,     0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Defense,      0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Blocks,       0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Evasion,      0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicBlocks,  0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Accuracy,     0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicEvasion, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Fear,         0, byte.MaxValue));
                 Assert.IsTrue(Utils.NumIsWithinRange(monster.Hits,         0, 16));
                 
                 // Action list exists and is the right length

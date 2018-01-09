@@ -13,13 +13,23 @@ namespace FF2_Monster_Sim
     {
         private static dynamic monsterData;
 
+        public static List<string> MonsterNames;
+        private static List<string> smallMonsterNames;
+        private static List<string> mediumMonsterNames;
+        private static List<string> tallMonsterNames;
+        private static List<string> largeMonsterNames;
+
         //////////////
         // Monogame //
         //////////////
 
         public static void Initialize()
         {
-            //
+            MonsterNames = new List<string>();
+            smallMonsterNames = new List<string>();
+            mediumMonsterNames = new List<string>();
+            tallMonsterNames = new List<string>();
+            largeMonsterNames = new List<string>();
         }
 
         public static void LoadContent()
@@ -28,7 +38,7 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_MonsterData.json");
             monsterData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_MonsterData.json"));
-            Debug.WriteLine("Loaded: " + GetMonsterNames().Count + " monsters");
+            Debug.WriteLine("Loaded " + GetMonsterNames().Count + " monsters");
         }
 
         /////////////
@@ -50,6 +60,28 @@ namespace FF2_Monster_Sim
             {
                 if (String.Equals(name, (string)data.name, StringComparison.OrdinalIgnoreCase))
                 {
+
+                    // TODO: Grab the monster's size and append it's name to a size list
+                    /*
+                    switch (data.size)
+                    {
+                        case "SMALL":
+                            smallMonsterNames.Add((string)data.name);
+                            break;
+                        case "MEDIUM":
+                            smallMonsterNames.Add((string)data.name);
+                            break;
+                        case "TALL":
+                            smallMonsterNames.Add((string)data.name);
+                            break;
+                        case "LARGE":
+                            smallMonsterNames.Add((string)data.name);
+                            break;
+                        default:
+                            throw new Exception("Invalid monster size: " + data.size + ", found on " + data.name);
+                    }
+                    */
+
                     Monster mon = new Monster();
                     
                     // Doing this by hand since generated .json naming isn't consistent, nor formatted 100%
@@ -95,6 +127,33 @@ namespace FF2_Monster_Sim
             foreach (dynamic data in monsterData)
                 nameSet.Add((string)data.name);
             return nameSet;
+        }
+
+        /// <summary>
+        /// Returns a list of monster names suitable for filling a given scene type
+        /// </summary>
+        /// <param name="sceneType">Type of scene to be filled. Must be "A", "B", or "C"</param>
+        public static List<string> GenerateMonsterList(string sceneType)
+        {
+            // TODO: x/100 chance to grab a pre-made team from a file and return that
+
+            switch (sceneType.ToUpper())
+            {
+                case "A":
+                    // Generate a list with 8 small monsters
+                    break;
+                case "B":
+                    // Determine which slots will be "tall", if any
+                    // Grab corresponding medium and tall monsters
+                    break;
+                case "C":
+                    // Grab a single large enemy
+                    break;
+                default:
+                    throw new ArgumentException("Invalid sceneType supplied: " + sceneType);
+            }
+
+            return new List<string>();
         }
     }
 }
