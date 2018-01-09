@@ -40,7 +40,7 @@ namespace FF2_Monster_Sim
             monsterData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_MonsterData.json"));
             PopulateNameData();
 
-            Debug.WriteLine("Loaded " + GetMonsterNames().Count + " monsters");
+            Debug.WriteLine("Loaded " + MonsterNames.Count + " monsters");
             Debug.WriteLine("\t" + smallMonsterNames.Count + " small");
             Debug.WriteLine("\t" + mediumMonsterNames.Count + " medium");
             Debug.WriteLine("\t" + tallMonsterNames.Count + " tall");
@@ -114,6 +114,11 @@ namespace FF2_Monster_Sim
             return nameSet;
         }
 
+        /////////////
+        // Helpers //
+        /////////////
+
+
         private static void PopulateNameData()
         {
             foreach (dynamic data in monsterData)
@@ -137,6 +142,7 @@ namespace FF2_Monster_Sim
                     default:
                         throw new Exception("Invalid monster size: " + data.size + ", found on " + data.name);
                 }
+                MonsterNames.Add((string)data.name);
             }
         }
 

@@ -17,21 +17,28 @@ namespace FF2_Monster_Sim
         private static Vector2[] positions;
 
         private static Stack<Textbox> textboxStack;
-
-        // 16, 444 - 670, 444
+        
         private static string sceneOneText;
         private static string sceneTwoText;
 
         private static SpriteFont spriteFont;
-
-
-
+        
         //////////////
         // Monogame //
         //////////////
 
         public static void Initialize(int x, int y)
         {
+            // Inits
+            actorBox = new Textbox();
+            hitsBox = new Textbox();
+            targetBox = new Textbox();
+            dmgBox = new Textbox();
+            resultsBox = new Textbox();
+            textboxes = new Textbox[]{ actorBox, hitsBox, targetBox, dmgBox, resultsBox };
+            textboxStack = new Stack<Textbox>();
+
+            // Setup positioning
             X = x;
             Y = y;
 
@@ -43,18 +50,10 @@ namespace FF2_Monster_Sim
                 new Vector2(x, y + 128)
             };
 
-            actorBox = new Textbox();
-            hitsBox = new Textbox();
-            targetBox = new Textbox();
-            dmgBox = new Textbox();
-            resultsBox = new Textbox();
-            textboxes = new Textbox[]{ actorBox, hitsBox, targetBox, dmgBox, resultsBox };
-
             for (int i = 0; i < 5; i++)
                 textboxes[i].Initialize(positions[i]);
 
-            textboxStack = new Stack<Textbox>();
-
+            // Testing
             sceneOneText = sceneTwoText = 
                 "MonsName -- 65535 -- 65535\n" +
                 "MonsName -- 65535 -- 65535\n" +
@@ -87,6 +86,18 @@ namespace FF2_Monster_Sim
         /////////////
         // Publics //
         /////////////
+
+        /// <summary>
+        /// Remove and hide all text objects
+        /// </summary>
+        public static void Clear()
+        {
+            foreach (Textbox box in textboxes)
+                TearDownTextBox(box);
+            sceneOneText = "";
+            sceneTwoText = "";
+            textboxStack.Clear();
+        }
 
         public static void SetActorText(string text)
         {

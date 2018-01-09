@@ -37,6 +37,9 @@ namespace SimTests
             TextManager.SetHitsText("Hits");
             TextManager.SetDamageText("Damage");
             TextManager.SetResultsText("Results");
+
+            // Static cleanup
+            TextManager.Clear();
         }
 
         [TestMethod]
@@ -56,6 +59,9 @@ namespace SimTests
             Assert.IsTrue(TextManager.TearDownText());
             Assert.IsTrue(TextManager.TearDownText());
             Assert.IsFalse(TextManager.TearDownText());
+
+            // Static cleanup
+            TextManager.Clear();
         }
 
         [TestMethod]
@@ -75,6 +81,9 @@ namespace SimTests
             Assert.IsTrue(TextManager.TearDownText());
             Assert.IsTrue(TextManager.TearDownText());
             Assert.IsFalse(TextManager.TearDownText());
+
+            // Static cleanup
+            TextManager.Clear();
         }
     }
 }
