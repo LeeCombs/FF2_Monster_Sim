@@ -44,6 +44,7 @@ namespace FF2_Monster_Sim
         // Etc.
         public BattleScene scene;
         private Random rnd;
+        public string size = "";
 
         private const int FEAR_VALUE = 20;
         private const int BERSERK_VALUE = 5;

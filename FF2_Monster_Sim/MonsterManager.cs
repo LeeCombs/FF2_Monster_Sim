@@ -38,7 +38,13 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_MonsterData.json");
             monsterData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_MonsterData.json"));
+            PopulateNameData();
+
             Debug.WriteLine("Loaded " + GetMonsterNames().Count + " monsters");
+            Debug.WriteLine("\t" + smallMonsterNames.Count + " small");
+            Debug.WriteLine("\t" + mediumMonsterNames.Count + " medium");
+            Debug.WriteLine("\t" + tallMonsterNames.Count + " tall");
+            Debug.WriteLine("\t" + largeMonsterNames.Count + " large");
         }
 
         /////////////
@@ -60,29 +66,8 @@ namespace FF2_Monster_Sim
             {
                 if (String.Equals(name, (string)data.name, StringComparison.OrdinalIgnoreCase))
                 {
-
-                    // TODO: Grab the monster's size and append it's name to a size list
-                    /*
-                    switch (data.size)
-                    {
-                        case "SMALL":
-                            smallMonsterNames.Add((string)data.name);
-                            break;
-                        case "MEDIUM":
-                            smallMonsterNames.Add((string)data.name);
-                            break;
-                        case "TALL":
-                            smallMonsterNames.Add((string)data.name);
-                            break;
-                        case "LARGE":
-                            smallMonsterNames.Add((string)data.name);
-                            break;
-                        default:
-                            throw new Exception("Invalid monster size: " + data.size + ", found on " + data.name);
-                    }
-                    */
-
                     Monster mon = new Monster();
+                    mon.size = data.size;
                     
                     // Doing this by hand since generated .json naming isn't consistent, nor formatted 100%
                     mon.Name = data.name;
@@ -127,6 +112,32 @@ namespace FF2_Monster_Sim
             foreach (dynamic data in monsterData)
                 nameSet.Add((string)data.name);
             return nameSet;
+        }
+
+        private static void PopulateNameData()
+        {
+            foreach (dynamic data in monsterData)
+            {
+                // Grab the monster's size and append it's name to a size list
+                string size = (string)data.size;
+                switch (size.ToUpper())
+                {
+                    case "SMALL":
+                        smallMonsterNames.Add((string)data.name);
+                        break;
+                    case "MEDIUM":
+                        mediumMonsterNames.Add((string)data.name);
+                        break;
+                    case "TALL":
+                        tallMonsterNames.Add((string)data.name);
+                        break;
+                    case "LARGE":
+                        largeMonsterNames.Add((string)data.name);
+                        break;
+                    default:
+                        throw new Exception("Invalid monster size: " + data.size + ", found on " + data.name);
+                }
+            }
         }
 
         /// <summary>

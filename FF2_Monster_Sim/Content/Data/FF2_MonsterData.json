@@ -17,7 +17,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "VmpThorn",
@@ -37,7 +38,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Poison"]
+   "attackEffect": ["Poison"],
+   "size": "Small"
  },
  {
    "name": "Hornet",
@@ -57,7 +59,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Poison"]
+   "attackEffect": ["Poison"],
+   "size": "Small"
  },
  {
    "name": "QueenBee",
@@ -77,7 +80,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Small"
  },
  {
    "name": "Snowman",
@@ -97,7 +101,8 @@
    "absorb": ["Ice"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Yeti",
@@ -117,7 +122,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Icicle",
@@ -137,7 +143,8 @@
    "absorb": ["Ice"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Stlctite",
@@ -157,7 +164,8 @@
    "absorb": [],
    "weak": ["Poison"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Column",
@@ -177,7 +185,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Sprinter",
@@ -197,7 +206,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "BigBird",
@@ -217,7 +227,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Adamanti",
@@ -237,7 +248,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "LandTurt",
@@ -257,7 +269,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Ogre",
@@ -277,7 +290,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "WzOgre",
@@ -297,7 +311,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"ICE","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"BLNK","level":3,"accuracy":50,"mpConsumption":0,"target":"Self"},{"name":"BLND","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"SLEP","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "GrOgre",
@@ -317,7 +332,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "DualHead",
@@ -337,7 +353,8 @@
    "absorb": [],
    "weak": ["Body"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "DualZomb",
@@ -357,7 +374,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Wererat",
@@ -377,7 +395,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Small"
  },
  {
    "name": "Stunner",
@@ -397,7 +416,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Small"
  },
  {
    "name": "DeadHead",
@@ -417,7 +437,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Skull",
@@ -437,7 +458,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"ICE","level":12,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":12,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":12,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"TOAD","level":10,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"TOAD","level":10,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Small"
  },
  {
    "name": "Zombie",
@@ -457,7 +479,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Ghoul",
@@ -477,7 +500,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "Ghast",
@@ -497,7 +521,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"BLND","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "Revenant",
@@ -517,7 +542,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "Shadow",
@@ -537,7 +563,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Blind"]
+   "attackEffect": ["Blind"],
+   "size": "Medium"
  },
  {
    "name": "Wraith",
@@ -557,7 +584,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "Spectre",
@@ -577,7 +605,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"SLEP","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"ICE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BRAK","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "Ghost",
@@ -597,7 +626,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURS","level":8,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"AERO","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"MINI","level":7,"accuracy":60,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "Antlion",
@@ -617,7 +647,8 @@
    "absorb": [],
    "weak": ["Poison","Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "Blade",
@@ -637,7 +668,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Gotus",
@@ -657,7 +689,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Drink","level":6,"accuracy":100,"mpConsumption":100,"target":"Self"},{"name":"HAST","level":6,"accuracy":50,"mpConsumption":100,"target":"CasterParty"},{"name":"HAST","level":6,"accuracy":50,"mpConsumption":100,"target":"CasterParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "BstDemon",
@@ -677,7 +710,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"STOP","level":8,"accuracy":95,"mpConsumption":50,"target":"EnemyParty"},{"name":"DSPL","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FOG","level":6,"accuracy":40,"mpConsumption":0,"target":"EnemyParty"},{"name":"BOLT","level":10,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FOG","level":6,"accuracy":40,"mpConsumption":0,"target":"EnemyParty"},{"name":"BOLT","level":10,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "Chimera",
@@ -697,7 +731,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"FIRE","level":7,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":7,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":7,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Gchimera",
@@ -717,7 +752,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"FIRE","level":7,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":7,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Breath","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":7,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Breath","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Sphinx",
@@ -737,7 +773,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Breath","level":6,"accuracy":60,"mpConsumption":0,"target":"EnemyParty"},{"name":"Breath","level":6,"accuracy":60,"mpConsumption":0,"target":"EnemyParty"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"DSPL","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Flower",
@@ -757,7 +794,8 @@
    "absorb": [],
    "weak": ["Fire","Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Confusion"]
+   "attackEffect": ["Confusion"],
+   "size": "Medium"
  },
  {
    "name": "DvFlower",
@@ -777,7 +815,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Poison","Confusion"]
+   "attackEffect": ["Poison","Confusion"],
+   "size": "Medium"
  },
  {
    "name": "KilrFish",
@@ -797,7 +836,8 @@
    "absorb": [],
    "weak": ["Lightning"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "ElecFish",
@@ -817,7 +857,8 @@
    "absorb": ["Lightning"],
    "weak": [],
    "attackList": [{"name":"BOLT","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BOLT","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BOLT","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Eagle",
@@ -837,7 +878,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Coctrice",
@@ -857,7 +899,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Petrify"]
+   "attackEffect": ["Petrify"],
+   "size": "Small"
  },
  {
    "name": "Pirate",
@@ -877,7 +920,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Bucaneer",
@@ -897,7 +941,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Borgan",
@@ -917,7 +962,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":3,"accuracy":100,"mpConsumption":100,"target":"Self"},{"name":"CURE","level":3,"accuracy":100,"mpConsumption":100,"target":"Self"},{"name":"CURE","level":3,"accuracy":100,"mpConsumption":100,"target":"Self"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Z.Borgan",
@@ -937,7 +983,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"FLAR","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"FLAR","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FLAR","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"FLAR","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "BigHorn",
@@ -957,7 +1004,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Tusk",
@@ -977,7 +1025,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "G.Toad",
@@ -997,7 +1046,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "P.Toad",
@@ -1017,7 +1067,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "SeaSnake",
@@ -1037,7 +1088,8 @@
    "absorb": [],
    "weak": ["Lightning"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "SeaDragn",
@@ -1057,7 +1109,8 @@
    "absorb": [],
    "weak": ["Lightning"],
    "attackList": [{"name":"Wave","level":8,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Wave","level":8,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Ray",
@@ -1077,7 +1130,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "MantaRay",
@@ -1097,7 +1151,8 @@
    "absorb": [],
    "weak": ["Lightning"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Flier",
@@ -1117,7 +1172,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Changer",
@@ -1137,7 +1193,8 @@
    "absorb": [],
    "weak": ["Mind"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHNG","level":4,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHNG","level":4,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHNG","level":4,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Brain",
@@ -1157,7 +1214,8 @@
    "absorb": [],
    "weak": ["Mind"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHNG","level":4,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHNG","level":4,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHNG","level":4,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"FOG","level":6,"accuracy":40,"mpConsumption":0,"target":"EnemyParty"},{"name":"FOG","level":6,"accuracy":40,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Sucker",
@@ -1177,7 +1235,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain MP"]
+   "attackEffect": ["Drain MP"],
+   "size": "Small"
  },
  {
    "name": "M.Sucker",
@@ -1197,7 +1256,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"},{"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Amnesia"]
+   "attackEffect": ["Amnesia"],
+   "size": "Small"
  },
  {
    "name": "Werewolf",
@@ -1217,7 +1277,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "WolfDevl",
@@ -1237,7 +1298,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"FIRE","level":11,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":11,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"CURS","level":8,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"CURS","level":8,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"CHRM","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"WARP","level":9,"accuracy":30,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Imp",
@@ -1257,7 +1319,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHRM","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"CHRM","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"CHRM","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"BLNK","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"},{"name":"BLNK","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "Fiend",
@@ -1277,7 +1340,8 @@
    "absorb": ["Fire"],
    "weak": [],
    "attackList": [{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Blind"]
+   "attackEffect": ["Blind"],
+   "size": "Medium"
  },
  {
    "name": "Molbor",
@@ -1297,7 +1361,8 @@
    "absorb": [],
    "weak": ["Lightning"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "L.Molbor",
@@ -1317,7 +1382,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Poison","Paralysis"]
+   "attackEffect": ["Poison","Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "G.Molbor",
@@ -1337,7 +1403,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Poison","Sleep","Mute","Mini","Paralysis","Confusion"]
+   "attackEffect": ["Poison","Sleep","Mute","Mini","Paralysis","Confusion"],
+   "size": "Medium"
  },
  {
    "name": "Basilisk",
@@ -1357,7 +1424,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Glare","level":5,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":" Glare","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":" Glare","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Salmandr",
@@ -1377,7 +1445,8 @@
    "absorb": ["Fire"],
    "weak": ["Ice"],
    "attackList": [{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "IceLiz",
@@ -1397,7 +1466,8 @@
    "absorb": ["Ice"],
    "weak": ["Fire"],
    "attackList": [{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Amoeba",
@@ -1417,7 +1487,8 @@
    "absorb": ["Poison"],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "100Eye",
@@ -1437,7 +1508,8 @@
    "absorb": ["Poison"],
    "weak": [],
    "attackList": [{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"ASPL","level":10,"accuracy":40,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHRM","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Glare","level":9,"accuracy":90,"mpConsumption":0,"target":"SingleTarget"},{"name":"SLOW","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"DSPL","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"WARP","level":9,"accuracy":30,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Death"]
+   "attackEffect": ["Death"],
+   "size": "Medium"
  },
  {
    "name": "Worm",
@@ -1457,7 +1529,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "SandWorm",
@@ -1477,7 +1550,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Quake","level":10,"accuracy":95,"mpConsumption":5,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Quake","level":10,"accuracy":95,"mpConsumption":5,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "AbysWorm",
@@ -1497,7 +1571,8 @@
    "absorb": ["Fire","Death"],
    "weak": [],
    "attackList": [{"name":"Tnad","level":13,"accuracy":95,"mpConsumption":20,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Tnad","level":13,"accuracy":95,"mpConsumption":20,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Slime",
@@ -1517,7 +1592,8 @@
    "absorb": ["Poison"],
    "weak": ["Fire","Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Poison"]
+   "attackEffect": ["Poison"],
+   "size": "Small"
  },
  {
    "name": "Jelly",
@@ -1537,7 +1613,8 @@
    "absorb": ["Poison"],
    "weak": ["Fire","Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Small"
  },
  {
    "name": "Mallow",
@@ -1557,7 +1634,8 @@
    "absorb": ["Poison"],
    "weak": ["Lightning"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Small"
  },
  {
    "name": "Pudding",
@@ -1577,7 +1655,8 @@
    "absorb": ["Poison"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Small"
  },
  {
    "name": "R.Soul",
@@ -1597,7 +1676,8 @@
    "absorb": ["Dimension","Fire","Mind","Lightning","Death","Poison","Body","Ice"],
    "weak": [],
    "attackList": [{"name":"FIRE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"BOLT","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"ICE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"AERO","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"FIRE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"BOLT","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"ICE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"AERO","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "G.Soul",
@@ -1617,7 +1697,8 @@
    "absorb": ["Dimension","Fire","Mind","Lightning","Death","Poison","Body","Ice"],
    "weak": [],
    "attackList": [{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURE","level":6,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Soul",
@@ -1637,7 +1718,8 @@
    "absorb": ["Dimension","Fire","Mind","Lightning","Death","Poison","Body","Ice"],
    "weak": [],
    "attackList": [{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "VmpGirl",
@@ -1657,7 +1739,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Wink","level":6,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Wink","level":6,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "VmpLady",
@@ -1677,7 +1760,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Wink","level":9,"accuracy":90,"mpConsumption":0,"target":"SingleTarget"},{"name":"ICE","level":12,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"SLEP","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Wink","level":9,"accuracy":90,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "Emperor_1",
@@ -1697,7 +1781,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BOLT","level":10,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"SLOW","level":9,"accuracy":95,"mpConsumption":50,"target":"EnemyParty"},{"name":"HAST","level":8,"accuracy":80,"mpConsumption":10,"target":"Self"},{"name":"Elixer","level":0,"accuracy":100,"mpConsumption":100,"target":"Self"},{"name":"BLNK","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"},{"name":"BARR","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Shade",
@@ -1717,7 +1802,8 @@
    "absorb": ["Death"],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURS","level":8,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"DETH","level":8,"accuracy":50,"mpConsumption":0,"target":"EnemyParty"},{"name":"CURS","level":8,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"DETH","level":8,"accuracy":50,"mpConsumption":0,"target":"EnemyParty"},{"name":"CURS","level":8,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"DETH","level":8,"accuracy":50,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": ["Curse"]
+   "attackEffect": ["Curse"],
+   "size": "Medium"
  },
  {
    "name": "Mantis",
@@ -1737,7 +1823,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "MantKing",
@@ -1757,7 +1844,8 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "DvMantis",
@@ -1777,7 +1865,8 @@
    "absorb": ["Fire"],
    "weak": [],
    "attackList": [{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": ["Paralysis"]
+   "attackEffect": ["Paralysis"],
+   "size": "Medium"
  },
  {
    "name": "Corpse",
@@ -1797,7 +1886,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "DkKnight",
@@ -1817,7 +1907,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "DthRider",
@@ -1837,7 +1928,8 @@
    "absorb": ["Death"],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Medium"
  },
  {
    "name": "Golem",
@@ -1857,7 +1949,8 @@
    "absorb": [],
    "weak": ["Fire"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Sleep"]
+   "attackEffect": ["Sleep"],
+   "size": "Tall"
  },
  {
    "name": "StGolem",
@@ -1877,7 +1970,8 @@
    "absorb": [],
    "weak": ["Poison"],
    "attackList": [{"name":"STOP","level":8,"accuracy":95,"mpConsumption":50,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"STOP","level":8,"accuracy":95,"mpConsumption":50,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Tall"
  },
  {
    "name": "MtGolem",
@@ -1897,7 +1991,8 @@
    "absorb": [],
    "weak": ["Lightning"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Tall"
  },
  {
    "name": "Goblin",
@@ -1917,7 +2012,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "G.Goblin",
@@ -1937,7 +2033,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Bow","level":1,"accuracy":45,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Bow","level":1,"accuracy":45,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "DesAngel",
@@ -1957,7 +2054,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Bow","level":3,"accuracy":65,"mpConsumption":0,"target":"SingleTarget"},{"name":"SLEP","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"SLEP","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"Bow","level":3,"accuracy":65,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Balloon",
@@ -1977,7 +2075,8 @@
    "absorb": [],
    "weak": ["Fire","Lightning"],
    "attackList": [{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":1,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Grenade",
@@ -1997,7 +2096,8 @@
    "absorb": [],
    "weak": ["Fire","Lightning"],
    "attackList": [{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":3,"accuracy":60,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Mine",
@@ -2017,7 +2117,8 @@
    "absorb": [],
    "weak": ["Fire","Lightning"],
    "attackList": [{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":5,"accuracy":70,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Bomb",
@@ -2037,7 +2138,8 @@
    "absorb": [],
    "weak": ["Fire","Lightning"],
    "attackList": [{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":7,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Small"
  },
  {
    "name": "Soldier",
@@ -2057,7 +2159,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Bow","level":1,"accuracy":45,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Bow","level":1,"accuracy":45,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Sargeant",
@@ -2077,7 +2180,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Bow","level":3,"accuracy":65,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Bow","level":3,"accuracy":65,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Captain",
@@ -2097,7 +2201,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Bow","level":3,"accuracy":65,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Bow","level":3,"accuracy":65,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "General",
@@ -2117,7 +2222,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Mage",
@@ -2137,7 +2243,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"FIRE","level":5,"accuracy":60,"mpConsumption":10,"target":"EnemyParty"},{"name":"ICE","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"BOLT","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"AERO","level":5,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"BLND","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"SLEP","level":4,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"BSRK","level":3,"accuracy":100,"mpConsumption":0,"target":"CasterParty"},{"name":"BSRK","level":3,"accuracy":100,"mpConsumption":0,"target":"CasterParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Sorcerer",
@@ -2157,7 +2264,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"DRAN","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"FIRE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"ICE","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"STON","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"CHRM","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"HAST","level":6,"accuracy":50,"mpConsumption":100,"target":"CasterParty"},{"name":"CURS","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"DETH","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Wizard",
@@ -2177,7 +2285,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"DRAN","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"ASPL","level":8,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"FLAR","level":10,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"FIRE","level":11,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"STOP","level":8,"accuracy":95,"mpConsumption":50,"target":"EnemyParty"},{"name":"TOAD","level":7,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"BRAK","level":6,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"WARP","level":7,"accuracy":40,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Medium"
  },
  {
    "name": "Panther",
@@ -2197,7 +2306,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Medium"
  },
  {
    "name": "Krull",
@@ -2217,7 +2327,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Blast","level":10,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Blast","level":10,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Death"]
+   "attackEffect": ["Death"],
+   "size": "Medium"
  },
  {
    "name": "Lamia",
@@ -2237,7 +2348,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Wink","level":6,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"Wink","level":6,"accuracy":70,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BLNK","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"}],
-   "attackEffect": ["Sleep"]
+   "attackEffect": ["Sleep"],
+   "size": "Medium"
  },
  {
    "name": "Q.Lamia",
@@ -2257,7 +2369,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Wink","level":9,"accuracy":90,"mpConsumption":0,"target":"SingleTarget"},{"name":"Wink","level":9,"accuracy":90,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BLNK","level":16,"accuracy":50,"mpConsumption":0,"target":"Self"}],
-   "attackEffect": ["Sleep"]
+   "attackEffect": ["Sleep"],
+   "size": "Medium"
  },
  {
    "name": "Gigas",
@@ -2277,7 +2390,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Tall"
  },
  {
    "name": "F.Gigas",
@@ -2297,7 +2411,8 @@
    "absorb": ["Fire"],
    "weak": ["Ice"],
    "attackList": [{"name":"Rock","level":9,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Rock","level":9,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Tall"
  },
  {
    "name": "I.Gigas",
@@ -2317,7 +2432,8 @@
    "absorb": ["Ice"],
    "weak": ["Fire"],
    "attackList": [{"name":"ICE","level":12,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":12,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Rock","level":9,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"Rock","level":9,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Tall"
  },
  {
    "name": "T.Gigas",
@@ -2337,7 +2453,8 @@
    "absorb": ["Lightning"],
    "weak": ["Poison"],
    "attackList": [{"name":"BOLT","level":12,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"BOLT","level":12,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Rock","level":9,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"Rock","level":9,"accuracy":75,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Tall"
  },
  {
    "name": "Behemoth",
@@ -2357,7 +2474,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "KingBehe",
@@ -2377,7 +2495,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "Dragon",
@@ -2397,7 +2516,8 @@
    "absorb": ["Ice"],
    "weak": ["Fire"],
    "attackList": [{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "G.Dragon",
@@ -2417,7 +2537,8 @@
    "absorb": ["Poison"],
    "weak": ["Lightning"],
    "attackList": [{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "B.Dragon",
@@ -2437,7 +2558,8 @@
    "absorb": ["Lightning"],
    "weak": ["Poison"],
    "attackList": [{"name":"BOLT","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BOLT","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BOLT","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "R.Dragon",
@@ -2457,7 +2579,8 @@
    "absorb": ["Fire"],
    "weak": ["Ice"],
    "attackList": [{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "Giant",
@@ -2477,7 +2600,8 @@
    "absorb": ["Fire"],
    "weak": ["Lightning","Ice"],
    "attackList": [{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"}],
-   "attackEffect": []
+   "attackEffect": [],
+   "size": "Large"
  },
  {
    "name": "Tiamat",
@@ -2497,7 +2621,8 @@
    "absorb": ["Fire","Lightning","Poison","Ice"],
    "weak": ["Body"],
    "attackList": [{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"ICE","level":16,"accuracy":95,"mpConsumption":100,"target":"EnemyParty"},{"name":"BOLT","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Mist","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Large"
  },
  {
    "name": "Satan",
@@ -2517,7 +2642,8 @@
    "absorb": ["Fire"],
    "weak": [],
    "attackList": [{"name":"FLAR","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"STON","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CHRM","level":16,"accuracy":100,"mpConsumption":100,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BLNK","level":16,"accuracy":50,"mpConsumption":0,"target":"Self"},{"name":"DSPL","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"}],
-   "attackEffect": ["Envenom"]
+   "attackEffect": ["Envenom"],
+   "size": "Large"
  },
  {
    "name": "Asteroth",
@@ -2537,7 +2663,8 @@
    "absorb": [],
    "weak": [],
    "attackList": [{"name":"DRAN","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"AERO","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"FIRE","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"BLN","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"DETH","level":16,"accuracy":50,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Large"
  },
  {
    "name": "Emperor_2",
@@ -2557,6 +2684,7 @@
    "absorb": ["Dimension","Death"],
    "weak": [],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Meteo","level":10,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"FLAR","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"SLOW","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"CURS","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"},{"name":"DSPL","level":16,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},{"name":"BLND","level":16,"accuracy":100,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain HP"]
+   "attackEffect": ["Drain HP"],
+   "size": "Large"
  }
 ]

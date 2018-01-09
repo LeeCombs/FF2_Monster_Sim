@@ -69,11 +69,16 @@ namespace SimTests
         [TestMethod]
         public void MonsterDataTest()
         {
+            string[] validSizes = new string[] { "SMALL", "MEDIUM", "TALL", "LARGE" };
+
             // Ensure each monster in the data has the basics set up
             foreach (string name in MonsterManager.GetMonsterNames())
             {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 Assert.IsNotNull(monster.Name);
+
+                // Size
+                Assert.IsTrue(validSizes.Contains(monster.size.ToUpper()));
 
                 // Stat ranges
                 Assert.IsTrue(Utils.NumIsWithinRange(monster.HP,           0, ushort.MaxValue));
