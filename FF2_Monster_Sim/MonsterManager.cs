@@ -11,7 +11,10 @@ namespace FF2_Monster_Sim
 {
     public static class MonsterManager
     {
+        private static int TALL_CHANCE = 10;
+
         private static dynamic monsterData;
+        private static Random rnd;
 
         public static List<string> MonsterNames;
         private static List<string> smallMonsterNames;
@@ -30,6 +33,7 @@ namespace FF2_Monster_Sim
             mediumMonsterNames = new List<string>();
             tallMonsterNames = new List<string>();
             largeMonsterNames = new List<string>();
+            rnd = new Random();
         }
 
         public static void LoadContent()
@@ -104,20 +108,58 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Return a HashSet of all the monsters names within monster data
+        /// Returns a list of monster names suitable for filling a given scene type
         /// </summary>
-        public static HashSet<string> GetMonsterNames()
+        /// <param name="sceneType">Type of scene to be filled. Must be "A", "B", or "C"</param>
+        public static List<string> GenerateMonsterList(string sceneType)
         {
-            HashSet<string> nameSet = new HashSet<string>();
-            foreach (dynamic data in monsterData)
-                nameSet.Add((string)data.name);
-            return nameSet;
+            if (String.IsNullOrEmpty(sceneType))
+                throw new ArgumentException("Invalid sceneType supplied");
+
+            // TODO: x/100 chance to grab a pre-made team from a file and return that?
+
+            List<string> nameList = new List<string>();
+            int roll;
+
+            switch (sceneType.ToUpper())
+            {
+                case "A":
+                    // Generate a list with 8 small monsters
+                    for (int i = 0; i < 8; i++)
+                    {
+                        roll = rnd.Next(smallMonsterNames.Count);
+                        nameList.Add(smallMonsterNames[roll]);
+                    }
+                    break;
+                case "B":
+                    // Determine which slots will be designated for tall or medium enemies
+                    // Per slot, add one tall enemy or two mediums
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (rnd.Next(100) < TALL_CHANCE)
+                            nameList.Add(tallMonsterNames[rnd.Next(tallMonsterNames.Count)]);
+                        else
+                        { 
+                            nameList.Add(mediumMonsterNames[rnd.Next(mediumMonsterNames.Count)]);
+                            nameList.Add(mediumMonsterNames[rnd.Next(mediumMonsterNames.Count)]);
+                        }
+                    }
+                    break;
+                case "C":
+                    // Grab a single large enemy
+                    roll = rnd.Next(largeMonsterNames.Count);
+                    nameList.Add(largeMonsterNames[roll]);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid sceneType supplied: " + sceneType);
+            }
+
+            return nameList;
         }
 
         /////////////
         // Helpers //
         /////////////
-
 
         private static void PopulateNameData()
         {
@@ -144,33 +186,6 @@ namespace FF2_Monster_Sim
                 }
                 MonsterNames.Add((string)data.name);
             }
-        }
-
-        /// <summary>
-        /// Returns a list of monster names suitable for filling a given scene type
-        /// </summary>
-        /// <param name="sceneType">Type of scene to be filled. Must be "A", "B", or "C"</param>
-        public static List<string> GenerateMonsterList(string sceneType)
-        {
-            // TODO: x/100 chance to grab a pre-made team from a file and return that
-
-            switch (sceneType.ToUpper())
-            {
-                case "A":
-                    // Generate a list with 8 small monsters
-                    break;
-                case "B":
-                    // Determine which slots will be "tall", if any
-                    // Grab corresponding medium and tall monsters
-                    break;
-                case "C":
-                    // Grab a single large enemy
-                    break;
-                default:
-                    throw new ArgumentException("Invalid sceneType supplied: " + sceneType);
-            }
-
-            return new List<string>();
         }
     }
 }

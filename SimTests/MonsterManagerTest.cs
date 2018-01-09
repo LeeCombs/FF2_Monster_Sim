@@ -30,19 +30,19 @@ namespace SimTests
             // Test that monsters properly load with known stats from data
             Monster monster = MonsterManager.GetMonsterByName("LegEater");
 
-            Assert.AreEqual(6,   monster.HP);
-            Assert.AreEqual(6,   monster.HPMax);
-            Assert.AreEqual(0,   monster.MP);
-            Assert.AreEqual(0,   monster.MPMax);
-            Assert.AreEqual(4,   monster.Strength);
-            Assert.AreEqual(0,   monster.Defense);
+            Assert.AreEqual(6, monster.HP);
+            Assert.AreEqual(6, monster.HPMax);
+            Assert.AreEqual(0, monster.MP);
+            Assert.AreEqual(0, monster.MPMax);
+            Assert.AreEqual(4, monster.Strength);
+            Assert.AreEqual(0, monster.Defense);
             Assert.AreEqual(180, monster.Fear);
-            Assert.AreEqual(1,   monster.Hits);
-            Assert.AreEqual(0,   monster.Blocks);
-            Assert.AreEqual(1,   monster.MagicBlocks);
-            Assert.AreEqual(60,  monster.Accuracy);
-            Assert.AreEqual(0,   monster.Evasion);
-            Assert.AreEqual(50,  monster.MagicEvasion);
+            Assert.AreEqual(1, monster.Hits);
+            Assert.AreEqual(0, monster.Blocks);
+            Assert.AreEqual(1, monster.MagicBlocks);
+            Assert.AreEqual(60, monster.Accuracy);
+            Assert.AreEqual(0, monster.Evasion);
+            Assert.AreEqual(50, monster.MagicEvasion);
 
             HashSet<MonsterFamily> familySet = new HashSet<MonsterFamily>() { MonsterFamily.Earth };
             Assert.IsTrue(monster.Families.SetEquals(familySet));
@@ -72,8 +72,9 @@ namespace SimTests
             string[] validSizes = new string[] { "SMALL", "MEDIUM", "TALL", "LARGE" };
 
             // Ensure each monster in the data has the basics set up
-            foreach (string name in MonsterManager.GetMonsterNames())
+            for (int i = 0; i < MonsterManager.MonsterNames.Count; i++)
             {
+                string name = MonsterManager.MonsterNames[i];
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 Assert.IsNotNull(monster.Name);
 
@@ -81,20 +82,20 @@ namespace SimTests
                 Assert.IsTrue(validSizes.Contains(monster.size.ToUpper()));
 
                 // Stat ranges
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.HP,           0, ushort.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.HPMax,        0, ushort.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MP,           0, ushort.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MPMax,        0, ushort.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Strength,     0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Defense,      0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Blocks,       0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Evasion,      0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicBlocks,  0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Accuracy,     0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.HP, 0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.HPMax, 0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MP, 0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MPMax, 0, ushort.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Strength, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Defense, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Blocks, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Evasion, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicBlocks, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Accuracy, 0, byte.MaxValue));
                 Assert.IsTrue(Utils.NumIsWithinRange(monster.MagicEvasion, 0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Fear,         0, byte.MaxValue));
-                Assert.IsTrue(Utils.NumIsWithinRange(monster.Hits,         0, 16));
-                
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Fear, 0, byte.MaxValue));
+                Assert.IsTrue(Utils.NumIsWithinRange(monster.Hits, 0, 16));
+
                 // Action list exists and is the right length
                 Assert.IsNotNull(monster.ActionList);
                 Assert.AreEqual(8, monster.ActionList.Count);
@@ -105,6 +106,48 @@ namespace SimTests
                 Assert.IsNotNull(monster.Weaknesses);
                 Assert.IsNotNull(monster.Resistances);
                 Assert.IsNotNull(monster.Absorbs);
+            }
+        }
+
+        [TestMethod]
+        public void GenerateMonsterListTest()
+        {
+            // Test invalid sceneTypes
+            Assert.ThrowsException<ArgumentException>(() => MonsterManager.GenerateMonsterList(null));
+            Assert.ThrowsException<ArgumentException>(() => MonsterManager.GenerateMonsterList(""));
+            Assert.ThrowsException<ArgumentException>(() => MonsterManager.GenerateMonsterList("D"));
+            Assert.ThrowsException<ArgumentException>(() => MonsterManager.GenerateMonsterList("InvalidInput"));
+
+            // Test valid input
+            MonsterManager.GenerateMonsterList("a");
+            MonsterManager.GenerateMonsterList("A");
+            MonsterManager.GenerateMonsterList("b");
+            MonsterManager.GenerateMonsterList("B");
+            MonsterManager.GenerateMonsterList("c");
+            MonsterManager.GenerateMonsterList("C");
+
+            // Ensure that the monster sizes returned match the scene type
+            for (int i = 0; i < 1000; i++)
+            {
+                foreach (string name in MonsterManager.GenerateMonsterList("A"))
+                    Assert.IsTrue(String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "SMALL"));
+
+                foreach (string name in MonsterManager.GenerateMonsterList("B"))
+                    Assert.IsTrue(
+                        String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "MEDIUM") ||
+                        String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "TALL")
+                        );
+
+                foreach (string name in MonsterManager.GenerateMonsterList("C"))
+                    Assert.IsTrue(String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "LARGE"));
+            }
+
+            // Ensure A always gives 8, B gives 3-6, and C gives 1
+            for (int i = 0; i < 1000; i++)
+            {
+                Assert.AreEqual(8, MonsterManager.GenerateMonsterList("A").Count);
+                Assert.IsTrue(Utils.NumIsWithinRange(MonsterManager.GenerateMonsterList("B").Count, 3, 6));
+                Assert.AreEqual(1, MonsterManager.GenerateMonsterList("C").Count);
             }
         }
     }
