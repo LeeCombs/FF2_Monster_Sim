@@ -626,6 +626,8 @@ namespace SimTests
         [TestMethod]
         public void CHNGTest()
         {
+            // NOTE: Failed once
+
             // Set up some monsters
             Monster caster = new Monster();
             caster.HPMax = 500;

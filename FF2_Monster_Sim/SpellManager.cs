@@ -89,6 +89,8 @@ namespace FF2_Monster_Sim
             if (String.IsNullOrEmpty(name))
                 throw new ArgumentException("Invalid spell name supplied");
 
+            name = name.Trim();
+
             foreach (dynamic data in spellData)
             {
                 if (String.Equals(name, (string)data.name, StringComparison.OrdinalIgnoreCase))

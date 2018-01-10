@@ -17,17 +17,12 @@ namespace FF2_Monster_Sim
     {
         // Monster stuff
         BattleScene sceneOne, sceneTwo;
-        List<string> sceneOneNames = new List<string> {
-            "Goblin", "Fiend", "LegEater", "LegEater", "Column", "VmpThorn", "Hornet", "Hornet"
-        };
-        List<string> sceneTwoNames = new List<string> {
-            "Goblin", "Fiend", "LegEater", "LegEater", "Column", "VmpThorn", "Hornet", "Hornet"
-        };
 
         // Turn Logic
         private int turn = 0, round = 0;
         private Thread combatThread;
-        private int gameTick = 150, teardownTick = 100;
+        // private int gameTick = 150, teardownTick = 100;
+        private int gameTick = 5, teardownTick = 1;
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -64,7 +59,7 @@ namespace FF2_Monster_Sim
             TextManager.Initialize(360, 413);
 
             sceneOne = new BattleScene(50, 139);
-            sceneTwo = new BattleScene(165, 139, "A", true); // TODO: Why is X not 657??
+            sceneTwo = new BattleScene(665, 139, "B", true);
 
             combatThread = new Thread(CombatLoop);
 
@@ -89,9 +84,9 @@ namespace FF2_Monster_Sim
             // Or, should monsters be generated and supplied to the scene as it is currently?
 
             List<Monster> sceneOneMonsters = new List<Monster>();
-            for (int i = 0; i < sceneOneNames.Count; i++)
+            foreach (string name in MonsterManager.GenerateMonsterList("A"))
             {
-                Monster monster = MonsterManager.GetMonsterByName(sceneOneNames[i]);
+                Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
                     continue;
 
@@ -102,9 +97,9 @@ namespace FF2_Monster_Sim
             sceneOne.PopulateScene(sceneOneMonsters);
 
             List<Monster> sceneTwoMonsters = new List<Monster>();
-            for (int i = 0; i < sceneTwoNames.Count; i++)
+            foreach (string name in MonsterManager.GenerateMonsterList("B"))
             {
-                Monster monster = MonsterManager.GetMonsterByName(sceneTwoNames[i]);
+                Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
                     continue;
 
@@ -113,8 +108,6 @@ namespace FF2_Monster_Sim
                 sceneTwoMonsters.Add(monster);
             }
             sceneTwo.PopulateScene(sceneTwoMonsters);
-            foreach (Monster m in sceneTwo.GetAllTargets())
-                m.Position.X += 500;
 
             // Graphics
             gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");

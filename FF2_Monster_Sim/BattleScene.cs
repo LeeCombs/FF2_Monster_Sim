@@ -166,6 +166,12 @@ namespace FF2_Monster_Sim
                 monster.Position = slotPositions[col / 2][row % 2];
                 row++;
                 col++;
+                // Tall monsters skip the next slot
+                if (string.Equals(monster.size.ToUpper(), "TALL"))
+                {
+                    row++;
+                    col++;
+                }
             }
         }
 

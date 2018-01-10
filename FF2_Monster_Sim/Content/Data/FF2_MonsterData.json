@@ -252,7 +252,7 @@
    "size": "Medium"
  },
  {
-   "name": "LandTurt",
+   "name": "LandTrtl",
    "HP": 140,
    "MP": 0,
    "strength": 35,
@@ -1423,7 +1423,7 @@
    "resist": [],
    "absorb": [],
    "weak": [],
-   "attackList": [{"name":"Glare","level":5,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":" Glare","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":" Glare","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
+   "attackList": [{"name":"Glare","level":5,"accuracy":80,"mpConsumption":0,"target":"SingleTarget"},{"name":"Glare","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Glare","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
    "attackEffect": [],
    "size": "Medium"
  },
