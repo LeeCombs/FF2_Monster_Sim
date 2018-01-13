@@ -7,6 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FF2_Monster_Sim
 {
+    public enum SceneType
+    {
+        A, B, C
+    }
+
     public struct Action
     {
         public Monster Actor;
@@ -68,13 +73,15 @@ namespace FF2_Monster_Sim
          * If they choose to attack, they simply do "Nothing"
          */
 
+        private SceneType sceneType;
         private Random rnd;
         private int width = 300, height = 200;
         private string type;
         public int X = 0, Y = 0;
         
-        Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
-        Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
+        private Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
+        private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
+        
 
         public BattleScene(int x = 0, int y = 0, string type = "A", bool flipped = false)
         {
@@ -115,6 +122,8 @@ namespace FF2_Monster_Sim
                     Debug.WriteLine("Scene type must be A, B, or C");
                     return;
             }
+            if (flipped)
+                Utils.ReverseNumberedDictValues(ref slotPositions);
             this.type = type;
         }
 
@@ -277,10 +286,13 @@ namespace FF2_Monster_Sim
             return activeList.ToArray();
         }
 
-        public int GetLiveCount()
+        /// <summary>
+        /// Return whether the scene has living creatures
+        /// </summary>
+        public bool HasLivingMonsters()
         {
-            // ?
-            return GetAllTargets().Length;
+            // TODO: Iterate through monsters and check if any are alive
+            return GetAllTargets().Length > 0;
         }
 
         /// <summary>
@@ -314,13 +326,11 @@ namespace FF2_Monster_Sim
         public Monster GetFrontRowTarget()
         {
             if (monsterSlots.Count == 0)
-            {
-                Debug.WriteLine("Monster Slots must be populated before they can return anything");
-                return null;
-            }
+                throw new Exception("Monster Slots must be populated before they can return anything");
 
+            // Build a list of viable targets based on which two rows are front rows
             List<Monster> monsterList = new List<Monster>();
-
+            
             if (!ColumnIsEmpty(3))
             {
                 // Col 3 and 2 are front

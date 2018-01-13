@@ -97,8 +97,10 @@ namespace FF2_Monster_Sim
             sceneOne.PopulateScene(sceneOneMonsters);
 
             List<Monster> sceneTwoMonsters = new List<Monster>();
-            foreach (string name in MonsterManager.GenerateMonsterList("B"))
-            {
+            List<string> monNames = new List<string> { "Molbor", "Molbor", "Worm", "Worm", "DthRider", "DthRider" };
+            // foreach (string name in MonsterManager.GenerateMonsterList("B"))
+            foreach (string name in monNames)
+                {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
                     continue;
@@ -299,7 +301,7 @@ namespace FF2_Monster_Sim
                         Thread.Sleep(teardownTick);
 
                     // Check for end of battle
-                    if (sceneOne.GetLiveCount() == 0 || sceneTwo.GetLiveCount() == 0)
+                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters())
                     {
                         Debug.WriteLine("Battle over");
                         SoundManager.PlayVictoryMusic();

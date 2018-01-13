@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
 namespace FF2_Monster_Sim
 {
@@ -53,6 +54,16 @@ namespace FF2_Monster_Sim
         public static bool NumIsWithinRange(int number, int min, int max)
         {
             return (number >= min && number <= max);
+        }
+
+        public static  void ReverseNumberedDictValues(ref Dictionary<int, Vector2[]> dict)
+        {
+            for (int i = 0; i < dict.Count / 2; i++)
+            {
+                Vector2[] temp = dict[i];
+                dict[i] = dict[dict.Count - i - 1];
+                dict[dict.Count - i - 1] = temp;
+            }
         }
     }
 }
