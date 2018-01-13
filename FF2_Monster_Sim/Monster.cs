@@ -474,10 +474,20 @@ namespace FF2_Monster_Sim
                 scene.RemoveMonster(this);
         }
 
+        public bool IsAlive()
+        {
+            return HP > 0;
+        }
+
         public bool IsDead()
         {
-            // TODO: Add KO status checks here?
             return HP <= 0;
+        }
+
+        public bool IsCritical()
+        {
+            // HP is at half or less
+            return HPMax / HP <= 2;
         }
 
         ///////////

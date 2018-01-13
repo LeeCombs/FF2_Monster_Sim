@@ -58,8 +58,8 @@ namespace FF2_Monster_Sim
             SoundManager.Initialize();
             TextManager.Initialize(360, 413);
 
-            sceneOne = new BattleScene(50, 139);
-            sceneTwo = new BattleScene(665, 139, "B", true);
+            sceneOne = new BattleScene(1, 50, 139);
+            sceneTwo = new BattleScene(2, 665, 139, "B", true);
 
             combatThread = new Thread(CombatLoop);
 
@@ -148,8 +148,10 @@ namespace FF2_Monster_Sim
                 Exit();
 
             // TODO: Add your update logic here
-            sceneOne.UpdateSceneText(1);
-            sceneTwo.UpdateSceneText(2);
+            
+            // TODO: Only drawing the text every frame for now. Should be redrawn when monsters take/heal damage.
+            sceneOne.UpdateSceneText();
+            sceneTwo.UpdateSceneText();
 
             base.Update(gameTime);
         }

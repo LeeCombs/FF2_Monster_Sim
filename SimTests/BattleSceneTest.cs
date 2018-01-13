@@ -73,7 +73,7 @@ namespace SimTests
             // Ensure null is returned or an exception is thrown if no monsters exist
 
             // Setup
-            BattleScene scene = new BattleScene(type: "A");
+            BattleScene scene = new BattleScene(1, 0, 0, "A");
             List<string> monNames;
             List<Monster> monList = new List<Monster>();
 
@@ -83,7 +83,7 @@ namespace SimTests
                 monList.Add(MonsterManager.GetMonsterByName(name));
             scene.PopulateScene(monList);
 
-            Assert.AreEqual(8, scene.GetAllTargets().Length);
+            Assert.AreEqual(8, scene.GetAllMonsters().Length);
             Assert.IsNotNull(scene.GetFrontRowTarget());
             for (int i = 0; i < 1000; i++)
             {
@@ -98,7 +98,7 @@ namespace SimTests
             // Clear the scene
             scene.ClearScene();
             monList.Clear();
-            Assert.AreEqual(0, scene.GetAllTargets().Length);
+            Assert.AreEqual(0, scene.GetAllMonsters().Length);
             Assert.IsNull(scene.GetAnySingleTarget());
             Assert.IsNull(scene.GetFrontRowTarget());
 
@@ -108,7 +108,7 @@ namespace SimTests
                 monList.Add(MonsterManager.GetMonsterByName(name));
             scene.PopulateScene(monList);
 
-            Assert.AreEqual(6, scene.GetAllTargets().Length);
+            Assert.AreEqual(6, scene.GetAllMonsters().Length);
             for (int i = 0; i < 1000; i++)
             {
                 Monster anyMonster = scene.GetAnySingleTarget();
@@ -144,11 +144,11 @@ namespace SimTests
         public void SceneCreationTest()
         {
             // Test Defaults
-            BattleScene scene = new BattleScene();
+            BattleScene scene = new BattleScene(1, 0, 0, "A");
 
             Assert.AreEqual(0, scene.X);
             Assert.AreEqual(0, scene.Y);
-            Assert.AreEqual(0, scene.GetAllTargets().Length);
+            Assert.AreEqual(0, scene.GetAllMonsters().Length);
             Assert.IsNull(scene.GetAnySingleTarget());
             Assert.IsNull(scene.GetFrontRowTarget());
         }

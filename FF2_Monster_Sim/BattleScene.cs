@@ -74,6 +74,7 @@ namespace FF2_Monster_Sim
          */
 
         private SceneType sceneType;
+        private int sceneNum;
         private Random rnd;
         private int width = 300, height = 200;
         private string type;
@@ -83,10 +84,11 @@ namespace FF2_Monster_Sim
         private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
         
 
-        public BattleScene(int x = 0, int y = 0, string type = "A", bool flipped = false)
+        public BattleScene(int sceneNum, int x, int y, string type = "A", bool flipped = false)
         {
             rnd = new Random();
 
+            this.sceneNum = sceneNum;
             X = x;
             Y = y;
 
@@ -95,6 +97,7 @@ namespace FF2_Monster_Sim
             switch(type)
             {
                 case "A": // 4 x 2 Slots
+                    sceneType = SceneType.A;
                     for (int i = 0; i < 4; i++)
                     {
                         Monster[] monsters = { null, null };
@@ -105,6 +108,7 @@ namespace FF2_Monster_Sim
                     }
                     break;
                 case "B": // 3 x 2 Slots
+                    sceneType = SceneType.B;
                     for (int i = 0; i < 3; i++)
                     {
                         Monster[] monsters = { null, null };
@@ -115,6 +119,7 @@ namespace FF2_Monster_Sim
                     }
                     break;
                 case "C": // Only one slot
+                    sceneType = SceneType.C;
                     monsterSlots[0] = new Monster[]{ null };
                     slotPositions[0] = new Vector2[]{ new Vector2(X, Y) };
                     break;
@@ -192,6 +197,11 @@ namespace FF2_Monster_Sim
                     entry.Value[i] = null;
         }
 
+        /// <summary>
+        /// Remove a single monster from this scene
+        /// TODO: Ensure memory cleanup
+        /// </summary>
+        /// <param name="monster"></param>
         public void RemoveMonster(Monster monster)
         {
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
@@ -214,59 +224,59 @@ namespace FF2_Monster_Sim
             // If monster attacks and is in back row, return "nothing"
             List<Action> actList = new List<Action>();
 
-            foreach (Monster mon in GetAllTargets())
+            foreach (Monster mon in GetAllLiveMonsters())
             {
-                if (mon != null)
+                if (mon == null)
+                    continue;
+
+                mon.Init = mon.Evasion += rnd.Next(0, 50);
+                Action action = new Action(mon);
+                MonsterAction monAct = mon.GetAction();
+
+                if (monAct.Name == "Attack")
                 {
-                    mon.Init = mon.Evasion += rnd.Next(0, 50);
-                    Action action = new Action(mon);
-                    MonsterAction monAct = mon.GetAction();
-
-                    if (monAct.Name == "Attack")
+                    // If monster is in back row, it will instead return 'nothing'
+                    if (MonsterIsBackRow(mon))
                     {
-                        // TODO: If monster is in back row, it will instead return 'nothing'
-                        if (MonsterIsBackRow(mon))
-                        {
-                            action.Nothing = true;
-                            action.Targets.Add(mon);
-                            actList.Add(action);
-                            continue;
-                        }
-
-                        action.Physical = true;
-                        action.Targets.Add(sceneRef.GetFrontRowTarget());
+                        action.Nothing = true;
+                        action.Targets.Add(mon);
                         actList.Add(action);
                         continue;
                     }
-                    else
-                    {
-                        // Get Spell
-                        // Spell spell = SpellManager.GetSpellByName(monAct.Name);
-                        Spell spell = SpellManager.GetSpellByName(monAct.Name);
-                        spell.Accuracy = monAct.Accuracy;
-                        action.Spell = spell;
-                        action.SpellLevel = monAct.Level;
 
-                        switch (monAct.Target)
-                        {
-                            case "Self":
-                                action.Targets.Add(mon);
-                                break;
-                            case "SingleTarget":
-                                action.Targets.Add(sceneRef.GetAnySingleTarget());
-                                break;
-                            case "EnemyParty":
-                                action.Targets = sceneRef.GetAllTargets().ToList();
-                                break;
-                            case "CasterParty":
-                                action.Targets = this.GetAllTargets().ToList();
-                                break;
-                            default:
-                                Debug.WriteLine("Invalid monAct target: " + monAct.Target);
-                                continue;
-                        }
-                        actList.Add(action);
+                    action.Physical = true;
+                    action.Targets.Add(sceneRef.GetFrontRowTarget());
+                    actList.Add(action);
+                    continue;
+                }
+                else
+                {
+                    // Get Spell
+                    // Spell spell = SpellManager.GetSpellByName(monAct.Name);
+                    Spell spell = SpellManager.GetSpellByName(monAct.Name);
+                    spell.Accuracy = monAct.Accuracy;
+                    action.Spell = spell;
+                    action.SpellLevel = monAct.Level;
+
+                    switch (monAct.Target)
+                    {
+                        case "Self":
+                            action.Targets.Add(mon);
+                            break;
+                        case "SingleTarget":
+                            action.Targets.Add(sceneRef.GetAnySingleTarget());
+                            break;
+                        case "EnemyParty":
+                            action.Targets = sceneRef.GetAllLiveMonsters().ToList();
+                            break;
+                        case "CasterParty":
+                            action.Targets = this.GetAllLiveMonsters().ToList();
+                            break;
+                        default:
+                            Debug.WriteLine("Invalid monAct target: " + monAct.Target);
+                            continue;
                     }
+                    actList.Add(action);
                 }
             }
 
@@ -274,9 +284,22 @@ namespace FF2_Monster_Sim
         }
         
         /// <summary>
-        /// Retrieve an array of all active monsters
+        /// Retrieve an array of all live monsters
         /// </summary>
-        public Monster[] GetAllTargets()
+        public Monster[] GetAllLiveMonsters()
+        {
+            List<Monster> liveMonsters = new List<Monster>();
+            foreach (Monster mon in GetAllMonsters())
+                if (mon.IsAlive())
+                    liveMonsters.Add(mon);
+            return liveMonsters.ToArray();
+        }
+
+        /// <summary>
+        /// Return an array of monsters within the scene, including the dead
+        /// </summary>
+        /// <returns></returns>
+        public Monster[] GetAllMonsters()
         {
             List<Monster> activeList = new List<Monster>();
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
@@ -291,8 +314,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         public bool HasLivingMonsters()
         {
-            // TODO: Iterate through monsters and check if any are alive
-            return GetAllTargets().Length > 0;
+            return GetAllLiveMonsters().Length > 0;
         }
 
         /// <summary>
@@ -301,22 +323,11 @@ namespace FF2_Monster_Sim
         public Monster GetAnySingleTarget()
         {
             if (monsterSlots.Count == 0)
-            {
-                Debug.WriteLine("Monster Slots must be populated before they can return anything");
-                return null;
-            }
+                throw new Exception("Monster Slots must be populated before they can return anything");
 
             // Build a list of current monsters, choose one randomly and return it
-            List<Monster> activeList = new List<Monster>();
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
-                foreach (Monster m in entry.Value)
-                    if (m != null)
-                        activeList.Add(m);
-
-            if (activeList.Count == 0)
-                return null;
-
-            int slotRoll = rnd.Next(0, activeList.Count);
+            Monster[] activeList = GetAllLiveMonsters();
+            int slotRoll = rnd.Next(0, activeList.Length);
             return activeList[slotRoll];
         }
 
@@ -330,60 +341,68 @@ namespace FF2_Monster_Sim
 
             // Build a list of viable targets based on which two rows are front rows
             List<Monster> monsterList = new List<Monster>();
-            
-            if (!ColumnIsEmpty(3))
+
+            switch (sceneType)
             {
-                // Col 3 and 2 are front
-                foreach (Monster m in monsterSlots[3])
-                    if (m != null)
-                        monsterList.Add(m);
-
-                foreach (Monster m in monsterSlots[2])
-                    if (m != null)
-                        monsterList.Add(m);
+                case SceneType.A:
+                    // 4 columns, check front two for emptiness
+                    if (!ColumnIsEmpty(3))
+                    {
+                        monsterList.AddRange(GetLiveMonstersFromCol(3));
+                        monsterList.AddRange(GetLiveMonstersFromCol(2));
+                    }
+                    if (!ColumnIsEmpty(2))
+                    {
+                        monsterList.AddRange(GetLiveMonstersFromCol(2));
+                        monsterList.AddRange(GetLiveMonstersFromCol(1));
+                    }
+                    else
+                    {
+                        monsterList.AddRange(GetLiveMonstersFromCol(1));
+                        monsterList.AddRange(GetLiveMonstersFromCol(0));
+                    }
+                    break;
+                case SceneType.B:
+                    // 3 columns, only check front-most for emptiness
+                    if (!ColumnIsEmpty(2))
+                    {
+                        monsterList.AddRange(GetLiveMonstersFromCol(2));
+                        monsterList.AddRange(GetLiveMonstersFromCol(1));
+                    }
+                    else
+                    {
+                        monsterList.AddRange(GetLiveMonstersFromCol(1));
+                        monsterList.AddRange(GetLiveMonstersFromCol(0));
+                    }
+                    break;
+                case SceneType.C:
+                    // Only one column
+                    monsterList.AddRange(GetLiveMonstersFromCol(0));
+                    break;
             }
-            else if (!ColumnIsEmpty(2))
-            {
-                // Col 2 and 1 are front
-                foreach (Monster m in monsterSlots[2])
-                    if (m != null)
-                        monsterList.Add(m);
 
-                foreach (Monster m in monsterSlots[1])
-                    if (m != null)
-                        monsterList.Add(m);
-            }
-            else
-            {
-                // Col 1 and 0 are front
-                foreach (Monster m in monsterSlots[1])
-                    if (m != null)
-                        monsterList.Add(m);
-
-                foreach (Monster m in monsterSlots[0])
-                    if (m != null)
-                        monsterList.Add(m);
-            }
-
-            if (monsterList.Count == 0)
-                return null;
-
+            // Roll a random monster from the list and return it
             int slotRoll = rnd.Next(0, monsterList.Count);
             return monsterList[slotRoll];
         }
 
-
-        public void UpdateSceneText(int sceneNum)
+    
+        /// <summary>
+        /// Iterate through all monsters and build the display text based on their current stats
+        /// TODO: Try to only call this when monsters in this scene take/heal damage
+        /// </summary>
+        public void UpdateSceneText()
         {
-            // TODO: Try to only call this when monsters in this scene take/heal damage
-            
             string displayText = "";
-            foreach (Monster monster in GetAllTargets())
+            foreach (Monster monster in GetAllMonsters())
             {
-                // TODO: Spacing
-                if (monster.IsDead()) displayText += "{{Red}}";
+                // Set line color based on Monster's current HP. Red = dead, Yellow = half or less.
+                if (monster.IsDead())
+                    displayText += "{{Red}}";
+                else if (monster.IsCritical())
+                    displayText += "{{White}}";
                 else
-                    displayText += monster.HPMax / monster.HP < 2 ? "{{White}}" : "{{Yellow}}";
+                    displayText += "{{Yellow}}";
 
                 displayText += monster.Name.PadRight(9) + " - ";
                 displayText += monster.HP.ToString().PadLeft(6) + " - ";
@@ -396,23 +415,45 @@ namespace FF2_Monster_Sim
         // Helpers //
         /////////////
 
-        private bool MonsterIsBackRow(Monster monster)
+        private Monster[] GetLiveMonstersFromCol(int col)
         {
-            // Columns 3 and 4 are always front row
-            // If another column is found, check 2-3 columns ahead of it for emptiness
-            Debug.WriteLine("Monsterisbackrow");
-            int col = GetMonsterColumn(monster);
-            Debug.WriteLine("col: " + col);
-
-            if (col == 3 || col == 2)
-                return false;
-            if (col == 1 && ColumnIsEmpty(3))
-                return false;
-            if (col == 1 && ColumnIsEmpty(3) && ColumnIsEmpty(2))
-                return false;
-            return true;
+            List<Monster> monList = new List<Monster>();
+            foreach (Monster m in monsterSlots[col])
+                if (m != null)
+                    if (m.IsAlive())
+                        monList.Add(m);
+            return monList.ToArray();
         }
 
+        private bool MonsterIsBackRow(Monster monster)
+        {
+            int col = GetMonsterColumn(monster);
+
+            // Col 2 and 3 cannot be back rows
+            if (col == 2 || col == 3)
+                return false;
+            
+            // Check columns 2+ ahead of monster for emptiness
+            switch (sceneType)
+            {
+                case SceneType.A:
+                    if (col == 1)
+                        return !ColumnIsEmpty(3);
+                    return !ColumnIsEmpty(3) || !ColumnIsEmpty(2);
+                case SceneType.B:
+                    // Three rows max, only check column 1
+                    return ColumnIsEmpty(1);
+                case SceneType.C:
+                    // Since there's only one slot, it cannot be a back row
+                    return false;
+            }
+
+            throw new Exception("Uncaught sceneType: " + sceneType);
+        }
+
+        /// <summary>
+        /// Return the column number a given monster is in
+        /// </summary>
         private int GetMonsterColumn(Monster monster)
         {
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
@@ -432,7 +473,7 @@ namespace FF2_Monster_Sim
                 return true;
 
             foreach (Monster m in monsterSlots[col])
-                if (m != null)
+                if (m.IsAlive())
                     return false;
 
             return true;
