@@ -22,7 +22,7 @@ namespace FF2_Monster_Sim
         private int turn = 0, round = 0;
         private Thread combatThread;
         // private int gameTick = 150, teardownTick = 100;
-        private int gameTick = 5, teardownTick = 1;
+        private int gameTick = 150, teardownTick = 100;
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -148,6 +148,8 @@ namespace FF2_Monster_Sim
                 Exit();
 
             // TODO: Add your update logic here
+            sceneOne.UpdateSceneText(1);
+            sceneTwo.UpdateSceneText(2);
 
             base.Update(gameTime);
         }

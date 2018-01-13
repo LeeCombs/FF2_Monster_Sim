@@ -361,6 +361,19 @@ namespace FF2_Monster_Sim
             int slotRoll = rnd.Next(0, monsterList.Count);
             return monsterList[slotRoll];
         }
+
+        public void UpdateSceneText(int sceneNum)
+        {
+            string displayText = "";
+            foreach (Monster monster in GetAllTargets())
+            {
+                // TODO: Spacing
+                displayText += monster.Name.PadRight(9) + " - ";
+                displayText += monster.HP.ToString().PadLeft(5) + " - ";
+                displayText += monster.MP.ToString().PadLeft(5) + "\n";
+            }
+            TextManager.SetSceneText(sceneNum, displayText);
+        }
         
         /////////////
         // Helpers //

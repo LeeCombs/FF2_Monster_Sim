@@ -99,6 +99,14 @@ namespace FF2_Monster_Sim
             textboxStack.Clear();
         }
 
+        public static void SetSceneText(int sceneNum, string str)
+        {
+            if (sceneNum == 1)
+                sceneOneText = str;
+            else
+                sceneTwoText = str;
+        }
+
         public static void SetActorText(string text)
         {
             if (string.IsNullOrEmpty(text))
