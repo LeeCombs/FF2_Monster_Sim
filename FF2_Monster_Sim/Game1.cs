@@ -97,10 +97,8 @@ namespace FF2_Monster_Sim
             sceneOne.PopulateScene(sceneOneMonsters);
 
             List<Monster> sceneTwoMonsters = new List<Monster>();
-            List<string> monNames = new List<string> { "Molbor", "Molbor", "Worm", "Worm", "DthRider", "DthRider" };
-            // foreach (string name in MonsterManager.GenerateMonsterList("B"))
-            foreach (string name in monNames)
-                {
+            foreach (string name in MonsterManager.GenerateMonsterList("B"))
+            {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
                     continue;

@@ -464,10 +464,14 @@ namespace FF2_Monster_Sim
         public void Kill()
         {
             HP = 0;
+            
+            // TODO: Animation
+        }
 
+        public void Remove()
+        {
             if (scene != null)
                 scene.RemoveMonster(this);
-            // TODO: Animation
         }
 
         public bool IsDead()

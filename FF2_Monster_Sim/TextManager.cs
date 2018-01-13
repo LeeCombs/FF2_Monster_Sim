@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,8 +80,95 @@ namespace FF2_Monster_Sim
             targetBox.Draw(spriteBatch);
             dmgBox.Draw(spriteBatch);
             resultsBox.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFont, sceneOneText, new Vector2(14, 444), Color.White);
-            spriteBatch.DrawString(spriteFont, sceneTwoText, new Vector2(662, 444), Color.White);
+
+            // Split scene text on new lines. For each line, split text based on "{{", then "}}"
+            // to apply color values based on strings within brackets
+            // i.e. "{{White}}Hello, {{Red}}World", would display "Hello," as white text, and "World" as red
+
+            // SceneOne
+            // TODO: Make below a method
+
+            int newlineOffset = 0;
+            string[] newLineSplit = sceneOneText.Split(new string[] { "\n" }, StringSplitOptions.None);
+            for (int i = 0; i < newLineSplit.Length; i++)
+            {
+                string[] stringSplit = newLineSplit[i].Split(new string[] { "{{" }, StringSplitOptions.None);
+
+                foreach (string strn in stringSplit)
+                    Debug.WriteLine(strn);
+
+                foreach (string str in stringSplit)
+                {
+
+                    // Ignore empty splits
+                    if (string.IsNullOrEmpty(str))
+                        continue;
+
+                    // Split the string on "}}", use the [0] value for the color, and apply it to the [1] text
+                    string[] nestedSplit = str.Split(new string[] { "}}" }, StringSplitOptions.None);
+
+                    Color color = Color.White;
+                    switch (nestedSplit[0].ToUpper())
+                    {
+                        case "WHITE":
+                            color = Color.White;
+                            break;
+                        case "YELLOW":
+                            color = Color.Yellow;
+                            break;
+                        case "RED":
+                            color = Color.Red;
+                            break;
+                        default:
+                            Debug.WriteLine("Unsupported color: " + nestedSplit[0]);
+                            break;
+                    }
+                    spriteBatch.DrawString(spriteFont, nestedSplit[1], new Vector2(14, 444 + newlineOffset), color);
+                    newlineOffset += 18;
+                }
+            }
+
+            // SceneTwo
+            newlineOffset = 0;
+            newLineSplit = sceneTwoText.Split(new string[] { "\n" }, StringSplitOptions.None);
+            for (int i = 0; i < newLineSplit.Length; i++)
+            {
+                string[] stringSplit = newLineSplit[i].Split(new string[] { "{{" }, StringSplitOptions.None);
+
+                foreach (string strn in stringSplit)
+                    Debug.WriteLine(strn);
+
+                foreach (string str in stringSplit)
+                {
+
+                    // Ignore empty splits
+                    if (string.IsNullOrEmpty(str))
+                        continue;
+
+                    // Split the string on "}}", use the [0] value for the color, and apply it to the [1] text
+                    string[] nestedSplit = str.Split(new string[] { "}}" }, StringSplitOptions.None);
+
+                    Color color = Color.White;
+                    switch (nestedSplit[0].ToUpper())
+                    {
+                        case "WHITE":
+                            color = Color.White;
+                            break;
+                        case "YELLOW":
+                            color = Color.Yellow;
+                            break;
+                        case "RED":
+                            color = Color.Red;
+                            break;
+                        default:
+                            Debug.WriteLine("Unsupported color: " + nestedSplit[0]);
+                            break;
+                    }
+                    spriteBatch.DrawString(spriteFont, nestedSplit[1], new Vector2(662, 444 + newlineOffset), color);
+                    newlineOffset += 18;
+                }
+            }
+            //
         }
 
         /////////////

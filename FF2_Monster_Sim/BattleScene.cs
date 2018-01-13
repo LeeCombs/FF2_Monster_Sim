@@ -147,7 +147,7 @@ namespace FF2_Monster_Sim
             {
                 foreach (Monster m in entry.Value)
                 {
-                    if (m == null)
+                    if (m == null || m.IsDead())
                         continue;
 
                     m.Draw(spriteBatch);
@@ -372,15 +372,22 @@ namespace FF2_Monster_Sim
             return monsterList[slotRoll];
         }
 
+
         public void UpdateSceneText(int sceneNum)
         {
+            // TODO: Try to only call this when monsters in this scene take/heal damage
+            
             string displayText = "";
             foreach (Monster monster in GetAllTargets())
             {
                 // TODO: Spacing
+                if (monster.IsDead()) displayText += "{{Red}}";
+                else
+                    displayText += monster.HPMax / monster.HP < 2 ? "{{White}}" : "{{Yellow}}";
+
                 displayText += monster.Name.PadRight(9) + " - ";
-                displayText += monster.HP.ToString().PadLeft(5) + " - ";
-                displayText += monster.MP.ToString().PadLeft(5) + "\n";
+                displayText += monster.HP.ToString().PadLeft(6) + " - ";
+                displayText += monster.MP.ToString().PadLeft(6) + "\n";
             }
             TextManager.SetSceneText(sceneNum, displayText);
         }
