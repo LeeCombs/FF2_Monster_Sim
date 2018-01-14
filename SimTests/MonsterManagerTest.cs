@@ -78,6 +78,8 @@ namespace SimTests
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 Assert.IsNotNull(monster.Name);
 
+                // TODO: Ensure graphics exist for each monster
+
                 // Size
                 Assert.IsTrue(validSizes.Contains(monster.size.ToUpper()));
 
@@ -99,6 +101,12 @@ namespace SimTests
                 // Action list exists and is the right length
                 Assert.IsNotNull(monster.ActionList);
                 Assert.AreEqual(8, monster.ActionList.Count);
+
+                // TODO: Ensure the actions in the ActionList are valid
+                // Attack or valid spell name
+                // Level within range
+                // Power, Accuracy, MpConsumption >= 0
+                // Target string is valid
 
                 // Everything else is not null
                 Assert.IsNotNull(monster.AttackEffects);
