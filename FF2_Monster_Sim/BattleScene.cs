@@ -73,7 +73,7 @@ namespace FF2_Monster_Sim
          * If they choose to attack, they simply do "Nothing"
          */
 
-        private SceneType sceneType;
+        public SceneType SceneType { get; private set; }
         private int sceneNum;
         private Random rnd;
         private int width = 300, height = 200;
@@ -97,7 +97,7 @@ namespace FF2_Monster_Sim
             switch(type)
             {
                 case "A": // 4 x 2 Slots
-                    sceneType = SceneType.A;
+                    SceneType = SceneType.A;
                     for (int i = 0; i < 4; i++)
                     {
                         Monster[] monsters = { null, null };
@@ -108,7 +108,7 @@ namespace FF2_Monster_Sim
                     }
                     break;
                 case "B": // 3 x 2 Slots
-                    sceneType = SceneType.B;
+                    SceneType = SceneType.B;
                     for (int i = 0; i < 3; i++)
                     {
                         Monster[] monsters = { null, null };
@@ -119,7 +119,7 @@ namespace FF2_Monster_Sim
                     }
                     break;
                 case "C": // Only one slot
-                    sceneType = SceneType.C;
+                    SceneType = SceneType.C;
                     monsterSlots[0] = new Monster[]{ null };
                     slotPositions[0] = new Vector2[]{ new Vector2(X, Y) };
                     break;
@@ -342,7 +342,7 @@ namespace FF2_Monster_Sim
             // Build a list of viable targets based on which two rows are front rows
             List<Monster> monsterList = new List<Monster>();
 
-            switch (sceneType)
+            switch (SceneType)
             {
                 case SceneType.A:
                     // 4 columns, check front two for emptiness
@@ -434,7 +434,7 @@ namespace FF2_Monster_Sim
                 return false;
             
             // Check columns 2+ ahead of monster for emptiness
-            switch (sceneType)
+            switch (SceneType)
             {
                 case SceneType.A:
                     if (col == 1)
@@ -448,7 +448,7 @@ namespace FF2_Monster_Sim
                     return false;
             }
 
-            throw new Exception("Uncaught sceneType: " + sceneType);
+            throw new Exception("Uncaught sceneType: " + SceneType);
         }
 
         /// <summary>

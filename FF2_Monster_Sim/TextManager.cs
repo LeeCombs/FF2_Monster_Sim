@@ -19,8 +19,8 @@ namespace FF2_Monster_Sim
 
         private static Stack<Textbox> textboxStack;
         
-        private static string sceneOneText;
-        private static string sceneTwoText;
+        private static string sceneOneText, sceneTwoText;
+        private static string roundText, turnText;
 
         private static SpriteFont spriteFont;
         
@@ -38,6 +38,8 @@ namespace FF2_Monster_Sim
             resultsBox = new Textbox();
             textboxes = new Textbox[]{ actorBox, hitsBox, targetBox, dmgBox, resultsBox };
             textboxStack = new Stack<Textbox>();
+            turnText = "Turn: 0";
+            roundText = "Round: 0";
 
             // Setup positioning
             X = x;
@@ -70,6 +72,9 @@ namespace FF2_Monster_Sim
             dmgBox.Draw(spriteBatch);
             resultsBox.Draw(spriteBatch);
 
+            spriteBatch.DrawString(spriteFont, roundText, new Vector2(0, 65), Color.White);
+            spriteBatch.DrawString(spriteFont, turnText, new Vector2(0, 80), Color.White);
+
             ParseDrawSceneText(sceneOneText, 14, 444, spriteBatch);
             ParseDrawSceneText(sceneTwoText, 662, 444, spriteBatch);
         }
@@ -85,8 +90,9 @@ namespace FF2_Monster_Sim
         {
             foreach (Textbox box in textboxes)
                 TearDownTextBox(box);
-            sceneOneText = "";
-            sceneTwoText = "";
+            sceneOneText = sceneTwoText = "";
+            roundText = "Round: 0";
+            turnText = "Turn: 0";
             textboxStack.Clear();
         }
 
@@ -132,7 +138,17 @@ namespace FF2_Monster_Sim
                 throw new ArgumentException("Invalid results string supplied");
             SetTextBox(resultsBox, text);
         }
-        
+
+        public static void SetRoundText(int round)
+        {
+            roundText = "Round: " + round.ToString();
+        }
+
+        public static void SetTurnText(int turn)
+        {
+            turnText = "Turn: " + turn.ToString();
+        }
+
         /// <summary>
         /// Removes and hides the results textbox
         /// </summary>

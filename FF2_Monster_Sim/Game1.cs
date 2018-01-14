@@ -22,7 +22,7 @@ namespace FF2_Monster_Sim
         private int turn = 0, round = 0;
         private Thread combatThread;
         // private int gameTick = 150, teardownTick = 100;
-        private int gameTick = 150, teardownTick = 100;
+        private int gameTick = 10, teardownTick = 10;
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -84,7 +84,9 @@ namespace FF2_Monster_Sim
             // Or, should monsters be generated and supplied to the scene as it is currently?
 
             List<Monster> sceneOneMonsters = new List<Monster>();
-            foreach (string name in MonsterManager.GenerateMonsterList("A"))
+            string[] monANames = new string[] { "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker" };
+            //foreach (string name in MonsterManager.GenerateMonsterList("A"))
+            foreach (string name in monANames)
             {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
@@ -184,18 +186,24 @@ namespace FF2_Monster_Sim
             // TODO: Sanity check. Ensure that battles don't run on forever. Enforce a round limit
             // Perhaps 100-200? If monsters heal their targets more than they can damage, gotta stop it.
 
-            SoundManager.PlayBattleMusic();
+            if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
+                SoundManager.PlayBossMusic();
+            else
+                SoundManager.PlayBattleMusic();
             Thread.Sleep(2000);
 
             while (true)
             {
+                // Update and display round number
                 round++;
-                Debug.WriteLine("Round: " + round);
+                TextManager.SetRoundText(round);
+
                 turn = 0;
                 foreach (Action action in GetSortedActionArray())
                 {
+                    // Update and display turn number
                     turn++;
-                    Debug.WriteLine("\nTurn: " + turn);
+                    TextManager.SetTurnText(turn);
 
                     // If an actor was killed before it's turn, ignore the turn
                     if (action.Actor == null || action.Actor.IsDead())

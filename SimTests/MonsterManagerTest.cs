@@ -110,10 +110,19 @@ namespace SimTests
 
                 // Everything else is not null
                 Assert.IsNotNull(monster.AttackEffects);
+                // TODO: Ensure each attack effect is valid
+
                 Assert.IsNotNull(monster.Families);
+                // TODO: Ensure each family is valid
+
                 Assert.IsNotNull(monster.Weaknesses);
+                // TODO: Ensure each weakness is valid
+
                 Assert.IsNotNull(monster.Resistances);
+                // TODO: Ensure each resistance is valid
+
                 Assert.IsNotNull(monster.Absorbs);
+                // TODO: Ensure each absorb is valid
             }
         }
 

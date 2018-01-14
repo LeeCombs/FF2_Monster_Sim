@@ -1379,7 +1379,7 @@
    "absorb": [],
    "weak": ["Ice"],
    "attackList": [{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"}],
-   "attackEffect": ["Drain MP"],
+   "attackEffect": ["Drain HP"],
    "size": "Small"
  },
  {
@@ -2751,8 +2751,8 @@
    "weak": [],
    "attackList": [
     {"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
-	{"name":"Blast","level":10,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},
-	{"name":"Blast","level":10,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},
+	{"name":"BLASTR","level":10,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},
+	{"name":"BLASTR","level":10,"accuracy":80,"mpConsumption":0,"target":"EnemyParty"},
 	{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
 	{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},
 	{"name":"Attack","level":0,"accuracy":0,"mpConsumption":0,"target":"SingleTarget"},

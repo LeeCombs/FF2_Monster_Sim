@@ -132,55 +132,54 @@ namespace FF2_Monster_Sim
                 }
             }
 
+            // Apply HP and MP drain effects based on totalHits
+            // TODO: Figure out about message returns
+            if (actor.AttackEffects.Contains("Drain HP"))
+            {
+                int hpAmt = target.HPMax / 16;
+                int dranAmt = hpAmt * totalHits;
+
+                // Opposite effect vs. Undead
+                if (target.Families.Contains(MonsterFamily.Undead))
+                {
+                    actor.DamageHP(dranAmt);
+                    target.HealHP(dranAmt);
+                }
+                else
+                {
+                    actor.HealHP(dranAmt);
+                    target.DamageHP(dranAmt);
+                }
+            }
+
+            // TODO: Figure out about message returns
+            if (actor.AttackEffects.Contains("Drain MP"))
+            {
+                int mpAmt = target.MPMax / 16;
+                int asplAmt = mpAmt * totalHits;
+
+                // Opposite effect vs. Undead
+                if (target.Families.Contains(MonsterFamily.Undead))
+                {
+                    actor.DamageMP(asplAmt);
+                    target.HealMP(asplAmt);
+                }
+                else
+                {
+                    actor.HealMP(asplAmt);
+                    target.DamageMP(asplAmt);
+                }
+            }
+
+            // Apply actor's attack effect(s), if any, to the target
             if (actor.AttackEffects.Count > 0)
             {
+                // Target rolls magic blocks against totalHits. If any hit makes it through, apply all status effects
                 int statusHits = totalHits - target.RollMagicBlocks();
                 if (statusHits > 0)
                 {
-                    // Apply attack effects to the target
                     foreach (string effect in actor.AttackEffects)
                     {
-                        // TODO: Figure out about message returns
-                        if (string.Equals(effect, "Drain HP"))
-                        {
-                            int hpAmt = target.HPMax / 16;
-                            int dranAmt = hpAmt * statusHits;
-
-                            // Opposite effect vs. Undead
-                            if (target.Families.Contains(MonsterFamily.Undead))
-                            {
-                                actor.DamageHP(dranAmt);
-                                target.HealHP(dranAmt);
-                            }
-                            else
-                            {
-                                actor.HealHP(dranAmt);
-                                target.DamageHP(dranAmt);
-                            }
-                            break;
-                        }
-
-                        // TODO: Figure out about message returns
-                        if (string.Equals(effect, "Drain MP"))
-                        {
-                            int mpAmt = target.MPMax / 16;
-                            int asplAmt = mpAmt * statusHits;
-
-                            // Opposite effect vs. Undead
-                            if (target.Families.Contains(MonsterFamily.Undead))
-                            {
-                                actor.DamageMP(asplAmt);
-                                target.HealMP(asplAmt);
-                            }
-                            else
-                            {
-                                actor.HealMP(asplAmt);
-                                target.DamageMP(asplAmt);
-                            }
-                            break;
-                        }
-
-                        // Apply all status effects to the target
                         if (Enum.TryParse<PermStatus>(effect, out PermStatus permStat))
                         {
                             target.AddPermStatus(permStat);
@@ -195,8 +194,8 @@ namespace FF2_Monster_Sim
                             continue;
                         }
                     }
-                } // End statusHits > 0
-            } // End attackEffects.Count > 0
+                } 
+            }
 
             // Apply the damage and return the overall results
             target.DamageHP(damage);

@@ -127,8 +127,8 @@ namespace FF2_Monster_Sim
                 throw new ArgumentNullException("Invalid target provided");
             if (spell == null)
                 throw new ArgumentNullException("Invalid spell provided");
-            if (level <= 0 || level > 16)
-                throw new ArgumentOutOfRangeException("Level out of range. Must be 1-16. Found: " + level);
+            if (level < 0 || level > 16)
+                throw new ArgumentOutOfRangeException("Level out of range. Must be 0-16. Found: " + level);
 
             Debug.WriteLine("Casting spell: " + spell.Name + " " + level);
 
