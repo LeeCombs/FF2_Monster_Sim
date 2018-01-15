@@ -681,7 +681,8 @@ namespace FF2_Monster_Sim
         {
             if (tempStatus == TempStatus.Mini)
             {
-                // TODO: Mini should kill the monster after it's added
+                // Animation
+                Kill();
             }
             return TempStatuses.Add(tempStatus);
         }
@@ -709,7 +710,8 @@ namespace FF2_Monster_Sim
         {
             if (permStatus == PermStatus.KO || permStatus == PermStatus.Stone || permStatus == PermStatus.Toad)
             {
-                // TODO: KO, Stone, and Toad should kill the monster after it's added
+                // Animation
+                Kill();
             }
             return PermStatuses.Add(permStatus);
         }

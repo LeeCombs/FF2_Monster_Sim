@@ -22,7 +22,7 @@ namespace FF2_Monster_Sim
         private int turn = 0, round = 0;
         private Thread combatThread;
         // private int gameTick = 150, teardownTick = 100;
-        private int gameTick = 10, teardownTick = 10;
+        private int gameTick = 150, teardownTick = 100;
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -84,7 +84,8 @@ namespace FF2_Monster_Sim
             // Or, should monsters be generated and supplied to the scene as it is currently?
 
             List<Monster> sceneOneMonsters = new List<Monster>();
-            string[] monANames = new string[] { "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker" };
+            // string[] monANames = new string[] { "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker" };
+            string[] monANames = new string[] { "Bomb", "Bomb", "Mine", "Mine", "Grenade", "Grenade", "Balloon", "Balloon" };
             //foreach (string name in MonsterManager.GenerateMonsterList("A"))
             foreach (string name in monANames)
             {
@@ -99,7 +100,9 @@ namespace FF2_Monster_Sim
             sceneOne.PopulateScene(sceneOneMonsters);
 
             List<Monster> sceneTwoMonsters = new List<Monster>();
-            foreach (string name in MonsterManager.GenerateMonsterList("B"))
+            string[] monBNames = new string[] { "Wizard", "Wizard", "Wizard", "Wizard", "Wizard", "Wizard" };
+            // foreach (string name in MonsterManager.GenerateMonsterList("B"))
+            foreach (string name in monBNames)
             {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)

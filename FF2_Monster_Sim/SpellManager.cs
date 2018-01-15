@@ -444,12 +444,21 @@ namespace FF2_Monster_Sim
 
                             break;
                         case "BLAST":
-                            // Bomb's Explosion Spell. It's kinda dumb...
-                            // Fails if HP is full. Acts like a physical attack...
-                            // Deals ((20...40) - Defense) * level
+                            // Bomb's Explosion Spell
+                            // Fails if HP is full, otherwise kills the caster
+                            // Deals damage like a physical attack
                             if (caster.HP == caster.HPMax)
                                 return failedResult;
-                            break;
+
+                            int blastSum = 0;
+                            for (int i = 0; i < level; i++)
+                            {
+                                int blastRoll = rnd.Next(20, 42) - target.Defense;
+                                blastSum += blastRoll > 0 ? blastRoll : 0;
+                            }
+                            
+                            caster.Kill();
+                            return HandleDamageSpellResult(target, blastSum);
                     }
                     break;
                 // The below are currently unused
