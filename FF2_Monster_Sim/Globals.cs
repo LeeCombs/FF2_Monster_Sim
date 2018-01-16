@@ -9,5 +9,6 @@ namespace FF2_Monster_Sim
     public static class Globals
     {
         public static bool BUG_FIXES = false;
+        public static Random rnd = new Random();
     }
 }

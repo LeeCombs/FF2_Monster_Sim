@@ -14,7 +14,6 @@ namespace FF2_Monster_Sim
         private static int TALL_CHANCE = 10;
 
         private static dynamic monsterData;
-        private static Random rnd;
 
         public static List<string> MonsterNames;
         private static List<string> smallMonsterNames;
@@ -33,7 +32,6 @@ namespace FF2_Monster_Sim
             mediumMonsterNames = new List<string>();
             tallMonsterNames = new List<string>();
             largeMonsterNames = new List<string>();
-            rnd = new Random();
         }
 
         public static void LoadContent()
@@ -127,7 +125,7 @@ namespace FF2_Monster_Sim
                     // Generate a list with 8 small monsters
                     for (int i = 0; i < 8; i++)
                     {
-                        roll = rnd.Next(smallMonsterNames.Count);
+                        roll = Globals.rnd.Next(smallMonsterNames.Count);
                         nameList.Add(smallMonsterNames[roll]);
                     }
                     break;
@@ -136,18 +134,18 @@ namespace FF2_Monster_Sim
                     // Per slot, add one tall enemy or two mediums
                     for (int i = 0; i < 3; i++)
                     {
-                        if (rnd.Next(100) < TALL_CHANCE)
-                            nameList.Add(tallMonsterNames[rnd.Next(tallMonsterNames.Count)]);
+                        if (Globals.rnd.Next(100) < TALL_CHANCE)
+                            nameList.Add(tallMonsterNames[Globals.rnd.Next(tallMonsterNames.Count)]);
                         else
                         { 
-                            nameList.Add(mediumMonsterNames[rnd.Next(mediumMonsterNames.Count)]);
-                            nameList.Add(mediumMonsterNames[rnd.Next(mediumMonsterNames.Count)]);
+                            nameList.Add(mediumMonsterNames[Globals.rnd.Next(mediumMonsterNames.Count)]);
+                            nameList.Add(mediumMonsterNames[Globals.rnd.Next(mediumMonsterNames.Count)]);
                         }
                     }
                     break;
                 case "C":
                     // Grab a single large enemy
-                    roll = rnd.Next(largeMonsterNames.Count);
+                    roll = Globals.rnd.Next(largeMonsterNames.Count);
                     nameList.Add(largeMonsterNames[roll]);
                     break;
                 default:

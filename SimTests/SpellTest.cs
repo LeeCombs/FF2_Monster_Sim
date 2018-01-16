@@ -181,7 +181,7 @@ namespace SimTests
         // Status Spells //
         ///////////////////
 
-        // Temp: SLEP, STON, STOP, CHRM, MUTE, MINI, Wink, Blast_2
+        // Temp: SLEP, STON, STOP, CHRM, MUTE, MINI, Wink, BLASTR
         // Perm: BLND, CURS, FOG, TOAD, BRAK, WARP, EXIT, Breath, Glare, DETH
 
         [TestMethod]
@@ -199,7 +199,7 @@ namespace SimTests
             }
 
             // Special case. Blast_2 is the only non-elemental status spell.
-            Spell blastSpell = SpellManager.GetSpellByName("Blast_2");
+            Spell blastSpell = SpellManager.GetSpellByName("BLASTR");
             Assert.IsFalse(IsAbsorbed(blastSpell));
             Assert.IsFalse(StatusIsResisted(blastSpell));
             Assert.IsFalse(StatusAutoHits(blastSpell));

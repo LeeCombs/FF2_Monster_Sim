@@ -46,7 +46,6 @@ namespace FF2_Monster_Sim
 
     public class SpellManager
     {
-        private static Random rnd;
         private static dynamic spellData;
 
         // Generic messages
@@ -63,7 +62,7 @@ namespace FF2_Monster_Sim
         
         public static void Initialize()
         {
-            rnd = new Random();
+            //
         }
 
         public static void LoadContent()
@@ -135,13 +134,10 @@ namespace FF2_Monster_Sim
             // Helpers
             SpellResult failedResult = new SpellResult(new List<string> { FAILED_SPELL_MESSAGE });
             SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.SuccessMessage });
-
-            // If wall is high enough, the spell fails outright
+            
+            // If target's wall is high enough, the spell fails outright
             if (level <= target.GetBuffStacks(Buff.Wall))
-            {
-                Debug.WriteLine("Wall stacks exceed spell level");
                 return failedResult;
-            }
 
             // Reduce accuracy and power if multi-targetting
             int adjustedAccuracy = spell.Accuracy;
@@ -485,7 +481,7 @@ namespace FF2_Monster_Sim
         {
             int successes = 0;
             for (int i = 0; i < rolls; i++)
-                if (rnd.Next(0, 100) < accuracy)
+                if (Globals.rnd.Next(0, 100) < accuracy)
                     successes++;
             return successes;
         }
@@ -505,7 +501,7 @@ namespace FF2_Monster_Sim
         {
             int sum = 0;
             for (int i = 0 ; i < hits ; i++)
-                sum += rnd.Next(power, 2 * power + 1);
+                sum += Globals.rnd.Next(power, 2 * power + 1);
             return sum;
         }
 
