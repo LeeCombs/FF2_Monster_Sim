@@ -59,7 +59,7 @@ namespace FF2_Monster_Sim
             TextManager.Initialize(360, 413);
 
             sceneOne = new BattleScene(1, 50, 139);
-            sceneTwo = new BattleScene(2, 665, 139, "B", true);
+            sceneTwo = new BattleScene(2, 665, 139, true);
 
             combatThread = new Thread(CombatLoop);
 
@@ -80,39 +80,10 @@ namespace FF2_Monster_Sim
             SpellManager.LoadContent();
             SoundManager.LoadContent(Content);
             
-            // TODO: Loading monsters should be handled by the scene itself?
-            // Or, should monsters be generated and supplied to the scene as it is currently?
-
-            List<Monster> sceneOneMonsters = new List<Monster>();
-            // string[] monANames = new string[] { "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker" };
-            // foreach (string name in monANames)
-            foreach (string name in MonsterManager.GenerateMonsterList("A"))
-            {
-                Monster monster = MonsterManager.GetMonsterByName(name);
-                if (monster == null)
-                    continue;
-
-                monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name));
-                monster.scene = sceneOne;
-                sceneOneMonsters.Add(monster);
-            }
-            sceneOne.PopulateScene(sceneOneMonsters);
-
-            List<Monster> sceneTwoMonsters = new List<Monster>();
-            string[] monBNames = new string[] { "Emperor_1", "Emperor_1" };
-            // foreach (string name in MonsterManager.GenerateMonsterList("B"))
-            foreach (string name in monBNames)
-            {
-                Monster monster = MonsterManager.GetMonsterByName(name);
-                if (monster == null)
-                    continue;
-
-                monster.Initialize(Content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), true);
-                monster.scene = sceneTwo;
-                sceneTwoMonsters.Add(monster);
-            }
-            sceneTwo.PopulateScene(sceneTwoMonsters);
-
+            // Populate the scenes with random monsters
+            sceneOne.PopulateScene(SceneType.A, MonsterManager.GenerateMonsterList("A"), Content);
+            sceneTwo.PopulateScene(SceneType.C, MonsterManager.GenerateMonsterList("C"), Content);
+            
             // Graphics
             gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");
             font = Content.Load<SpriteFont>("Graphics/Font");

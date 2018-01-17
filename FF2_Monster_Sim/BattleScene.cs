@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace FF2_Monster_Sim
@@ -63,7 +64,7 @@ namespace FF2_Monster_Sim
          * |       L       |
          * |               |
          * +---------------+
-         * 
+         *
          * For columns (a, b, c, d)
          * Only front two columns (c,d) can be targetted by and use physical attacks
          * If column d is removed, then (b,c), etc.
@@ -74,27 +75,29 @@ namespace FF2_Monster_Sim
          */
 
         public SceneType SceneType { get; private set; }
+        public bool Flipped = false;
         private int sceneNum;
-        private int width = 300, height = 200;
-        private string type;
         public int X = 0, Y = 0;
         
         private Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
         private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
         
 
-        public BattleScene(int sceneNum, int x, int y, string type = "A", bool flipped = false)
+        public BattleScene(int sceneNum, int x, int y, bool flipped = false)
         {
             this.sceneNum = sceneNum;
             X = x;
             Y = y;
+            Flipped = flipped;
+        }
 
-            // TODO: flipped should swap column positions
+        public void SetSceneType(SceneType sceneType)
+        {
+            // Set positions and monster slots based on sceneType, and whether the scene is flipped or not
 
-            switch(type)
+            switch (sceneType)
             {
-                case "A": // 4 x 2 Slots
-                    SceneType = SceneType.A;
+                case SceneType.A: // 4 x 2 Slots
                     for (int i = 0; i < 4; i++)
                     {
                         Monster[] monsters = { null, null };
@@ -104,8 +107,7 @@ namespace FF2_Monster_Sim
                         slotPositions[i] = positions;
                     }
                     break;
-                case "B": // 3 x 2 Slots
-                    SceneType = SceneType.B;
+                case SceneType.B: // 3 x 2 Slots
                     for (int i = 0; i < 3; i++)
                     {
                         Monster[] monsters = { null, null };
@@ -115,18 +117,16 @@ namespace FF2_Monster_Sim
                         slotPositions[i] = positions;
                     }
                     break;
-                case "C": // Only one slot
-                    SceneType = SceneType.C;
-                    monsterSlots[0] = new Monster[]{ null };
-                    slotPositions[0] = new Vector2[]{ new Vector2(X, Y) };
+                case SceneType.C: // Only one slot
+                    monsterSlots[0] = new Monster[] { null };
+                    slotPositions[0] = new Vector2[] { new Vector2(X, Y) };
                     break;
                 default:
-                    Debug.WriteLine("Scene type must be A, B, or C");
-                    return;
+                    throw new Exception("Invalid SceneType supplied: " + sceneType);
             }
-            if (flipped)
+            if (Flipped)
                 Utils.ReverseNumberedDictValues(ref slotPositions);
-            this.type = type;
+            SceneType = sceneType;
         }
 
         //////////////
@@ -161,7 +161,7 @@ namespace FF2_Monster_Sim
         // Publics //
         /////////////
 
-        public void PopulateScene(List<Monster> monsters)
+        public void PopulateScene(SceneType sceneType, List<String> monsterNames, ContentManager content)
         {
             // TODO: This needs to have some checks in place
             // Length check on monsters
@@ -170,13 +170,23 @@ namespace FF2_Monster_Sim
             // Talls must be in row 0, and will ignore the next input~
             // Maybe have unique layouts for combinations of medium/tall?
 
+            SetSceneType(sceneType);
+
             int col = 0, row = 0;
-            foreach (Monster monster in monsters)
+            foreach (string name in monsterNames)
             {
+                Monster monster = MonsterManager.GetMonsterByName(name);
+                if (monster == null)
+                    continue;
+
+                monster.Initialize(content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), Flipped);
+                monster.scene = this;
+                
                 monsterSlots[col / 2][row % 2] = monster;
                 monster.Position = slotPositions[col / 2][row % 2];
                 row++;
                 col++;
+
                 // Tall monsters skip the next slot
                 if (string.Equals(monster.size.ToUpper(), "TALL"))
                 {
