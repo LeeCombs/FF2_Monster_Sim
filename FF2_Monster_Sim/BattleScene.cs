@@ -475,8 +475,9 @@ namespace FF2_Monster_Sim
                 return true;
 
             foreach (Monster m in monsterSlots[col])
-                if (m.IsAlive())
-                    return false;
+                if (m != null)
+                    if (m.IsAlive())
+                        return false;
 
             return true;
         }

@@ -2065,7 +2065,7 @@
 	{"name":"BOLT","level":10,"accuracy":100,"mpConsumption":0,"target":"EnemyParty"},
 	{"name":"SLOW","level":9,"accuracy":95,"mpConsumption":50,"target":"EnemyParty"},
 	{"name":"HAST","level":8,"accuracy":80,"mpConsumption":10,"target":"Self"},
-	{"name":"Elixer","level":0,"accuracy":100,"mpConsumption":100,"target":"Self"},
+	{"name":"Elixir","level":0,"accuracy":100,"mpConsumption":100,"target":"Self"},
 	{"name":"BLNK","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"},
 	{"name":"BARR","level":8,"accuracy":100,"mpConsumption":100,"target":"CasterParty"}
    ],

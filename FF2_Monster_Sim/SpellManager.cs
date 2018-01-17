@@ -136,7 +136,7 @@ namespace FF2_Monster_Sim
             SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.SuccessMessage });
             
             // If target's wall is high enough, the spell fails outright
-            if (level <= target.GetBuffStacks(Buff.Wall))
+            if (target.HasBuff(Buff.Wall) && level <= target.GetBuffStacks(Buff.Wall))
                 return failedResult;
 
             // Reduce accuracy and power if multi-targetting
@@ -434,7 +434,6 @@ namespace FF2_Monster_Sim
                                 caster.MP = target.MP;
                                 target.HP = casterHP;
                                 target.MP = casterMP;
-                                // caster.MP -= MPConsumption
                                 return statusSuccessResult;
                             }
 
@@ -449,7 +448,7 @@ namespace FF2_Monster_Sim
                             int blastSum = 0;
                             for (int i = 0; i < level; i++)
                             {
-                                int blastRoll = rnd.Next(20, 42) - target.Defense;
+                                int blastRoll = Globals.rnd.Next(20, 41) - target.Defense;
                                 blastSum += blastRoll > 0 ? blastRoll : 0;
                             }
                             
@@ -457,6 +456,11 @@ namespace FF2_Monster_Sim
                             return HandleDamageSpellResult(target, blastSum);
                     }
                     break;
+                case "ItemFullRestore":
+                    // Elixir
+                    target.HealHP(target.HPMax);
+                    target.HealMP(target.MPMax);
+                    return statusSuccessResult;
                 // The below are currently unused
                 case "ItemHeal":
                 case "ItemCure":

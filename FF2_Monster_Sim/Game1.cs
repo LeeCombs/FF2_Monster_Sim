@@ -85,9 +85,8 @@ namespace FF2_Monster_Sim
 
             List<Monster> sceneOneMonsters = new List<Monster>();
             // string[] monANames = new string[] { "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker", "Sucker" };
-            string[] monANames = new string[] { "Bomb", "Bomb", "Mine", "Mine", "Grenade", "Grenade", "Balloon", "Balloon" };
-            //foreach (string name in MonsterManager.GenerateMonsterList("A"))
-            foreach (string name in monANames)
+            // foreach (string name in monANames)
+            foreach (string name in MonsterManager.GenerateMonsterList("A"))
             {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
@@ -100,7 +99,7 @@ namespace FF2_Monster_Sim
             sceneOne.PopulateScene(sceneOneMonsters);
 
             List<Monster> sceneTwoMonsters = new List<Monster>();
-            string[] monBNames = new string[] { "Wizard", "Wizard", "Wizard", "Wizard", "Wizard", "Wizard" };
+            string[] monBNames = new string[] { "Emperor_1" };
             // foreach (string name in MonsterManager.GenerateMonsterList("B"))
             foreach (string name in monBNames)
             {

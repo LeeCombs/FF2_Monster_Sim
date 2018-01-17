@@ -590,14 +590,14 @@
  {
    "name": "Elixir",
    "type": "Special",
-   "effect": "ItemHeal",
+   "effect": "ItemFullRestore",
    "power": 100,
    "accuracy": 100,
    "status": "",
    "element": "None",
    "price": 0,
    "value": 0,
-   "successMessage": ""
+   "successMessage": "ELIXER_MESSAGE"
  },
  {
    "name": "Drink",

@@ -596,6 +596,11 @@ namespace FF2_Monster_Sim
             return 0;
         }
 
+        public bool HasBuff(Buff buff)
+        {
+            return Buffs.ContainsKey(buff);
+        }
+
         /////////////
         // Debuffs //
         /////////////
@@ -663,6 +668,11 @@ namespace FF2_Monster_Sim
             if (Debuffs.TryGetValue(debuff, out int value))
                 return value % 256; // Overflow
             return 0;
+        }
+
+        public bool HasDebuff(Debuff debuff)
+        {
+            return Debuffs.ContainsKey(debuff);
         }
 
         ///////////////////
