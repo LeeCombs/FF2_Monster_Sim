@@ -75,7 +75,6 @@ namespace FF2_Monster_Sim
 
         public SceneType SceneType { get; private set; }
         private int sceneNum;
-        private Random rnd;
         private int width = 300, height = 200;
         private string type;
         public int X = 0, Y = 0;
@@ -86,8 +85,6 @@ namespace FF2_Monster_Sim
 
         public BattleScene(int sceneNum, int x, int y, string type = "A", bool flipped = false)
         {
-            rnd = new Random();
-
             this.sceneNum = sceneNum;
             X = x;
             Y = y;
@@ -229,11 +226,14 @@ namespace FF2_Monster_Sim
                 if (mon == null)
                     continue;
 
-                mon.Init = mon.Evasion += rnd.Next(0, 50);
+                // Rolls the monster's initiative and figure out it's action
+                mon.Init = mon.Evasion += Globals.rnd.Next(0, 50);
                 Action action = new Action(mon);
                 MonsterAction monAct = mon.GetAction();
 
-                if (monAct.Name == "Attack")
+                // A Monster will physically attack if it wants to, or otherwise cannot cast spells
+                // It may cast a spell as long as it has MP, even if it doesn't have enough to cast the spell
+                if (monAct.Name == "Attack" || mon.HasPermStatus(PermStatus.Amnesia) || mon.MP <= 0)
                 {
                     // If monster is in back row, it will instead return 'nothing'
                     if (MonsterIsBackRow(mon))
@@ -252,11 +252,13 @@ namespace FF2_Monster_Sim
                 else
                 {
                     // Get Spell
-                    // Spell spell = SpellManager.GetSpellByName(monAct.Name);
                     Spell spell = SpellManager.GetSpellByName(monAct.Name);
                     spell.Accuracy = monAct.Accuracy;
                     action.Spell = spell;
                     action.SpellLevel = monAct.Level;
+
+                    // Deal mp cost here, why not
+                    mon.MP -= monAct.MPCost;
 
                     switch (monAct.Target)
                     {
@@ -327,7 +329,7 @@ namespace FF2_Monster_Sim
 
             // Build a list of current monsters, choose one randomly and return it
             Monster[] activeList = GetAllLiveMonsters();
-            int slotRoll = rnd.Next(0, activeList.Length);
+            int slotRoll = Globals.rnd.Next(0, activeList.Length);
             return activeList[slotRoll];
         }
 
@@ -382,7 +384,7 @@ namespace FF2_Monster_Sim
             }
 
             // Roll a random monster from the list and return it
-            int slotRoll = rnd.Next(0, monsterList.Count);
+            int slotRoll = Globals.rnd.Next(0, monsterList.Count);
             return monsterList[slotRoll];
         }
 

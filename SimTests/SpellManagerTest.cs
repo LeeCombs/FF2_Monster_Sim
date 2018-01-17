@@ -63,7 +63,7 @@ namespace SimTests
             Assert.ThrowsException<ArgumentNullException>(() => SpellManager.CastSpell(actor, target, null, 1));
             Assert.ThrowsException<ArgumentNullException>(() => SpellManager.CastSpell(null, target, null, 1));
             Assert.ThrowsException<ArgumentNullException>(() => SpellManager.CastSpell(null, null, null, 1));
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => SpellManager.CastSpell(actor, target, spell, 0));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => SpellManager.CastSpell(actor, target, spell, -1));
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => SpellManager.CastSpell(actor, target, spell, 17));
 
             spell.Effect = "Banana";

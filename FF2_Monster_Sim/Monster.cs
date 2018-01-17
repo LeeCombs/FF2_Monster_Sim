@@ -43,7 +43,6 @@ namespace FF2_Monster_Sim
     {
         // Etc.
         public BattleScene scene;
-        private Random rnd;
         public string size = "";
 
         private const int FEAR_VALUE = 20;
@@ -98,7 +97,7 @@ namespace FF2_Monster_Sim
                 // Set MPMax if not already set
                 if (MPMax == -1)
                     MPMax = Utils.EnforceNumCap(value, 65535);
-                mp = Utils.EnforceNumCap(value, MPMax);
+                mp = Utils.EnforceNumCap(value, 0, MPMax);
             }
         }
 
@@ -266,8 +265,6 @@ namespace FF2_Monster_Sim
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new HashSet<TempStatus>();
             PermStatuses = new HashSet<PermStatus>();
-
-            rnd = new Random();
         }
 
         //////////////
@@ -362,7 +359,7 @@ namespace FF2_Monster_Sim
                 new int[] { 7, 100 }
             };
 
-            int rndRoll = rnd.Next(0, 100);
+            int rndRoll = Globals.rnd.Next(0, 100);
 
             // Iterate through the available slots and pick one with a higher roll value
             // If it's spell that cannot be cast, remove the slot and try again.
@@ -401,7 +398,7 @@ namespace FF2_Monster_Sim
         {
             int hits = 0;
             for (int i = 0; i < Hits; i++)
-                if (rnd.Next(0, 100) < Accuracy)
+                if (Globals.rnd.Next(0, 100) < Accuracy)
                     hits++;
             return hits;
         }
@@ -413,7 +410,7 @@ namespace FF2_Monster_Sim
         {
             int blocks = 0;
             for (int i = 0; i < Blocks; i++)
-                if (rnd.Next(100) < Evasion)
+                if (Globals.rnd.Next(100) < Evasion)
                     blocks++;
             return blocks;
         }
@@ -425,7 +422,7 @@ namespace FF2_Monster_Sim
         {
             int mBlocks = 0;
             for (int i = 0; i < MagicBlocks; i++)
-                if (rnd.Next(100) < MagicEvasion)
+                if (Globals.rnd.Next(100) < MagicEvasion)
                     mBlocks++;
             return mBlocks;
         }

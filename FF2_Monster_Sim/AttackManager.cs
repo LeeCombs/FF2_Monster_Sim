@@ -30,7 +30,6 @@ namespace FF2_Monster_Sim
 
     public class AttackManager
     {
-        private static Random rnd;
         private const int CRIT_RATE = 5;
         private const int AURA_BONUS = 20;
         private const string CRIT_MESSAGE = "Critical Hit!";
@@ -73,7 +72,7 @@ namespace FF2_Monster_Sim
 
         public static void Initialize()
         {
-            rnd = new Random();
+            //
         }
 
         /////////////
@@ -118,9 +117,9 @@ namespace FF2_Monster_Sim
             for (int i = 0; i < totalHits; i++)
             {
                 // Get damage and add critical bonus damage if rolled
-                int dmgRoll = rnd.Next(attackScore, attackScore * 2 + 1) - target.Defense;
+                int dmgRoll = Globals.rnd.Next(attackScore, attackScore * 2 + 1) - target.Defense;
                 damage += dmgRoll > 0 ? dmgRoll : 0;
-                if (rnd.Next(100) < CRIT_RATE)
+                if (Globals.rnd.Next(100) < CRIT_RATE)
                 {
                     damage += attackScore;
                     // Only add the crit message once
