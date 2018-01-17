@@ -99,7 +99,7 @@ namespace FF2_Monster_Sim
             sceneOne.PopulateScene(sceneOneMonsters);
 
             List<Monster> sceneTwoMonsters = new List<Monster>();
-            string[] monBNames = new string[] { "Emperor_1" };
+            string[] monBNames = new string[] { "Emperor_1", "Emperor_1" };
             // foreach (string name in MonsterManager.GenerateMonsterList("B"))
             foreach (string name in monBNames)
             {

@@ -441,10 +441,12 @@ namespace FF2_Monster_Sim
                 case SceneType.A:
                     if (col == 1)
                         return !ColumnIsEmpty(3);
-                    return !ColumnIsEmpty(3) || !ColumnIsEmpty(2);
+                    return !(ColumnIsEmpty(2) && ColumnIsEmpty(3));
                 case SceneType.B:
-                    // Three rows max, only check column 1
-                    return ColumnIsEmpty(1);
+                    // Three rows max, only check column 2
+                    if (col == 0)
+                        return !ColumnIsEmpty(2);
+                    return false;
                 case SceneType.C:
                     // Since there's only one slot, it cannot be a back row
                     return false;
