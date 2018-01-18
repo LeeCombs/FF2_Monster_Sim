@@ -81,7 +81,9 @@ namespace FF2_Monster_Sim
         
         private Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
         private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
-        
+
+        // TEMP
+        public string MonsterNames;
 
         public BattleScene(int sceneNum, int x, int y, bool flipped = false)
         {
@@ -145,7 +147,7 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots.ToArray())
             {
                 foreach (Monster m in entry.Value)
                 {
@@ -163,13 +165,7 @@ namespace FF2_Monster_Sim
 
         public void PopulateScene(SceneType sceneType, List<String> monsterNames, ContentManager content)
         {
-            // TODO: This needs to have some checks in place
-            // Length check on monsters
-            // Size checks for monsters
-            // - A must be small. B must be medium/tall. C must be large.
-            // Talls must be in row 0, and will ignore the next input~
-            // Maybe have unique layouts for combinations of medium/tall?
-
+            // Setup the scene, the populate it with the supplied monsters
             SetSceneType(sceneType);
 
             int col = 0, row = 0;
@@ -194,6 +190,8 @@ namespace FF2_Monster_Sim
                     col++;
                 }
             }
+            
+            MonsterNames = String.Join("-", monsterNames);
         }
 
         public void ClearScene()
@@ -314,7 +312,7 @@ namespace FF2_Monster_Sim
         public Monster[] GetAllMonsters()
         {
             List<Monster> activeList = new List<Monster>();
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots.ToArray())
                 foreach (Monster m in entry.Value)
                     if (m != null)
                         activeList.Add(m);

@@ -22,7 +22,7 @@ namespace FF2_Monster_Sim
         private int turn = 0, round = 0;
         private Thread combatThread;
         // private int gameTick = 150, teardownTick = 100;
-        private int gameTick = 150, teardownTick = 100;
+        private int gameTick = 1, teardownTick = 1;
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -159,130 +159,133 @@ namespace FF2_Monster_Sim
             // TODO: Sanity check. Ensure that battles don't run on forever. Enforce a round limit
             // Perhaps 100-200? If monsters heal their targets more than they can damage, gotta stop it.
 
-            if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
-                SoundManager.PlayBossMusic();
-            else
-                SoundManager.PlayBattleMusic();
-            Thread.Sleep(2000);
-
             while (true)
             {
-                // Update and display round number
-                round++;
-                TextManager.SetRoundText(round);
+                if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
+                    SoundManager.PlayBossMusic();
+                else
+                    SoundManager.PlayBattleMusic();
 
-                turn = 0;
-                foreach (Action action in GetSortedActionArray())
+                while (true)
                 {
-                    // Update and display turn number
-                    turn++;
-                    TextManager.SetTurnText(turn);
+                    // Update and display round number
+                    round++;
+                    TextManager.SetRoundText(round);
 
-                    // If an actor was killed before it's turn, ignore the turn
-                    if (action.Actor == null || action.Actor.IsDead())
-                        continue;
-
-                    foreach (Monster target in action.Targets)
+                    turn = 0;
+                    foreach (Action action in GetSortedActionArray())
                     {
-                        // Ignore invalid target and spells against the dead
-                        if (target == null)
+                        // Update and display turn number
+                        turn++;
+                        TextManager.SetTurnText(turn);
+
+                        // If an actor was killed before it's turn, ignore the turn
+                        if (action.Actor == null || action.Actor.IsDead())
                             continue;
 
-                        if (action.Spell != null && target.IsDead())
-                            continue;
-
-                        TextManager.SetActorText(action.Actor.Name);
-                        Thread.Sleep(gameTick);
-
-                        if (action.Nothing)
+                        foreach (Monster target in action.Targets)
                         {
-                            TextManager.SetResultsText("Nothing");
-                            continue;
-                        }
+                            // Ignore invalid target and spells against the dead
+                            if (target == null)
+                                continue;
 
-                        TextManager.SetTargetText(target.Name);
-                        Thread.Sleep(gameTick);
+                            if (action.Spell != null && target.IsDead())
+                                continue;
 
-                        if (action.Physical)
-                        {
-                            // Physical attacks can target the dead, but are ineffective
-                            if (target.IsDead())
+                            TextManager.SetActorText(action.Actor.Name);
+                            Thread.Sleep(gameTick);
+
+                            if (action.Nothing)
                             {
-                                TextManager.SetResultsText("Ineffective");
+                                TextManager.SetResultsText("Nothing");
                                 continue;
                             }
 
-                            // Apply the attack and display the results
-                            AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
-
-                            if (string.Equals(atkRes.DamageMessage, "Miss"))
-                            {
-                                TextManager.SetDamageText("Miss");
-                                continue;
-                            }
-
-                            TextManager.SetHitsText(atkRes.HitsMessage);
+                            TextManager.SetTargetText(target.Name);
                             Thread.Sleep(gameTick);
 
-                            TextManager.SetDamageText(atkRes.DamageMessage);
-                            Thread.Sleep(gameTick);
-
-                            // Display each result, tearing down existing results as needed
-                            for (int i = 0; i < atkRes.Results.Count; i++)
+                            if (action.Physical)
                             {
-                                string res = atkRes.Results[i];
-                                TextManager.SetResultsText(res);
-                                if (i < atkRes.Results.Count - 1)
+                                // Physical attacks can target the dead, but are ineffective
+                                if (target.IsDead())
                                 {
-                                    Thread.Sleep(gameTick * 2);
-                                    TextManager.TearDownResults();
-                                    Thread.Sleep(teardownTick);
+                                    TextManager.SetResultsText("Ineffective");
+                                    continue;
                                 }
-                            }
-                            
-                            break;
-                        }
-                        else
-                        {
-                            // Casting a spell
-                            TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
-                            Thread.Sleep(gameTick);
 
-                            // Cast the spell and display the results
-                            SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
+                                // Apply the attack and display the results
+                                AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
 
-                            if (spellRes.Damage >= 0)
-                            {
-                                TextManager.SetDamageText(spellRes.Damage.ToString());
+                                if (string.Equals(atkRes.DamageMessage, "Miss"))
+                                {
+                                    TextManager.SetDamageText("Miss");
+                                    continue;
+                                }
+
+                                TextManager.SetHitsText(atkRes.HitsMessage);
                                 Thread.Sleep(gameTick);
-                            }
 
-                            // Display each result, tearing down existing results as needed
-                            for (int i = 0; i < spellRes.Results.Count; i++)
-                            {
-                                string res = spellRes.Results[i];
-                                TextManager.SetResultsText(res);
-                                if (i < spellRes.Results.Count - 1)
+                                TextManager.SetDamageText(atkRes.DamageMessage);
+                                Thread.Sleep(gameTick);
+
+                                // Display each result, tearing down existing results as needed
+                                for (int i = 0; i < atkRes.Results.Count; i++)
                                 {
-                                    Thread.Sleep(gameTick * 2);
-                                    TextManager.TearDownResults();
-                                    Thread.Sleep(teardownTick);
+                                    string res = atkRes.Results[i];
+                                    TextManager.SetResultsText(res);
+                                    if (i < atkRes.Results.Count - 1)
+                                    {
+                                        Thread.Sleep(gameTick * 2);
+                                        TextManager.TearDownResults();
+                                        Thread.Sleep(teardownTick);
+                                    }
                                 }
-                            }
 
-                            // Tear down between each target
-                            Thread.Sleep(gameTick * 2);
-                            while (TextManager.TearDownText())
-                                Thread.Sleep(teardownTick);
+                                break;
+                            }
+                            else
+                            {
+                                // Casting a spell
+                                TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
+                                Thread.Sleep(gameTick);
+
+                                // Cast the spell and display the results
+                                SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
+
+                                if (spellRes.Damage >= 0)
+                                {
+                                    TextManager.SetDamageText(spellRes.Damage.ToString());
+                                    Thread.Sleep(gameTick);
+                                }
+
+                                // Display each result, tearing down existing results as needed
+                                for (int i = 0; i < spellRes.Results.Count; i++)
+                                {
+                                    string res = spellRes.Results[i];
+                                    TextManager.SetResultsText(res);
+                                    if (i < spellRes.Results.Count - 1)
+                                    {
+                                        Thread.Sleep(gameTick * 2);
+                                        TextManager.TearDownResults();
+                                        Thread.Sleep(teardownTick);
+                                    }
+                                }
+
+                                // Tear down between each target
+                                Thread.Sleep(gameTick * 2);
+                                while (TextManager.TearDownText())
+                                    Thread.Sleep(teardownTick);
+                            }
                         }
+                        // Turn end, clean up text display
+                        Thread.Sleep(gameTick * 2);
+                        while (TextManager.TearDownText())
+                            Thread.Sleep(teardownTick);
                     }
-                    // Turn end, clean up text display
-                    Thread.Sleep(gameTick * 2);
-                    while (TextManager.TearDownText())
-                        Thread.Sleep(teardownTick);
+                    Debug.WriteLine("Round end");
 
                     // Check for end of battle
-                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters())
+                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= 500)
                     {
                         Debug.WriteLine("Battle over");
                         SoundManager.PlayVictoryMusic();
@@ -290,10 +293,29 @@ namespace FF2_Monster_Sim
                         // TODO: Write battle results data to a file, or database, or something
                         // Just log it and determine how to store said data.
 
-                        return;
+                        break;
                     }
                 }
-                Debug.WriteLine("Round end");
+
+
+                // Write battle information, reset and repopulate the scenes
+                /*
+                int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
+                if (round >= 500) winner = 3;
+                string outstr = round.ToString() + "," + turn.ToString() + "," + winner.ToString() + "," + sceneOne.MonsterNames + "," + sceneTwo.MonsterNames;
+                using (System.IO.StreamWriter file =
+                    new System.IO.StreamWriter(@"C:\Users\HellaLaptop\Desktop\FF2Battle.txt", true))
+                {
+                    file.WriteLine(outstr);
+                }
+                */
+
+                sceneOne.ClearScene();
+                sceneTwo.ClearScene();
+                round = 0;
+                turn = 0;
+                sceneOne.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
+                sceneTwo.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
             }
         }
 
