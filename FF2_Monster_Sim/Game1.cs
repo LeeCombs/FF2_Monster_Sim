@@ -19,7 +19,7 @@ namespace FF2_Monster_Sim
         BattleScene sceneOne, sceneTwo;
 
         // Turn Logic
-        private int turn = 0, round = 0;
+        private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
         // private int gameTick = 150, teardownTick = 100;
         private int gameTick = 1, teardownTick = 1;
@@ -30,6 +30,9 @@ namespace FF2_Monster_Sim
         private Texture2D gameBackground;
         private SpriteFont font;
 
+        // Saving battle results
+        private const string RESULTS_FILE_PATH = @"C:\Users\HellaLaptop\Desktop\FF2Battle.txt";
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,10 +42,7 @@ namespace FF2_Monster_Sim
             graphics.PreferredBackBufferHeight = 604;
             graphics.ApplyChanges();
         }
-
-        // Scene Layout
-
-
+        
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -177,6 +177,7 @@ namespace FF2_Monster_Sim
                     {
                         // Update and display turn number
                         turn++;
+                        turnTotal++;
                         TextManager.SetTurnText(turn);
 
                         // If an actor was killed before it's turn, ignore the turn
@@ -297,23 +298,14 @@ namespace FF2_Monster_Sim
                     }
                 }
 
+                WriteBattleResults();
 
-                // Write battle information, reset and repopulate the scenes
-                /*
-                int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
-                if (round >= 500) winner = 3;
-                string outstr = round.ToString() + "," + turn.ToString() + "," + winner.ToString() + "," + sceneOne.MonsterNames + "," + sceneTwo.MonsterNames;
-                using (System.IO.StreamWriter file =
-                    new System.IO.StreamWriter(@"C:\Users\HellaLaptop\Desktop\FF2Battle.txt", true))
-                {
-                    file.WriteLine(outstr);
-                }
-                */
-
+                // Cleanup scenes and setup for next battle
                 sceneOne.ClearScene();
                 sceneTwo.ClearScene();
                 round = 0;
                 turn = 0;
+                turnTotal = 0;
                 sceneOne.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
                 sceneTwo.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
             }
@@ -322,6 +314,22 @@ namespace FF2_Monster_Sim
         /////////////
         // Helpers //
         /////////////
+
+        private void WriteBattleResults()
+        {
+            // Build the output string and save it. 
+            // NOTE: Local saves on a very specifc path currently
+            int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
+            if (round >= 500)
+                winner = 0;
+            string outstr = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.MonsterNames + "," + sceneTwo.MonsterNames;
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(RESULTS_FILE_PATH, true))
+            {
+                file.WriteLine(outstr);
+            }
+            
+        }
 
         /// <summary>
         /// Get and sort both scene's actions and return it

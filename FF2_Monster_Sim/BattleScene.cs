@@ -84,6 +84,7 @@ namespace FF2_Monster_Sim
 
         // TEMP
         public string MonsterNames;
+        public string SceneString;
 
         public BattleScene(int sceneNum, int x, int y, bool flipped = false)
         {
@@ -192,6 +193,8 @@ namespace FF2_Monster_Sim
             }
             
             MonsterNames = String.Join("-", monsterNames);
+            SceneString = SceneType.ToString() + ";" + String.Join(":", MonsterNames);
+            Debug.WriteLine(SceneString);
         }
 
         public void ClearScene()
