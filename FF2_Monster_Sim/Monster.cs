@@ -358,7 +358,7 @@ namespace FF2_Monster_Sim
              */
 
             // If the monster cannot cast a spell, it'll simply attack
-            if (MP <= 0 || HasPermStatus(PermStatus.Amnesia) || HasTempStatus(TempStatus.Mute))
+            if (MP <= 0 || HasPermStatus(PermStatus.Amnesia) || HasTempStatus(TempStatus.Mute) || HasTempStatus(TempStatus.Confuse))
                 new MonsterAction("Attack", 0, 0, 0, "SingleTarget");
             
             // Roll a random action and return it

@@ -22,7 +22,7 @@ namespace FF2_Monster_Sim
         private const int ROUND_LIMIT = 200;
         private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
-        private int gameTick = 1, teardownTick = 1;
+        private int gameTick = 10, teardownTick = 1;
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -125,8 +125,8 @@ namespace FF2_Monster_Sim
             // TODO: Add your update logic here
             
             // TODO: Only drawing the text every frame for now. Should be redrawn when monsters take/heal damage.
-            sceneOne.UpdateSceneText();
-            sceneTwo.UpdateSceneText();
+            // sceneOne.UpdateSceneText();
+            // sceneTwo.UpdateSceneText();
 
             base.Update(gameTime);
         }
@@ -239,6 +239,10 @@ namespace FF2_Monster_Sim
                                     }
                                 }
 
+                                // Testin
+                                sceneOne.UpdateSceneText();
+                                sceneTwo.UpdateSceneText();
+
                                 break;
                             }
                             else
@@ -273,10 +277,13 @@ namespace FF2_Monster_Sim
                                 Thread.Sleep(gameTick * 2);
                                 while (TextManager.TearDownText())
                                     Thread.Sleep(teardownTick);
+
+                                // Testin
+                                sceneOne.UpdateSceneText();
+                                sceneTwo.UpdateSceneText();
                             }
 
                             // TODO: If both scenes only contain "Soul" enemies, they cannot kill eachother
-
                             if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
                                 break;
                         }
@@ -321,7 +328,7 @@ namespace FF2_Monster_Sim
         private string GenerateRandomSceneString()
         {
             string[] alph = new string[] { "A", "B", "B", "B", "B", "C" };
-            string rndchar = alph[Globals.rnd.Next(0, 3)];
+            string rndchar = alph[Globals.rnd.Next(0, alph.Length)];
             return rndchar + ";" + String.Join("-", MonsterManager.GenerateMonsterList(rndchar));
         }
 

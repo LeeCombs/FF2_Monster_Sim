@@ -149,6 +149,14 @@ namespace FF2_Monster_Sim
                 if (monster == null)
                     continue;
 
+                if (string.Equals(monster.size.ToUpper(), "TALL") && row == 1)
+                {
+                    row++;
+                    col++;
+                    if (col >= 3)
+                        break;
+                }
+
                 monster.Initialize(content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), Flipped);
                 monster.scene = this;
                 
@@ -164,13 +172,18 @@ namespace FF2_Monster_Sim
                     col++;
                 }
             }
+
+            // Set the display text for monsters
+            UpdateSceneText();
         }
         
         /// <summary>
-        /// Remove all monsters from the scene
+        /// Clear text display and remove all monsters from the scene
         /// </summary>
         public void ClearScene()
         {
+            TextManager.SetSceneText(sceneNum, "");
+
             // TODO: Ensure this actually cleans up properly
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
                 for (int i = 0; i < entry.Value.Length; i++)
@@ -224,7 +237,13 @@ namespace FF2_Monster_Sim
                     }
 
                     action.Physical = true;
-                    action.Targets.Add(sceneRef.GetFrontRowTarget());
+
+                    // Confused monsters target their allies and themselves
+                    if (mon.HasTempStatus(TempStatus.Confuse))
+                        action.Targets.Add(this.GetFrontRowTarget());
+                    else
+                        action.Targets.Add(sceneRef.GetFrontRowTarget());
+
                     actList.Add(action);
                     continue;
                 }
@@ -365,10 +384,8 @@ namespace FF2_Monster_Sim
             return monsterList[slotRoll];
         }
 
-    
         /// <summary>
         /// Iterate through all monsters and build the display text based on their current stats
-        /// TODO: Try to only call this when monsters in this scene take/heal damage
         /// </summary>
         public void UpdateSceneText()
         {
@@ -393,8 +410,7 @@ namespace FF2_Monster_Sim
         /////////////
         // Helpers //
         /////////////
-
-
+        
         /// <summary>
         /// Sets the scene's type, monster slots, and positions, based on supplied sceneType
         /// </summary>
