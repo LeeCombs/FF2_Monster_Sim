@@ -94,44 +94,6 @@ namespace FF2_Monster_Sim
             Flipped = flipped;
         }
 
-        public void SetSceneType(SceneType sceneType)
-        {
-            // Set positions and monster slots based on sceneType, and whether the scene is flipped or not
-
-            switch (sceneType)
-            {
-                case SceneType.A: // 4 x 2 Slots
-                    for (int i = 0; i < 4; i++)
-                    {
-                        Monster[] monsters = { null, null };
-                        monsterSlots[i] = monsters;
-
-                        Vector2[] positions = { new Vector2(X + 75 * i, Y + 0), new Vector2(X + 75 * i, Y + 100) };
-                        slotPositions[i] = positions;
-                    }
-                    break;
-                case SceneType.B: // 3 x 2 Slots
-                    for (int i = 0; i < 3; i++)
-                    {
-                        Monster[] monsters = { null, null };
-                        monsterSlots[i] = monsters;
-
-                        Vector2[] positions = { new Vector2(X + 100 * i, Y + 0), new Vector2(X + 100 * i, Y + 100) };
-                        slotPositions[i] = positions;
-                    }
-                    break;
-                case SceneType.C: // Only one slot
-                    monsterSlots[0] = new Monster[] { null };
-                    slotPositions[0] = new Vector2[] { new Vector2(X, Y) };
-                    break;
-                default:
-                    throw new Exception("Invalid SceneType supplied: " + sceneType);
-            }
-            if (Flipped)
-                Utils.ReverseNumberedDictValues(ref slotPositions);
-            SceneType = sceneType;
-        }
-
         //////////////
         // Monogame //
         //////////////
@@ -164,13 +126,24 @@ namespace FF2_Monster_Sim
         // Publics //
         /////////////
 
-        public void PopulateScene(SceneType sceneType, List<String> monsterNames, ContentManager content)
+        /// <summary>
+        /// Setup and populate the scene with monsters using a very specifically formatted string...
+        /// Expected format: "A;name-name-name-name-name-name-name-name"
+        /// </summary>
+        public void PopulateScene(string sceneString, ContentManager content)
         {
-            // Setup the scene, the populate it with the supplied monsters
-            SetSceneType(sceneType);
+            // Rip apart the string into it's scene type and monster list
+            SceneString = sceneString;
+            string[] sceneSplit = sceneString.Split(';');
+            string sType = sceneSplit[0];
+            string monsterNames = sceneSplit[1];
+            
+            // Setup the scene, then populate with the monsters
+            SceneType = (SceneType)Enum.Parse(typeof(SceneType), sType);
+            LoadSceneType(SceneType);
 
             int col = 0, row = 0;
-            foreach (string name in monsterNames)
+            foreach (string name in monsterNames.Split('-'))
             {
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
@@ -191,12 +164,11 @@ namespace FF2_Monster_Sim
                     col++;
                 }
             }
-            
-            MonsterNames = String.Join("-", monsterNames);
-            SceneString = SceneType.ToString() + ";" + String.Join(":", MonsterNames);
-            Debug.WriteLine(SceneString);
         }
-
+        
+        /// <summary>
+        /// Remove all monsters from the scene
+        /// </summary>
         public void ClearScene()
         {
             // TODO: Ensure this actually cleans up properly
@@ -207,9 +179,8 @@ namespace FF2_Monster_Sim
 
         /// <summary>
         /// Remove a single monster from this scene
-        /// TODO: Ensure memory cleanup
+        /// TODO: Ensure proper memory cleanup
         /// </summary>
-        /// <param name="monster"></param>
         public void RemoveMonster(Monster monster)
         {
             foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
@@ -229,7 +200,6 @@ namespace FF2_Monster_Sim
         public List<Action> GetMonsterActions(BattleScene sceneRef)
         {
             // Get the monster's action at a given position
-            // If monster attacks and is in back row, return "nothing"
             List<Action> actList = new List<Action>();
 
             foreach (Monster mon in GetAllLiveMonsters())
@@ -241,10 +211,8 @@ namespace FF2_Monster_Sim
                 mon.Init = mon.Evasion += Globals.rnd.Next(0, 50);
                 Action action = new Action(mon);
                 MonsterAction monAct = mon.GetAction();
-
-                // A Monster will physically attack if it wants to, or otherwise cannot cast spells
-                // It may cast a spell as long as it has MP, even if it doesn't have enough to cast the spell
-                if (monAct.Name == "Attack" || mon.HasPermStatus(PermStatus.Amnesia) || mon.MP <= 0)
+                
+                if (monAct.Name == "Attack")
                 {
                     // If monster is in back row, it will instead return 'nothing'
                     if (MonsterIsBackRow(mon))
@@ -286,8 +254,7 @@ namespace FF2_Monster_Sim
                             action.Targets = this.GetAllLiveMonsters().ToList();
                             break;
                         default:
-                            Debug.WriteLine("Invalid monAct target: " + monAct.Target);
-                            continue;
+                            throw new Exception("Invalid monAct target: " + monAct.Target);
                     }
                     actList.Add(action);
                 }
@@ -311,7 +278,6 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Return an array of monsters within the scene, including the dead
         /// </summary>
-        /// <returns></returns>
         public Monster[] GetAllMonsters()
         {
             List<Monster> activeList = new List<Monster>();
@@ -423,11 +389,57 @@ namespace FF2_Monster_Sim
             }
             TextManager.SetSceneText(sceneNum, displayText);
         }
-        
+
         /////////////
         // Helpers //
         /////////////
 
+
+        /// <summary>
+        /// Sets the scene's type, monster slots, and positions, based on supplied sceneType
+        /// </summary>
+        private void LoadSceneType(SceneType sceneType)
+        {
+            // Set positions and monster slots based on sceneType, and whether the scene is flipped or not
+            SceneType = sceneType;
+            switch (SceneType)
+            {
+                case SceneType.A: // 4 x 2 Slots
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Monster[] monsters = { null, null };
+                        monsterSlots[i] = monsters;
+
+                        Vector2[] positions = { new Vector2(X + 75 * i, Y + 0), new Vector2(X + 75 * i, Y + 100) };
+                        slotPositions[i] = positions;
+                    }
+                    break;
+                case SceneType.B: // 3 x 2 Slots
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Monster[] monsters = { null, null };
+                        monsterSlots[i] = monsters;
+
+                        Vector2[] positions = { new Vector2(X + 100 * i, Y + 0), new Vector2(X + 100 * i, Y + 100) };
+                        slotPositions[i] = positions;
+                    }
+                    break;
+                case SceneType.C: // Only one slot
+                    monsterSlots[0] = new Monster[] { null };
+                    slotPositions[0] = new Vector2[] { new Vector2(X, Y) };
+                    break;
+                default:
+                    throw new Exception("Invalid SceneType supplied: " + sceneType);
+            }
+
+            // Reverse positions if the scene is flipped
+            if (Flipped)
+                Utils.ReverseNumberedDictValues(ref slotPositions);
+        }
+
+        /// <summary>
+        /// Retrieve an array of all alive and non-null monsters from a given column
+        /// </summary>
         private Monster[] GetLiveMonstersFromCol(int col)
         {
             List<Monster> monList = new List<Monster>();
@@ -438,6 +450,9 @@ namespace FF2_Monster_Sim
             return monList.ToArray();
         }
 
+        /// <summary>
+        /// Return whether a given monster is considered back-row
+        /// </summary>
         private bool MonsterIsBackRow(Monster monster)
         {
             int col = GetMonsterColumn(monster);
@@ -461,9 +476,9 @@ namespace FF2_Monster_Sim
                 case SceneType.C:
                     // Since there's only one slot, it cannot be a back row
                     return false;
+                default:
+                    throw new Exception("Uncaught sceneType: " + SceneType);
             }
-
-            throw new Exception("Uncaught sceneType: " + SceneType);
         }
 
         /// <summary>

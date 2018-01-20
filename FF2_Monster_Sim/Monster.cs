@@ -41,7 +41,8 @@ namespace FF2_Monster_Sim
 
     public class Monster
     {
-        // Etc.
+        // Misc vars
+
         public BattleScene scene;
         public string size = "";
 
@@ -49,10 +50,8 @@ namespace FF2_Monster_Sim
         private const int BERSERK_VALUE = 5;
         private const int IMBIBE_VALUE = 10;
         private const int PROTECT_VALUE = 0;
-
-        //////////////
-        // Monogame //
-        //////////////
+        
+        // Monogame vars
 
         private bool flipped;
         private Texture2D texture;
@@ -65,10 +64,8 @@ namespace FF2_Monster_Sim
         {
             get { return texture.Height; }
         }
-
-        //////////////////
-        // Combat Stats //
-        //////////////////
+        
+        // Combat vars
 
         public string Name { get; set; }
         public List<string> AlternateNames { get; set; }
@@ -242,16 +239,31 @@ namespace FF2_Monster_Sim
         // public List<string> GilDrops { get; set; }
         // public List<string> ItemDrops { get; set; }
         
-        ////////////////////
-        // Battle Effects //
-        ////////////////////
+        // Battle vars
 
         public int Init = 0;
         public Dictionary<Buff, int> Buffs { get; set; }
         public Dictionary<Debuff, int> Debuffs { get; set; } 
         public HashSet<TempStatus> TempStatuses { get; set; }
         public HashSet<PermStatus> PermStatuses { get; set; }
-        
+
+        private List<int[]> actionSlotOdds = new List<int[]>
+        {
+            new int[] { 0, 20 },
+            new int[] { 1, 40 },
+            new int[] { 2, 60 },
+            new int[] { 3, 70 },
+            new int[] { 4, 80 },
+            new int[] { 5, 90 },
+            new int[] { 6, 95 },
+            new int[] { 7, 100 }
+        };
+
+        //////////////////
+        // Actual Class //
+        //////////////////
+
+
         public Monster()
         {
             ActionList = new List<MonsterAction>();
@@ -336,7 +348,6 @@ namespace FF2_Monster_Sim
         /// </summary>
         public MonsterAction GetAction()
         {
-            // Noting this here... Curse halves magic power, but that's not a base stat
             /**
              * Considerations
              * 
@@ -346,46 +357,16 @@ namespace FF2_Monster_Sim
              * if it cannot perform any listed action, it will attack, even if attack doesn't exist in their abilities
              */
 
-            // Odds per slot: 20, 20, 20, 10, 10, 10, 5, 5
-            List<int[]> slotVals = new List<int[]>
-            {
-                new int[] { 0, 20 },
-                new int[] { 1, 40 },
-                new int[] { 2, 60 },
-                new int[] { 3, 70 },
-                new int[] { 4, 80 },
-                new int[] { 5, 90 },
-                new int[] { 6, 95 },
-                new int[] { 7, 100 }
-            };
-
+            // If the monster cannot cast a spell, it'll simply attack
+            if (MP <= 0 || HasPermStatus(PermStatus.Amnesia) || HasTempStatus(TempStatus.Mute))
+                new MonsterAction("Attack", 0, 0, 0, "SingleTarget");
+            
+            // Roll a random action and return it
+            List<int[]> slotVals = actionSlotOdds;
             int rndRoll = Globals.rnd.Next(0, 100);
-
-            // Iterate through the available slots and pick one with a higher roll value
-            // If it's spell that cannot be cast, remove the slot and try again.
-            while (slotVals.Count > 0)
-            {
-                for (int i = 0; i < slotVals.Count; i++)
-                {
-                    if (slotVals[i][1] > rndRoll || i == slotVals.Count - 1)
-                    {
-                        MonsterAction act = ActionList[slotVals[i][0]];
-                        if (act.Name != "Attack")
-                        {
-                            // It's a spell. If it cannot be cast, remove the slot and try another action.
-                            if (MP <= 0 || HasPermStatus(PermStatus.Amnesia) || HasTempStatus(TempStatus.Mute))
-                            {
-                                slotVals.RemoveAt(i);
-                                break;
-                            }
-                            // Can't cast spells without sufficient MP
-                            if (MP < act.MPCost)
-                                return new MonsterAction("Nothing", 0, 0, 0, "SingleTarget");
-                        }
-                        return act;
-                    }
-                }
-            }
+            for (int i = 0; i < actionSlotOdds.Count; i++)
+                if (actionSlotOdds[i][1] > rndRoll)
+                    return ActionList[actionSlotOdds[i][0]];
             
             // Default to basic attack if unable to perform any of the normal actions
             return new MonsterAction("Attack", 0, 0, 0, "SingleTarget");

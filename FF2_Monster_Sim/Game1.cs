@@ -19,9 +19,9 @@ namespace FF2_Monster_Sim
         BattleScene sceneOne, sceneTwo;
 
         // Turn Logic
+        private const int ROUND_LIMIT = 200;
         private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
-        // private int gameTick = 150, teardownTick = 100;
         private int gameTick = 1, teardownTick = 1;
 
         // Graphics
@@ -79,11 +79,11 @@ namespace FF2_Monster_Sim
             MonsterManager.LoadContent();
             SpellManager.LoadContent();
             SoundManager.LoadContent(Content);
-            
+
             // Populate the scenes with random monsters
-            sceneOne.PopulateScene(SceneType.A, MonsterManager.GenerateMonsterList("A"), Content);
-            sceneTwo.PopulateScene(SceneType.C, MonsterManager.GenerateMonsterList("C"), Content);
-            
+            sceneOne.PopulateScene(GenerateRandomSceneString(), Content);
+            sceneTwo.PopulateScene(GenerateRandomSceneString(), Content);
+
             // Graphics
             gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");
             font = Content.Load<SpriteFont>("Graphics/Font");
@@ -156,9 +156,6 @@ namespace FF2_Monster_Sim
 
         private void CombatLoop()
         {
-            // TODO: Sanity check. Ensure that battles don't run on forever. Enforce a round limit
-            // Perhaps 100-200? If monsters heal their targets more than they can damage, gotta stop it.
-
             while (true)
             {
                 if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
@@ -277,18 +274,21 @@ namespace FF2_Monster_Sim
                                 while (TextManager.TearDownText())
                                     Thread.Sleep(teardownTick);
                             }
+
+                            // TODO: If both scenes only contain "Soul" enemies, they cannot kill eachother
+
+                            if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
+                                break;
                         }
                         // Turn end, clean up text display
                         Thread.Sleep(gameTick * 2);
                         while (TextManager.TearDownText())
                             Thread.Sleep(teardownTick);
                     }
-                    Debug.WriteLine("Round end");
 
                     // Check for end of battle
-                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= 500)
+                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
                     {
-                        Debug.WriteLine("Battle over");
                         SoundManager.PlayVictoryMusic();
 
                         // TODO: Write battle results data to a file, or database, or something
@@ -306,8 +306,11 @@ namespace FF2_Monster_Sim
                 round = 0;
                 turn = 0;
                 turnTotal = 0;
-                sceneOne.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
-                sceneTwo.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
+                // sceneOne.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
+                // sceneTwo.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
+
+                sceneOne.PopulateScene(GenerateRandomSceneString(), Content);
+                sceneTwo.PopulateScene(GenerateRandomSceneString(), Content);
             }
         }
 
@@ -315,19 +318,30 @@ namespace FF2_Monster_Sim
         // Helpers //
         /////////////
 
+        private string GenerateRandomSceneString()
+        {
+            string[] alph = new string[] { "A", "B", "B", "B", "B", "C" };
+            string rndchar = alph[Globals.rnd.Next(0, 3)];
+            return rndchar + ";" + String.Join("-", MonsterManager.GenerateMonsterList(rndchar));
+        }
+
         private void WriteBattleResults()
         {
             // Build the output string and save it. 
-            // NOTE: Local saves on a very specifc path currently
+            // NOTE: Local saves on a very specifc path currently. To be written to a project folder instead.
             int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
-            if (round >= 500)
+            if (round >= ROUND_LIMIT)
                 winner = 0;
-            string outstr = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.MonsterNames + "," + sceneTwo.MonsterNames;
+            string outstr = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
 
+            Debug.WriteLine(outstr);
+
+            /*
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(RESULTS_FILE_PATH, true))
             {
                 file.WriteLine(outstr);
             }
+            */
             
         }
 

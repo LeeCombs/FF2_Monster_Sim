@@ -39,12 +39,12 @@ namespace FF2_Monster_Sim
         /// </summary>
         private static readonly Dictionary<TempStatus, string> tempStatusMessageDict = new Dictionary<TempStatus, string>
         {
-            { TempStatus.Confuse, "CONF_MESSAGE" },
-            { TempStatus.Mini, "MINI_MESSAGE" },
-            { TempStatus.Mute, "MUTE_MESSAGE" },
-            { TempStatus.Paralysis, "PARA_MESSAGE" },
-            { TempStatus.Sleep, "SLEEP_MESSAGE" },
-            { TempStatus.Venom, "VENOM_MESSAGE" }
+            { TempStatus.Confuse, "Confused" },
+            { TempStatus.Mini, "Shrank" },
+            { TempStatus.Mute, "Muted" },
+            { TempStatus.Paralysis, "Parayzed" },
+            { TempStatus.Sleep, "Slept" },
+            { TempStatus.Venom, "Envenomed" }
         };
 
         /// <summary>
@@ -52,13 +52,13 @@ namespace FF2_Monster_Sim
         /// </summary>
         private static readonly Dictionary<PermStatus, string> permStatusMessageDict = new Dictionary<PermStatus, string>
         {
-            { PermStatus.Amnesia, "AMNESIA_MESSAGE" },
-            { PermStatus.Curse, "CURSE_MESSAGE" },
-            { PermStatus.Darkness, "DARK_MESSAGE" },
-            { PermStatus.KO, "KO_MESSAGE" },
-            { PermStatus.Poison, "PSN_MESSAGE" },
-            { PermStatus.Stone, "STONE_MESSAGE" },
-            { PermStatus.Toad, "TOAD_MESSAGE" }
+            { PermStatus.Amnesia, "Dumbfounded" },
+            { PermStatus.Curse, "Cursed" },
+            { PermStatus.Darkness, "Blinded" },
+            { PermStatus.KO, "KO" },
+            { PermStatus.Poison, "Poisoned" },
+            { PermStatus.Stone, "Stopped" },
+            { PermStatus.Toad, "Toad" }
         };
 
         public AttackManager()

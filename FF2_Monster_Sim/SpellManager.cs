@@ -68,7 +68,6 @@ namespace FF2_Monster_Sim
         public static void LoadContent()
         {
             // Read SpellData.json and load it
-            Debug.WriteLine("MonsterManager LoadContent");
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_SpellData.json");
             spellData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_SpellData.json"));
 
@@ -88,7 +87,7 @@ namespace FF2_Monster_Sim
             if (String.IsNullOrEmpty(name))
                 throw new ArgumentException("Invalid spell name supplied");
 
-            name = name.Trim();
+            name.Trim();
 
             foreach (dynamic data in spellData)
             {
@@ -128,9 +127,7 @@ namespace FF2_Monster_Sim
                 throw new ArgumentNullException("Invalid spell provided");
             if (level < 0 || level > 16)
                 throw new ArgumentOutOfRangeException("Level out of range. Must be 0-16. Found: " + level);
-
-            Debug.WriteLine("Casting spell: " + spell.Name + " " + level);
-
+            
             // Helpers
             SpellResult failedResult = new SpellResult(new List<string> { FAILED_SPELL_MESSAGE });
             SpellResult statusSuccessResult = new SpellResult(new List<string> { spell.SuccessMessage });
@@ -152,7 +149,6 @@ namespace FF2_Monster_Sim
             if (target.IsAbsorbentTo(spell.Element))
             {
                 int totalHeal = GetDamage(adjustedAccuracy, level);
-                Debug.WriteLine("Healing: " + totalHeal);
                 target.HealHP(totalHeal);
                 return new SpellResult(new List<string> { "HP up!" });
             }
@@ -523,7 +519,6 @@ namespace FF2_Monster_Sim
         /// </summary>
         private static SpellResult HandleDamageSpellResult(Monster target, int damage)
         {
-            Debug.WriteLine("Damaging " + target.Name + " for " + damage);
             SpellResult res = new SpellResult(damage);
             target.DamageHP(damage);
             if (target.IsDead())
