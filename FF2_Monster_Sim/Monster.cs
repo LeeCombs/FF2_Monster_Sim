@@ -411,14 +411,14 @@ namespace FF2_Monster_Sim
         public void HealHP(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+                throw new ArgumentException("Cannot heal a negative amount: " + amount);
             HP += amount;
         }
 
         public void HealMP(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+                throw new ArgumentException("Cannot heal a negative amount: " + amount);
             MP += amount;
         }
 

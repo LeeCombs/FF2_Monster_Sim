@@ -104,6 +104,7 @@ namespace SimTests
 
                 // Cast the spell and ensure nothing pops up
                 Monster mon = new Monster();
+                mon.HPMax = mon.HP = mon.MPMax = mon.MP = 1;
                 SpellManager.CastSpell(mon, mon, spell, 1);
             }
         }

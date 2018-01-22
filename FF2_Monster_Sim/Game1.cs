@@ -22,7 +22,7 @@ namespace FF2_Monster_Sim
         private const int ROUND_LIMIT = 200;
         private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
-        private int gameTick = 10, teardownTick = 1;
+        private int gameTick = 1, teardownTick = 1;
 
         // Graphics
         private GraphicsDeviceManager graphics;

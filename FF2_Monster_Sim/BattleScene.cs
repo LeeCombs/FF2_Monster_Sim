@@ -148,16 +148,9 @@ namespace FF2_Monster_Sim
                 Monster monster = MonsterManager.GetMonsterByName(name);
                 if (monster == null)
                     continue;
-
-                if (string.Equals(monster.size.ToUpper(), "TALL") && row == 1)
-                {
-                    row++;
-                    col++;
-                    if (col >= 3)
-                        break;
-                }
-
-                monster.Initialize(content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), Flipped);
+                
+                if (content != null)
+                    monster.Initialize(content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), Flipped);
                 monster.scene = this;
                 
                 monsterSlots[col / 2][row % 2] = monster;
@@ -292,19 +285,6 @@ namespace FF2_Monster_Sim
                 if (mon.IsAlive())
                     liveMonsters.Add(mon);
             return liveMonsters.ToArray();
-        }
-
-        /// <summary>
-        /// Return an array of monsters within the scene, including the dead
-        /// </summary>
-        public Monster[] GetAllMonsters()
-        {
-            List<Monster> activeList = new List<Monster>();
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots.ToArray())
-                foreach (Monster m in entry.Value)
-                    if (m != null)
-                        activeList.Add(m);
-            return activeList.ToArray();
         }
 
         /// <summary>
@@ -443,7 +423,7 @@ namespace FF2_Monster_Sim
                 case SceneType.C: // Only one slot
                     monsterSlots[0] = new Monster[] { null };
                     slotPositions[0] = new Vector2[] { new Vector2(X, Y) };
-                    break;
+                    return;
                 default:
                     throw new Exception("Invalid SceneType supplied: " + sceneType);
             }
@@ -524,6 +504,19 @@ namespace FF2_Monster_Sim
                         return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Return an array of monsters within the scene, including the dead
+        /// </summary>
+        private Monster[] GetAllMonsters()
+        {
+            List<Monster> activeList = new List<Monster>();
+            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots.ToArray())
+                foreach (Monster m in entry.Value)
+                    if (m != null)
+                        activeList.Add(m);
+            return activeList.ToArray();
         }
     }
 }
