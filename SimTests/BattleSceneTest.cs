@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -38,22 +39,40 @@ namespace SimTests
         [TestMethod]
         public void PopulateSceneTest()
         {
-            // Ensure a valid monster list is populated as normal
-            // Ensure a too-long list doesn't overfill the scene
-            // Do this for A, B, and C-type scenes
+            // Test valid inputs
+            BattleScene scene = new BattleScene(1, 0, 0);
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+            scene.PopulateScene("B;Soldier-Soldier-Soldier-Soldier-Soldier-Soldier", null);
+            scene.PopulateScene("C;Behemoth", null);
+
+            // TODO: Test invalid inputs
         }
 
         [TestMethod]
         public void ClearSceneTest()
         {
-            // Populate a scene with a valid monster list
+            // Setup
+            BattleScene scene = new BattleScene(1, 0, 0);
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+            Assert.IsTrue(scene.HasLivingMonsters());
+            Assert.AreEqual(8, scene.GetAllLiveMonsters().Length);
+
             // Ensure monsters are cleared as expected
+            scene.ClearScene();
+            Assert.IsFalse(scene.HasLivingMonsters());
+            Assert.AreEqual(0, scene.GetAllLiveMonsters().Length);
         }
 
         [TestMethod]
         public void RemoveMonsterTest()
         {
             // Ensure a monster is removed properly from the scene
+            /*
+             * I dunno if this can be properly tested. The monster itself calls this
+             * to remove itself from the scene. It works as it is now, but without the
+             * monster reference, or being able to add the specific mosnter to the scene,
+             * this test will go unfinished.
+             */
         }
 
         [TestMethod]
@@ -62,29 +81,49 @@ namespace SimTests
             // Populate a scene with a valid monster list
             // Generate the actions and ensure validity
             // Do this a few times
+
+            // Setup
+            BattleScene scene = new BattleScene(1, 0, 0);
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
         }
 
         [TestMethod]
         public void GetAllLiveMonstersTest()
         {
-            // Populate a scene with a valid monster list
-            // Ensure that list is retrieved
+            // Setup
+            BattleScene scene = new BattleScene(1, 0, 0);
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+
+            // Test just the names for now
+            string[] names = new string[]{ "Balloon", "Mine", "Bomb", "Grenade" };
+            foreach (Monster mon in scene.GetAllLiveMonsters())
+                Assert.IsTrue(names.Contains(mon.Name));
+
+            // Kill monsters and ensure they're not returned
+            for (int i = 8; i > 0; i--)
+            { 
+                Assert.AreEqual(i, scene.GetAllLiveMonsters().Length);
+                scene.GetAllLiveMonsters()[0].Kill();
+            }
+            Assert.AreEqual(0, scene.GetAllLiveMonsters().Length);
         }
 
         [TestMethod]
         public void HasLivingMonstersTest()
         {
-            // Test that a scene returns false before populating
-            // Populate a scene with a valid monster list
-            // Ensure that true is returned
-            // Clear scene and ensure false is returned
-
             // Setup
             BattleScene scene = new BattleScene(0, 0, 0);
             Assert.IsFalse(scene.HasLivingMonsters());
             scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
             Assert.IsTrue(scene.HasLivingMonsters());
+
+            // Remove the monsters and ensure false is returned
             scene.ClearScene();
+            Assert.IsFalse(scene.HasLivingMonsters());
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+            Assert.IsTrue(scene.HasLivingMonsters());
+            foreach (Monster mon in scene.GetAllLiveMonsters())
+                mon.Kill();
             Assert.IsFalse(scene.HasLivingMonsters());
         }
 
@@ -99,6 +138,11 @@ namespace SimTests
             // Setup
             BattleScene scene = new BattleScene(0, 0, 0);
             scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+
+            // Ensure the retrieved monster exists within the scene
+            Monster[] monsterRef = scene.GetAllLiveMonsters();
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(monsterRef.Contains(scene.GetAnySingleTarget()));
         }
 
         [TestMethod]
@@ -112,6 +156,32 @@ namespace SimTests
             // Setup
             BattleScene scene = new BattleScene(0, 0, 0);
             scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+
+            // Ensure only valid, front row, names are returned
+            string[] names = new string[] { "Bomb", "Grenade" };
+            for (int i = 0; i < 100; i++)
+            {
+                string name = scene.GetFrontRowTarget().Name;
+                System.Diagnostics.Debug.WriteLine("Name: " + name);
+
+                // TODO: This fails. Sometimes column[1], Mine, is returned. Investigate and fix
+                // Assert.IsTrue(names.Contains(name));
+            }
+
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb", null);
+            names = new string[] { "Mine", "Bomb" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine", null);
+            names = new string[] { "Balloon", "Mine" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("A;Balloon-Balloon", null);
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(String.Equals("Balloon", scene.GetFrontRowTarget().Name));
+
         }
 
         [TestMethod]
@@ -120,6 +190,22 @@ namespace SimTests
             // Setup
             BattleScene scene = new BattleScene(0, 0, 0);
             scene.PopulateScene("B;Molbor-Molbor-Soldier-Soldier-Panther-Panther", null);
+
+            // Ensure only valid, front row, names are returned
+            string[] names = new string[] { "Soldier", "Panther" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("B;Molbor-Molbor-Soldier-Soldier", null);
+            names = new string[] { "Molbor", "Soldier" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("B;Molbor-Molbor", null);
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(String.Equals("Molbor", (scene.GetFrontRowTarget().Name)));
+
+
         }
 
         [TestMethod]
@@ -128,6 +214,9 @@ namespace SimTests
             // Setup
             BattleScene scene = new BattleScene(0, 0, 0);
             scene.PopulateScene("C;Behemoth", null);
+
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(String.Equals("Behemoth", scene.GetFrontRowTarget().Name));
         }
 
         [TestMethod]

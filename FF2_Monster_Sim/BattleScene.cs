@@ -132,6 +132,9 @@ namespace FF2_Monster_Sim
         /// </summary>
         public void PopulateScene(string sceneString, ContentManager content)
         {
+            // Cleanup any leftovers first
+            ClearScene();
+
             // Rip apart the string into it's scene type and monster list
             SceneString = sceneString;
             string[] sceneSplit = sceneString.Split(';');
