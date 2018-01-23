@@ -23,6 +23,7 @@ namespace FF2_Monster_Sim
         private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
         private int gameTick = 1, teardownTick = 1;
+        private const int FANFARE_TIMER = 30000; // 17000 for one loop
 
         // Graphics
         private GraphicsDeviceManager graphics;
@@ -293,28 +294,28 @@ namespace FF2_Monster_Sim
                             Thread.Sleep(teardownTick);
                     }
 
+                    // End of round
+                    
                     // Check for end of battle
                     if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
-                    {
-                        SoundManager.PlayVictoryMusic();
-
-                        // TODO: Write battle results data to a file, or database, or something
-                        // Just log it and determine how to store said data.
-
                         break;
-                    }
+
+                    // Check if any monster recovers from temporary status effects
+                    foreach (Monster mon in sceneOne.GetAllLiveMonsters())
+                        MonsterManager.RollTempStatusRecovery(mon);
+                    foreach (Monster mon in sceneTwo.GetAllLiveMonsters())
+                        MonsterManager.RollTempStatusRecovery(mon);
                 }
 
+                // TODO: Display winning team and scene, fanfare for a bit, then tear down to start another battle
+                SoundManager.PlayVictoryMusic();
                 WriteBattleResults();
+                Thread.Sleep(FANFARE_TIMER);
 
                 // Cleanup scenes and setup for next battle
                 sceneOne.ClearScene();
                 sceneTwo.ClearScene();
-                round = 0;
-                turn = 0;
-                turnTotal = 0;
-                // sceneOne.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
-                // sceneTwo.PopulateScene(SceneType.B, MonsterManager.GenerateMonsterList("B"), Content);
+                round = turn = turnTotal = 0;
 
                 sceneOne.PopulateScene(GenerateRandomSceneString(), Content);
                 sceneTwo.PopulateScene(GenerateRandomSceneString(), Content);

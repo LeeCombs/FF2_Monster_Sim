@@ -160,13 +160,7 @@ namespace SimTests
             // Ensure only valid, front row, names are returned
             string[] names = new string[] { "Bomb", "Grenade" };
             for (int i = 0; i < 100; i++)
-            {
-                string name = scene.GetFrontRowTarget().Name;
-                System.Diagnostics.Debug.WriteLine("Name: " + name);
-
-                // TODO: This fails. Sometimes column[1], Mine, is returned. Investigate and fix
-                // Assert.IsTrue(names.Contains(name));
-            }
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
 
             scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb", null);
             names = new string[] { "Mine", "Bomb" };

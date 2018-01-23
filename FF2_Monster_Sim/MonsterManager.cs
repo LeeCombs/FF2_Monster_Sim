@@ -21,6 +21,13 @@ namespace FF2_Monster_Sim
         private static List<string> tallMonsterNames;
         private static List<string> largeMonsterNames;
 
+        // Chance per turn to recover. Mini is ignored as it outright kills
+        private const int VENOM_RECOVERY_CHANCE = 70;
+        private const int SLEEP_RECOVERY_CHANCE = 60;
+        private const int MUTE_RECOVERY_CHANCE = 50; // A guess
+        private const int PARALYSIS_RECOVERY_CHANCE = 30;
+        private const int CONFUSION_RECOVERY_CHANCE = 20;
+
         //////////////
         // Monogame //
         //////////////
@@ -153,6 +160,32 @@ namespace FF2_Monster_Sim
             }
 
             return nameList;
+        }
+
+        /// <summary>
+        /// Roll to check if a monster recovers from temporary status effects
+        /// </summary>
+        public static void RollTempStatusRecovery(Monster monster)
+        {
+            if (monster.HasTempStatus(TempStatus.Venom))
+                if (Globals.rnd.Next(100) < VENOM_RECOVERY_CHANCE)
+                    monster.RemoveTempStatus(TempStatus.Venom);
+
+            if (monster.HasTempStatus(TempStatus.Sleep))
+                if (Globals.rnd.Next(100) < SLEEP_RECOVERY_CHANCE)
+                    monster.RemoveTempStatus(TempStatus.Sleep);
+
+            if (monster.HasTempStatus(TempStatus.Mute))
+                if (Globals.rnd.Next(100) < MUTE_RECOVERY_CHANCE)
+                    monster.RemoveTempStatus(TempStatus.Mute);
+
+            if (monster.HasTempStatus(TempStatus.Paralysis))
+                if (Globals.rnd.Next(100) < PARALYSIS_RECOVERY_CHANCE)
+                    monster.RemoveTempStatus(TempStatus.Paralysis);
+
+            if (monster.HasTempStatus(TempStatus.Confuse))
+                if (Globals.rnd.Next(100) < CONFUSION_RECOVERY_CHANCE)
+                    monster.RemoveTempStatus(TempStatus.Confuse);
         }
 
         /////////////

@@ -167,5 +167,15 @@ namespace SimTests
                 Assert.AreEqual(1, MonsterManager.GenerateMonsterList("C").Count);
             }
         }
+
+        [TestMethod]
+        public void RollTempStatusRecoveryTest()
+        {
+            // TODO
+            // Generate a monster, inflict it with temporary statuses
+            // and determine how often they recover at the end of a 'round'
+
+            // Expected odds: Venom = 70%, Sleep = 60%, Mute = 50%, Paralysis = 30%, Confusion = 20%
+        }
     }
 }
