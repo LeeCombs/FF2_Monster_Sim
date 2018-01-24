@@ -15,13 +15,13 @@ namespace FF2_Monster_Sim
 
         private static dynamic monsterData;
 
-        public static List<string> MonsterNames;
+        public static List<string> MonsterNames { get; private set; }
         private static List<string> smallMonsterNames;
         private static List<string> mediumMonsterNames;
         private static List<string> tallMonsterNames;
         private static List<string> largeMonsterNames;
 
-        // Chance per turn to recover. Mini is ignored as it outright kills
+        // Chance per turn to recover for temporary statuses. Mini is ignored as it outright kills
         private const int VENOM_RECOVERY_CHANCE = 70;
         private const int SLEEP_RECOVERY_CHANCE = 60;
         private const int MUTE_RECOVERY_CHANCE = 50; // A guess
@@ -168,23 +168,23 @@ namespace FF2_Monster_Sim
         public static void RollTempStatusRecovery(Monster monster)
         {
             if (monster.HasTempStatus(TempStatus.Venom))
-                if (Globals.rnd.Next(100) < VENOM_RECOVERY_CHANCE)
+                if (Globals.rnd.Next(101) < VENOM_RECOVERY_CHANCE)
                     monster.RemoveTempStatus(TempStatus.Venom);
 
             if (monster.HasTempStatus(TempStatus.Sleep))
-                if (Globals.rnd.Next(100) < SLEEP_RECOVERY_CHANCE)
+                if (Globals.rnd.Next(101) < SLEEP_RECOVERY_CHANCE)
                     monster.RemoveTempStatus(TempStatus.Sleep);
 
             if (monster.HasTempStatus(TempStatus.Mute))
-                if (Globals.rnd.Next(100) < MUTE_RECOVERY_CHANCE)
+                if (Globals.rnd.Next(101) < MUTE_RECOVERY_CHANCE)
                     monster.RemoveTempStatus(TempStatus.Mute);
 
             if (monster.HasTempStatus(TempStatus.Paralysis))
-                if (Globals.rnd.Next(100) < PARALYSIS_RECOVERY_CHANCE)
+                if (Globals.rnd.Next(101) < PARALYSIS_RECOVERY_CHANCE)
                     monster.RemoveTempStatus(TempStatus.Paralysis);
 
             if (monster.HasTempStatus(TempStatus.Confuse))
-                if (Globals.rnd.Next(100) < CONFUSION_RECOVERY_CHANCE)
+                if (Globals.rnd.Next(101) < CONFUSION_RECOVERY_CHANCE)
                     monster.RemoveTempStatus(TempStatus.Confuse);
         }
 

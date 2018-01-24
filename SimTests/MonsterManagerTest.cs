@@ -70,6 +70,7 @@ namespace SimTests
         public void MonsterDataTest()
         {
             string[] validSizes = new string[] { "SMALL", "MEDIUM", "TALL", "LARGE" };
+            string[] validTargets = new string[] { "SELF", "SINGLETARGET", "ENEMYPARTY", "CASTERPARTY" };
 
             // Ensure each monster in the data has the basics set up
             for (int i = 0; i < MonsterManager.MonsterNames.Count; i++)
@@ -103,6 +104,14 @@ namespace SimTests
                 Assert.AreEqual(8, monster.ActionList.Count);
 
                 // TODO: Ensure the actions in the ActionList are valid
+                foreach (MonsterAction action in monster.ActionList)
+                {
+                    Assert.IsNotNull(action.Name);
+                    Assert.IsTrue(Utils.NumIsWithinRange(action.Level, 0, 16));
+                    Assert.IsTrue(Utils.NumIsWithinRange(action.Accuracy, 0, 100));
+                    Assert.IsTrue(Utils.NumIsWithinRange(action.MPCost, 0, 256));
+                    Assert.IsTrue(validTargets.Contains(action.Target.ToUpper()));
+                }
                 // Attack or valid spell name
                 // Level within range
                 // Power, Accuracy, MpConsumption >= 0
@@ -112,17 +121,12 @@ namespace SimTests
                 Assert.IsNotNull(monster.AttackEffects);
                 // TODO: Ensure each attack effect is valid
 
+                // Does the below need further validation checking? If the enum type
+                // is forced upon reading the data, it should complain then.
                 Assert.IsNotNull(monster.Families);
-                // TODO: Ensure each family is valid
-
                 Assert.IsNotNull(monster.Weaknesses);
-                // TODO: Ensure each weakness is valid
-
                 Assert.IsNotNull(monster.Resistances);
-                // TODO: Ensure each resistance is valid
-
                 Assert.IsNotNull(monster.Absorbs);
-                // TODO: Ensure each absorb is valid
             }
         }
 
@@ -171,11 +175,71 @@ namespace SimTests
         [TestMethod]
         public void RollTempStatusRecoveryTest()
         {
-            // TODO
-            // Generate a monster, inflict it with temporary statuses
-            // and determine how often they recover at the end of a 'round'
-
+            // Generate a monster, inflict it with temporary statuses, and determine how often it recovers end of round
             // Expected odds: Venom = 70%, Sleep = 60%, Mute = 50%, Paralysis = 30%, Confusion = 20%
+            // Mini is ignored as it simply kills the monster
+            Dictionary<TempStatus, float> statusOdds = new Dictionary<TempStatus, float>() {
+                { TempStatus.Confuse, 0.2f },
+                { TempStatus.Mute, 0.5f },
+                { TempStatus.Paralysis, 0.3f },
+                { TempStatus.Sleep, 0.6f },
+                { TempStatus.Venom, 0.7f }
+            };
+
+            Monster mon = new Monster();
+            int roundIterations = 100000;
+            foreach (KeyValuePair<TempStatus, float> entry in statusOdds)
+            {
+                Assert.IsFalse(mon.HasTempStatus(entry.Key));
+                mon.AddTempStatus(entry.Key);
+                Assert.IsTrue(mon.HasTempStatus(entry.Key));
+
+                // Keep track of each time the monster recovers, then reapply the status
+                float recoverCount = 0.0f;
+                for (int i = 0; i < roundIterations; i++)
+                {
+                    MonsterManager.RollTempStatusRecovery(mon);
+                    if (!mon.HasTempStatus(entry.Key))
+                    {
+                        recoverCount++;
+                        mon.AddTempStatus(entry.Key);
+                    }
+
+                }
+
+                // Ensure found odds come within 1% of expected odds
+                Assert.IsTrue((Math.Abs(recoverCount / roundIterations - entry.Value) < 0.01f));
+            }
+
+            // Ensure multiple temporary statuses can be recovered during a round
+            mon = null;
+            mon = new Monster();
+            for (int i = 0; i < 1000; i++)
+            {
+                mon.AddTempStatus(TempStatus.Confuse);
+                mon.AddTempStatus(TempStatus.Mute);
+                mon.AddTempStatus(TempStatus.Paralysis);
+                mon.AddTempStatus(TempStatus.Sleep);
+                mon.AddTempStatus(TempStatus.Venom);
+
+                int recoverCount = 0;
+                MonsterManager.RollTempStatusRecovery(mon);
+                if (!mon.HasTempStatus(TempStatus.Confuse))
+                    recoverCount++;
+                if (!mon.HasTempStatus(TempStatus.Mute))
+                    recoverCount++;
+                if (!mon.HasTempStatus(TempStatus.Paralysis))
+                    recoverCount++;
+                if (!mon.HasTempStatus(TempStatus.Sleep))
+                    recoverCount++;
+                if (!mon.HasTempStatus(TempStatus.Venom))
+                    recoverCount++;
+
+                // At least two statuses were removed, it's valid
+                if (recoverCount > 1)
+                    return;
+            }
+            Assert.Fail("Monster did not recover multiple temp statuses after 1000 rounds.");
         }
     }
 }
