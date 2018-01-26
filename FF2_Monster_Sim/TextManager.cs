@@ -13,7 +13,7 @@ namespace FF2_Monster_Sim
     public static class TextManager
     {
         private static int X, Y;
-        private static Textbox actorBox, hitsBox, targetBox, dmgBox, resultsBox;
+        private static Textbox actorBox, hitsBox, targetBox, dmgBox, resultsBox, infoBox;
         private static Textbox[] textboxes;
         private static Vector2[] positions;
 
@@ -21,6 +21,7 @@ namespace FF2_Monster_Sim
         
         private static string sceneOneText, sceneTwoText;
         private static string roundText, turnText;
+        private static string teamOneName, teamTwoName;
 
         private static SpriteFont spriteFont;
         
@@ -36,10 +37,12 @@ namespace FF2_Monster_Sim
             targetBox = new Textbox();
             dmgBox = new Textbox();
             resultsBox = new Textbox();
-            textboxes = new Textbox[]{ actorBox, hitsBox, targetBox, dmgBox, resultsBox };
+            infoBox = new Textbox();
+            textboxes = new Textbox[]{ actorBox, hitsBox, targetBox, dmgBox, resultsBox, infoBox };
             textboxStack = new Stack<Textbox>();
-            turnText = "Turn: 0";
+            turnText = "Turn : 0";
             roundText = "Round: 0";
+            teamOneName = teamTwoName = "Team";
 
             // Setup positioning
             X = x;
@@ -50,22 +53,24 @@ namespace FF2_Monster_Sim
                 new Vector2(x + 144, y),
                 new Vector2(x, y + 64),
                 new Vector2(x + 144, y + 64),
-                new Vector2(x, y + 128)
+                new Vector2(x, y + 128),
+                new Vector2(x, y)
             };
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < positions.Length; i++)
                 textboxes[i].Initialize(positions[i]);
         }
 
         public static void LoadContent(Texture2D[] textures, SpriteFont font)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < textboxes.Length; i++)
                 textboxes[i].LoadContent(textures[i], font);
             spriteFont = font;
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
+            infoBox.Draw(spriteBatch);
             actorBox.Draw(spriteBatch);
             hitsBox.Draw(spriteBatch);
             targetBox.Draw(spriteBatch);
@@ -74,6 +79,8 @@ namespace FF2_Monster_Sim
 
             spriteBatch.DrawString(spriteFont, roundText, new Vector2(0, 65), Color.White);
             spriteBatch.DrawString(spriteFont, turnText, new Vector2(0, 80), Color.White);
+            spriteBatch.DrawString(spriteFont, teamOneName, new Vector2(14, 375), Color.White);
+            spriteBatch.DrawString(spriteFont, teamTwoName, new Vector2(734, 375), Color.White);
 
             ParseDrawSceneText(sceneOneText, 14, 444, spriteBatch);
             ParseDrawSceneText(sceneTwoText, 662, 444, spriteBatch);
@@ -90,7 +97,7 @@ namespace FF2_Monster_Sim
         {
             foreach (Textbox box in textboxes)
                 TearDownTextBox(box);
-            sceneOneText = sceneTwoText = "";
+            sceneOneText = sceneTwoText = teamOneName = teamTwoName = "";
             roundText = "Round: 0";
             turnText = "Turn: 0";
             textboxStack.Clear();
@@ -139,6 +146,11 @@ namespace FF2_Monster_Sim
             SetTextBox(resultsBox, text);
         }
 
+        public static void SetInfoText(string text)
+        {
+            SetTextBox(infoBox, text);
+        }
+
         public static void SetRoundText(int round)
         {
             roundText = "Round: " + round.ToString();
@@ -146,7 +158,15 @@ namespace FF2_Monster_Sim
 
         public static void SetTurnText(int turn)
         {
-            turnText = "Turn: " + turn.ToString();
+            turnText = "Turn : " + turn.ToString();
+        }
+
+        public static void SetTeamName(int team, string name)
+        {
+            if (team == 1)
+                teamOneName = "Team " + name;
+            else
+                teamTwoName = "Team " + name;
         }
 
         /// <summary>

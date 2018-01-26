@@ -112,10 +112,6 @@ namespace SimTests
                     Assert.IsTrue(Utils.NumIsWithinRange(action.MPCost, 0, 256));
                     Assert.IsTrue(validTargets.Contains(action.Target.ToUpper()));
                 }
-                // Attack or valid spell name
-                // Level within range
-                // Power, Accuracy, MpConsumption >= 0
-                // Target string is valid
 
                 // Everything else is not null
                 Assert.IsNotNull(monster.AttackEffects);

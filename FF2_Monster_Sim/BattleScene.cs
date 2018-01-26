@@ -75,7 +75,7 @@ namespace FF2_Monster_Sim
          */
 
         public SceneType SceneType { get; private set; }
-        public bool Flipped = false;
+        public bool Flipped = false, IsTeam = false;
         private int sceneNum;
         public int X = 0, Y = 0;
         
@@ -130,10 +130,12 @@ namespace FF2_Monster_Sim
         /// Setup and populate the scene with monsters using a very specifically formatted string...
         /// Expected format: "A;name-name-name-name-name-name-name-name"
         /// </summary>
-        public void PopulateScene(string sceneString, ContentManager content)
+        public void PopulateScene(string sceneString, ContentManager content, bool isTeam = false)
         {
             // Cleanup any leftovers first
             ClearScene();
+
+            IsTeam = isTeam;
 
             // Rip apart the string into it's scene type and monster list
             SceneString = sceneString;
