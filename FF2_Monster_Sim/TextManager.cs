@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace FF2_Monster_Sim
 {
@@ -61,11 +62,15 @@ namespace FF2_Monster_Sim
                 textboxes[i].Initialize(positions[i]);
         }
 
-        public static void LoadContent(Texture2D[] textures, SpriteFont font)
+        public static void LoadContent(ContentManager content, SpriteFont font)
         {
-            for (int i = 0; i < textboxes.Length; i++)
-                textboxes[i].LoadContent(textures[i], font);
             spriteFont = font;
+            actorBox.LoadContent(content.Load<Texture2D>("Graphics\\Actorbox"), spriteFont);
+            hitsBox.LoadContent(content.Load<Texture2D>("Graphics\\DmgHitBox"), spriteFont);
+            targetBox.LoadContent(content.Load<Texture2D>("Graphics\\Actorbox"), spriteFont);
+            dmgBox.LoadContent(content.Load<Texture2D>("Graphics\\DmgHitBox"), spriteFont);
+            resultsBox.LoadContent(content.Load<Texture2D>("Graphics\\ResultsBox"), spriteFont);
+            infoBox.LoadContent(content.Load<Texture2D>("Graphics\\InfoBox"), spriteFont);
         }
 
         public static void Draw(SpriteBatch spriteBatch)

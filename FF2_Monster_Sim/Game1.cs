@@ -91,30 +91,19 @@ namespace FF2_Monster_Sim
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            MonsterManager.LoadContent();
-            SpellManager.LoadContent();
-            SoundManager.LoadContent(Content);
 
             // Graphics
             gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");
-            font = Content.Load<SpriteFont>("Graphics/Font");
+            font = Content.Load<SpriteFont>("Graphics\\Font");
 
-            // Text Manager
-            // TODO: This should be moved into TextManager
-            Texture2D[] textures =
-            {
-                Content.Load<Texture2D>("Graphics\\ActorBox"),
-                Content.Load<Texture2D>("Graphics\\DmgHitBox"),
-                Content.Load<Texture2D>("Graphics\\ActorBox"),
-                Content.Load<Texture2D>("Graphics\\DmgHitBox"),
-                Content.Load<Texture2D>("Graphics\\ResultsBox"),
-                Content.Load<Texture2D>("Graphics\\InfoBox")
-            };
-            TextManager.LoadContent(textures.ToArray(), font);
+            // Managers
+            MonsterManager.LoadContent();
+            SpellManager.LoadContent();
+            SoundManager.LoadContent(Content);
+            TextManager.LoadContent(Content, font);
 
             // Populate the scenes with random monsters
             PopulateScenes();
-
 
             // Threading
             combatThread.Start();
