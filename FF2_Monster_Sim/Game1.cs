@@ -249,11 +249,25 @@ namespace FF2_Monster_Sim
                                     continue;
                                 }
 
+                                // Flicker sprite
+                                // TODO: Different sounds and animations need to play based on the attack type
+                                SoundManager.PlayPhysicalHitSound();
+                                for (int i = 0; i < 16; i++)
+                                {
+                                    if (i % 2 == 0)
+                                        target.IsVisible = false;
+                                    else
+                                        target.IsVisible = true;
+                                    Thread.Sleep(25);
+                                }
+
                                 TextManager.SetHitsText(atkRes.HitsMessage);
                                 Thread.Sleep(gameTick);
 
                                 TextManager.SetDamageText(atkRes.DamageMessage);
                                 Thread.Sleep(gameTick);
+
+                                // TODO: Monster's death animation and sound needs to occur on this step, if necessary
 
                                 // Display each result, tearing down existing results as needed
                                 for (int i = 0; i < atkRes.Results.Count; i++)
@@ -282,12 +296,27 @@ namespace FF2_Monster_Sim
 
                                 // Cast the spell and display the results
                                 SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
+                                
+                                // Flicker sprite
+                                // TODO: Different sounds and animations need to play based on the attack type
+                                SoundManager.PlayPhysicalHitSound();
+                                for (int i = 0; i < 16; i++)
+                                {
+                                    if (i % 2 == 0)
+                                        target.IsVisible = false;
+                                    else
+                                        target.IsVisible = true;
+                                    Thread.Sleep(25);
+                                }
 
                                 if (spellRes.Damage >= 0)
                                 {
                                     TextManager.SetDamageText(spellRes.Damage.ToString());
                                     Thread.Sleep(gameTick);
+
                                 }
+
+                                // TODO: Monster's death animation and sound needs to occur on this step, if necessary
 
                                 // Display each result, tearing down existing results as needed
                                 for (int i = 0; i < spellRes.Results.Count; i++)

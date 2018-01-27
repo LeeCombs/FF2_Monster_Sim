@@ -45,6 +45,7 @@ namespace FF2_Monster_Sim
 
         public BattleScene scene;
         public string size = "";
+        public bool IsVisible = true;
 
         private const int FEAR_VALUE = 20;
         private const int BERSERK_VALUE = 5;
@@ -300,7 +301,8 @@ namespace FF2_Monster_Sim
             SpriteEffects s = SpriteEffects.None;
             if (flipped)
                 s = SpriteEffects.FlipHorizontally;
-            spriteBatch.Draw(texture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
+            if (IsVisible)
+                spriteBatch.Draw(texture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
         }
 
         public void Update()

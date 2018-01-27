@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
+
 
 namespace FF2_Monster_Sim
 {
@@ -21,6 +23,7 @@ namespace FF2_Monster_Sim
         private static Song victorySong;
         private static Song defeatSong;
         private static Song menuSong;
+        private static SoundEffect physicalHit;
 
         // Sound
 
@@ -49,6 +52,7 @@ namespace FF2_Monster_Sim
             menuSong = content.Load<Song>("Music\\Chocobo");
 
             // Sounds
+            physicalHit = content.Load<SoundEffect>("Sounds\\Physical_Hit");
         }
 
         public static void Update(GameTime gameTime)
@@ -83,6 +87,11 @@ namespace FF2_Monster_Sim
         public static void PlayMenuMusic()
         {
             MediaPlayer.Play(menuSong);
+        }
+
+        public static void PlayPhysicalHitSound()
+        {
+            physicalHit.Play();
         }
 
         /////////////

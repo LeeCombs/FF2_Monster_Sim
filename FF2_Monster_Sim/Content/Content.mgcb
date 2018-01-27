@@ -1856,3 +1856,9 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/InfoBox.png
 
+#begin Sounds/Physical_Hit.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Physical_Hit.ogg
+
