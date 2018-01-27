@@ -1,16 +1,16 @@
 id,teamName,sceneString,wins,losses,ties,rounds
-0,Final Boss,C;Emperor_2,0,0,0,0
-1,Sandbagger,B;Emperor_1-Emperor_1-Emperor_1-Emperor_1-Emperor_1-Emperor_1,0,0,0,0
-2,Jello,A;Jelly-Jelly-Slime-Slime-Mallow-Mallow-Pudding-Pudding,0,0,0,0
-3,S U C C,A;M.Sucker-M.Sucker-M.Sucker-M.Sucker-Sucker-Sucker-Sucker-Sucker,0,0,0,0
-4,Blood Suckers,B;VmpLady-VmpLady-VmpGirl-VmpGirl-VmpThorn-VmpThorn,0,0,0,0
-5,Tall Boys,B;MtGolem-StGolem-Golem,0,0,0,0
-6,Magic,B;Mage-Sorcerer-Wizard-Mage-Sorcerer-Wizard,0,0,0,0
-7,Catz,B;Coeurl-Coeurl-Coeurl-Panther-Panther-Panther,0,0,0,0
-8,Soul Searching,A;R.Soul-R.Soul-R.Soul-R.Soul-G.Soul-G.Soul-Soul-Soul,0,0,0,0
-9,Global Worming,B;AbysWorm-AbysWorm-SandWorm-SandWorm-Worm-Worm,0,0,0,0
-10,Bad Breath,B;L.Molbor-G.Molbor-Molbor-L.Molbor-G.Molbor-Molbor,0,0,0,0
-11,RURURU,B;WolfDevl-WolfDevl-WolfDevl-Werewolf-Werewolf-Werewolf,0,0,0,0
-12,It's All Ogre,B;WzOgre-WzOgre-GrOgre-GrOgre-Ogre-Ogre,0,0,0,0
-13,Pump Iron,C;Giant,0,0,0,0
-14,Arr Matey,B;Borgan-Bucaneer-Bucaneer-Bucaneer-Pirate-Pirate,0,0,0,0
+0,Final Boss,C;Emperor_2,12,0,0,76
+1,Sandbagger,B;Emperor_1-Emperor_1-Emperor_1-Emperor_1-Emperor_1-Emperor_1,6,0,0,145
+2,Jello,A;Jelly-Jelly-Slime-Slime-Mallow-Mallow-Pudding-Pudding,0,8,0,83
+3,S U C C,A;M.Sucker-M.Sucker-M.Sucker-M.Sucker-Sucker-Sucker-Sucker-Sucker,4,3,0,39
+4,Blood Suckers,B;VmpLady-VmpLady-VmpGirl-VmpGirl-VmpThorn-VmpThorn,10,2,0,96
+5,Tall Boys,B;MtGolem-StGolem-Golem,8,2,0,96
+6,Magic,B;Mage-Sorcerer-Wizard-Mage-Sorcerer-Wizard,5,2,0,40
+7,Catz,B;Coeurl-Coeurl-Coeurl-Panther-Panther-Panther,1,4,0,41
+8,Soul Searching,A;R.Soul-R.Soul-R.Soul-R.Soul-G.Soul-G.Soul-Soul-Soul,2,5,0,93
+9,Global Worming,B;AbysWorm-AbysWorm-SandWorm-SandWorm-Worm-Worm,4,0,0,15
+10,Bad Breath,B;L.Molbor-G.Molbor-Molbor-L.Molbor-G.Molbor-Molbor,4,2,0,28
+11,RURURU,B;WolfDevl-WolfDevl-WolfDevl-Werewolf-Werewolf-Werewolf,2,2,0,31
+12,It's All Ogre,B;WzOgre-WzOgre-GrOgre-GrOgre-Ogre-Ogre,1,4,0,28
+13,Pump Iron,C;Giant,4,0,0,20
+14,Arr Matey,B;Borgan-Bucaneer-Bucaneer-Bucaneer-Pirate-Pirate,0,7,0,27

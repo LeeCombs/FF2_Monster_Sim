@@ -23,7 +23,7 @@ namespace FF2_Monster_Sim
         private const int ROUND_LIMIT = 100;
         private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
-        private int gameTick = 100, teardownTick = 150;
+        private int gameTick = 10, teardownTick = 15;
         private const int FANFARE_TIMER = 17000; // 17000 for one loop, 30000 for two
         private const int INTERLUDE_TIMER = 6500; // ~6500 per loop
 
@@ -34,11 +34,11 @@ namespace FF2_Monster_Sim
         private SpriteFont font;
 
         // Teams
-        private string teamOneName, teamTwoName;
-        private int teamOneIndex, teamTwoIndex;
+        private TeamManager.Team teamOne, teamTwo;
 
         // Saving battle results
-        private const string RESULTS_FILE_PATH = @".\Content\Data\FF2_BattleResults.txt";
+        private const string RESULTS_PATH = @".\Content\Data\FF2_BattleResults.txt";
+        private const string TEAM_DATA_PATH = @".\Content\Data\FF2_TeamData.csv";
 
         public Game1()
         {
@@ -103,18 +103,10 @@ namespace FF2_Monster_Sim
                 Content.Load<Texture2D>("Graphics\\InfoBox")
             };
             TextManager.LoadContent(textures.ToArray(), font);
-            
-            // Populate the scenes with random monsters
-            string[] teamOne = PickRandomTeam().Split(',');
-            teamOneName = teamOne[1];
-            teamOneIndex = int.Parse(teamOne[0]);
-            TextManager.SetTeamName(1, teamOneName);
-            sceneOne.PopulateScene(teamOne[2], Content, true);
 
-            teamTwoName = "Random";
-            TextManager.SetTeamName(2, teamTwoName);
-            sceneTwo.PopulateScene(GenerateRandomSceneString(), Content);
-            
+            // Populate the scenes with random monsters
+            PopulateScenes();
+
             // Threading
             combatThread.Start();
         }
@@ -336,44 +328,34 @@ namespace FF2_Monster_Sim
 
                 // Record the battle info
                 WriteBattleResults();
+                
+                // Display results info and play some music
+                if (sceneTwo.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
+                    SoundManager.PlayDefeatMusic();
+                else
+                    SoundManager.PlayVictoryMusic();
 
-                // Play music based on who won or lost, and based on scene type
-                if (!sceneOne.HasLivingMonsters() && sceneTwo.SceneType == SceneType.C)
+                String infoText = "";
+                if (sceneOne.HasLivingMonsters())
                 {
-                    SoundManager.PlayDefeatMusic();
-                    TextManager.SetInfoText("Team " + teamOneName + "\nwas defeated...");
+                    infoText = "Team " + teamOne.TeamName + "\nwas victorious!!\n\n";
+                    infoText += TeamManager.GetTeamInfo(teamOne);
                 }
-                else if (!sceneTwo.HasLivingMonsters() && sceneOne.SceneType == SceneType.C)
+                else if (sceneTwo.HasLivingMonsters())
                 {
-                    SoundManager.PlayDefeatMusic();
-                    TextManager.SetInfoText("Team " + teamTwoName + "\nwas defeated...");
+                    infoText = "Team " + teamTwo.TeamName + "\nwas victorious!!\n\n";
+                    infoText += TeamManager.GetTeamInfo(teamTwo);
                 }
                 else
-                {
-                    SoundManager.PlayVictoryMusic();
-                    if (sceneOne.HasLivingMonsters())
-                        TextManager.SetInfoText("Team " + teamOneName + "\nwas victorious!!");
-                    else
-                        TextManager.SetInfoText("Team " + teamTwoName + "\nwas victorious!!");
-                }
+                    infoText = "Tie! Neither team has\ndefeated the other in time.";
+                
+                TextManager.SetInfoText(infoText);
                 Thread.Sleep(FANFARE_TIMER);
 
-                // Cleanup scenes and setup for next battle
-                sceneOne.ClearScene();
-                sceneTwo.ClearScene();
+                // Cleanup and setup for the next battle
                 round = turn = turnTotal = 0;
                 TextManager.Clear();
-
-                // Repopulate scenes
-                string[] teamOne = PickRandomTeam().Split(',');
-                teamOneName = teamOne[1];
-                teamOneIndex = int.Parse(teamOne[0]);
-                TextManager.SetTeamName(1, teamOneName);
-                sceneOne.PopulateScene(teamOne[2], Content, true);
-
-                teamTwoName = "Random";
-                TextManager.SetTeamName(2, teamTwoName);
-                sceneTwo.PopulateScene(GenerateRandomSceneString(), Content);
+                PopulateScenes();
             }
         }
 
@@ -381,6 +363,43 @@ namespace FF2_Monster_Sim
         // Helpers //
         /////////////
 
+        /// <summary>
+        /// Setup the two teams and battle scenes for the next battle
+        /// </summary>
+        private void PopulateScenes()
+        {
+            // Cleanup scenes
+            sceneOne.ClearScene();
+            sceneTwo.ClearScene();
+
+            // Team one is always a pre-defined team
+            teamOne = TeamManager.TeamFromString(PickRandomTeamString());
+            sceneOne.PopulateScene(teamOne.TeamString, Content, true);
+            TextManager.SetTeamName(1, teamOne.TeamName);
+
+            // Sometimes pick a pre-defined team for scene two, but usually just generate one
+            bool twoIsTeam = false;
+            if (Globals.rnd.Next(100) < 20)
+            {
+                teamTwo = TeamManager.TeamFromString(PickRandomTeamString());
+                twoIsTeam = true;
+            }
+            else
+            {
+                teamTwo = new TeamManager.Team
+                {
+                    TeamName = "Random",
+                    TeamString = GenerateRandomSceneString()
+                };
+            }
+
+            sceneTwo.PopulateScene(teamTwo.TeamString, Content, twoIsTeam);
+            TextManager.SetTeamName(2, teamTwo.TeamName);
+        }
+
+        /// <summary>
+        /// Generate and retrieve a random Scene string
+        /// </summary>
         private string GenerateRandomSceneString()
         {
             string[] alph = new string[] { "A", "A", "B", "B", "B", "B", "C" };
@@ -388,19 +407,18 @@ namespace FF2_Monster_Sim
             return rndchar + ";" + String.Join("-", MonsterManager.GenerateMonsterList(rndchar));
         }
 
-        private string PickRandomTeam()
+        /// <summary>
+        /// Retrieve a random team string from team data
+        /// </summary>
+        private string PickRandomTeamString()
         {
-            string path = @".\Content\Data\FF2_TeamData.csv";
-            List<string> teamData = File.ReadAllLines(path).ToList();
+            List<string> teamData = File.ReadAllLines(TEAM_DATA_PATH).ToList();
             return teamData[Globals.rnd.Next(1, teamData.Count)];
-
-            /*
-            string[] str2 = str[1].Split(',');
-            str[1] = string.Join(",", str2);
-            File.WriteAllLines(path, str);
-            */
         }
 
+        /// <summary>
+        /// Write results of the battle and update team data
+        /// </summary>
         private void WriteBattleResults()
         {
             // Build the output string and save it. 
@@ -410,56 +428,61 @@ namespace FF2_Monster_Sim
             string outstr = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
 
             Debug.WriteLine(outstr);
-            using (StreamWriter file = new StreamWriter(RESULTS_FILE_PATH, true))
+            using (StreamWriter file = new StreamWriter(RESULTS_PATH, true))
             {
                 file.WriteLine(outstr);
             }
-
-            string path = @".\Content\Data\FF2_TeamData.csv";
-            List<string> teamData = File.ReadAllLines(path).ToList();
+            
+            // Update team data
+            // TODO: Make this nice
+            List<string> teamData = File.ReadAllLines(TEAM_DATA_PATH).ToList();
+            
             if (sceneOne.IsTeam)
             {
                 for (int i = 0; i < teamData.Count; i++)
                 {
                     string data = teamData[i];
                     string[] dataSplit = data.Split(',');
-                    if (string.Equals(teamOneIndex.ToString(), dataSplit[0]))
+                    if (string.Equals(teamOne.TeamIndex.ToString(), dataSplit[0]))
                     {
-                        Debug.WriteLine(string.Join(",", dataSplit));
-
-                        // TODO: This is fugly, fix it
                         if (sceneOne.HasLivingMonsters())
-                        {
-                            int wins = int.Parse(dataSplit[3]);
-                            wins++;
-                            dataSplit[3] = wins.ToString();
-                        }
+                            teamOne.Wins++;
                         else if (sceneTwo.HasLivingMonsters())
-                        {
-                            int losses = int.Parse(dataSplit[4]);
-                            losses++;
-                            dataSplit[4] = losses.ToString();
-                        }
+                            teamOne.Losses++;
                         else if (round >= ROUND_LIMIT)
-                        {
-                            int ties = int.Parse(dataSplit[5]);
-                            ties++;
-                            dataSplit[5] = ties.ToString();
-                        }
+                            teamOne.Ties++;
+                        teamOne.Rounds += round;
 
-                        int rounds = int.Parse(dataSplit[6]);
-                        rounds += round;
-                        dataSplit[6] = rounds.ToString();
-
-                        Debug.WriteLine(string.Join(",", dataSplit));
-                        teamData[i] = string.Join(",", dataSplit);
+                        // Write the new results and finish up
+                        teamData[i] = TeamManager.TeamToString(teamOne);
                         break;
                     }
                 }
-                File.WriteAllLines(path, teamData);
+            }
+            if (sceneTwo.IsTeam)
+            {
+                for (int i = 0; i < teamData.Count; i++)
+                {
+                    string data = teamData[i];
+                    string[] dataSplit = data.Split(',');
+                    if (string.Equals(teamTwo.TeamIndex.ToString(), dataSplit[0]))
+                    {
+                        if (sceneOne.HasLivingMonsters())
+                            teamTwo.Wins++;
+                        else if (sceneTwo.HasLivingMonsters())
+                            teamTwo.Losses++;
+                        else if (round >= ROUND_LIMIT)
+                            teamTwo.Ties++;
+                        teamTwo.Rounds += round;
+
+                        // Write the new results and finish up
+                        teamData[i] = TeamManager.TeamToString(teamTwo);
+                        break;
+                    }
+                }
             }
 
-
+            File.WriteAllLines(TEAM_DATA_PATH, teamData);
         }
 
         /// <summary>
