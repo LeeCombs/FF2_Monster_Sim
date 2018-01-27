@@ -20,18 +20,26 @@ namespace FF2_Monster_Sim
         BattleScene sceneOne, sceneTwo;
 
         // Turn Logic
+        private const int FANFARE_TIMER = 17000; // 17000 for one loop, 30000 for two
+        private const int INTERLUDE_TIMER = 13500; // ~6500 per loop
+        private const int GAME_TICK = 150;
+        private const int TEARDOWN_TICK = 100;
         private const int ROUND_LIMIT = 100;
         private int turn = 0, turnTotal = 0, round = 0;
         private Thread combatThread;
-        private int gameTick = 10, teardownTick = 15;
-        private const int FANFARE_TIMER = 17000; // 17000 for one loop, 30000 for two
-        private const int INTERLUDE_TIMER = 6500; // ~6500 per loop
 
         // Graphics
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Texture2D gameBackground;
         private SpriteFont font;
+
+        private Texture2D bg1, bg2;
+        string[] bgs = new string[] {
+                "Castle", "Cave", "Cyclone", "Desert", "Dreadnought", "Forest",
+                "Leviathan", "MysidianTower", "Pandaemonium1", "Pandaemonium2",
+                "Plains", "Sea", "Snow", "SnowCavern", "Swamp", "TropicalIsle"
+            };
 
         // Teams
         private TeamManager.Team teamOne, teamTwo;
@@ -81,7 +89,7 @@ namespace FF2_Monster_Sim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
             // TODO: use this.Content to load your game content here
             MonsterManager.LoadContent();
             SpellManager.LoadContent();
@@ -90,10 +98,10 @@ namespace FF2_Monster_Sim
             // Graphics
             gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");
             font = Content.Load<SpriteFont>("Graphics/Font");
-            
+
             // Text Manager
             // TODO: This should be moved into TextManager
-            Texture2D[] textures = 
+            Texture2D[] textures =
             {
                 Content.Load<Texture2D>("Graphics\\ActorBox"),
                 Content.Load<Texture2D>("Graphics\\DmgHitBox"),
@@ -106,6 +114,7 @@ namespace FF2_Monster_Sim
 
             // Populate the scenes with random monsters
             PopulateScenes();
+
 
             // Threading
             combatThread.Start();
@@ -131,10 +140,8 @@ namespace FF2_Monster_Sim
                 Exit();
 
             // TODO: Add your update logic here
-            
-            // TODO: Only drawing the text every frame for now. Should be redrawn when monsters take/heal damage.
-            // sceneOne.UpdateSceneText();
-            // sceneTwo.UpdateSceneText();
+            sceneOne.UpdateSceneText();
+            sceneTwo.UpdateSceneText();
 
             base.Update(gameTime);
         }
@@ -150,6 +157,8 @@ namespace FF2_Monster_Sim
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(gameBackground, new Vector2(), Color.White);
+            spriteBatch.Draw(bg1, new Vector2(), Color.White);
+            spriteBatch.Draw(bg2, new Vector2(512, 0), Color.White);
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
             TextManager.Draw(spriteBatch);
@@ -166,6 +175,11 @@ namespace FF2_Monster_Sim
         {
             while (true)
             {
+                // Setup
+                int gameTick = GAME_TICK;
+                int teardownTick = TEARDOWN_TICK;
+
+                // Display pre-game and countdown
                 SoundManager.PlayMenuMusic();
                 TextManager.SetInfoText("Starting in 14...");
                 for (int i = 0; i <= INTERLUDE_TIMER; i += 1000)
@@ -173,7 +187,7 @@ namespace FF2_Monster_Sim
                     TextManager.SetInfoText("Starting in " + (INTERLUDE_TIMER - i)/1000 + "...");
                     Thread.Sleep(1000);
                 }
-                TextManager.TearDownText();
+                while (TextManager.TearDownText());
 
                 if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
                     SoundManager.PlayBossMusic();
@@ -185,6 +199,15 @@ namespace FF2_Monster_Sim
                     // Update and display round number
                     round++;
                     TextManager.SetRoundText(round);
+
+                    // Speed up the battle every x rounds
+                    if (round % 1 == 0)
+                    {
+                        if (gameTick >= 10)
+                            gameTick -= 10;
+                        if (teardownTick >= 15)
+                            teardownTick -= 15;
+                    }
 
                     turn = 0;
                     foreach (Action action in GetSortedActionArray())
@@ -291,13 +314,9 @@ namespace FF2_Monster_Sim
                                 }
 
                                 // Tear down between each target
-                                Thread.Sleep(gameTick * 2);
+                                Thread.Sleep(gameTick * 5);
                                 while (TextManager.TearDownText())
                                     Thread.Sleep(teardownTick);
-
-                                // Testin
-                                sceneOne.UpdateSceneText();
-                                sceneTwo.UpdateSceneText();
                             }
 
                             // TODO: If both scenes only contain "Soul" enemies, they cannot kill eachother
@@ -305,7 +324,7 @@ namespace FF2_Monster_Sim
                                 break;
                         }
                         // Turn end, clean up text display
-                        Thread.Sleep(gameTick * 2);
+                        Thread.Sleep(gameTick * 5);
                         while (TextManager.TearDownText())
                             Thread.Sleep(teardownTick);
                         
@@ -328,9 +347,11 @@ namespace FF2_Monster_Sim
 
                 // Record the battle info
                 WriteBattleResults();
-                
+
                 // Display results info and play some music
-                if (sceneTwo.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
+                if (sceneOne.SceneType == SceneType.C && sceneOne.HasLivingMonsters())
+                    SoundManager.PlayDefeatMusic();
+                if (sceneTwo.SceneType == SceneType.C && sceneTwo.HasLivingMonsters())
                     SoundManager.PlayDefeatMusic();
                 else
                     SoundManager.PlayVictoryMusic();
@@ -372,6 +393,11 @@ namespace FF2_Monster_Sim
             sceneOne.ClearScene();
             sceneTwo.ClearScene();
 
+            // Set the background image randomly
+            string bgstr = bgs[Globals.rnd.Next(bgs.Length)];
+            bg1 = Content.Load<Texture2D>("Graphics\\Backdrops\\" + bgstr);
+            bg2 = Content.Load<Texture2D>("Graphics\\Backdrops\\" + bgstr);
+
             // Team one is always a pre-defined team
             teamOne = TeamManager.TeamFromString(PickRandomTeamString());
             sceneOne.PopulateScene(teamOne.TeamString, Content, true);
@@ -381,7 +407,11 @@ namespace FF2_Monster_Sim
             bool twoIsTeam = false;
             if (Globals.rnd.Next(100) < 20)
             {
-                teamTwo = TeamManager.TeamFromString(PickRandomTeamString());
+                // Don't pit a team against itself
+                do
+                    teamTwo = TeamManager.TeamFromString(PickRandomTeamString());
+                while (teamOne.TeamIndex == teamTwo.TeamIndex);
+
                 twoIsTeam = true;
             }
             else
