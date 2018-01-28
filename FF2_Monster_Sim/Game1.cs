@@ -74,7 +74,10 @@ namespace FF2_Monster_Sim
             TextManager.Initialize(360, 413);
 
             sceneOne = new BattleScene(1, 50, 139);
+            sceneOne.Initialize();
+
             sceneTwo = new BattleScene(2, 665, 139, true);
+            sceneTwo.Initialize();
 
             combatThread = new Thread(CombatLoop);
 

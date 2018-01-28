@@ -21,13 +21,6 @@ namespace SimTests
         public void SceneCreationTest()
         {
             // Test Defaults
-            BattleScene scene = new BattleScene(1, 0, 0);
-
-            Assert.AreEqual(0, scene.X);
-            Assert.AreEqual(0, scene.Y);
-            Assert.AreEqual(0, scene.GetAllLiveMonsters().Length);
-            Assert.ThrowsException<Exception>(() => scene.GetAnySingleTarget());
-            Assert.ThrowsException<Exception>(() => scene.GetFrontRowTarget());
         }
 
         [TestMethod]
@@ -53,6 +46,7 @@ namespace SimTests
         {
             // Setup
             BattleScene scene = new BattleScene(1, 0, 0);
+
             scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
             Assert.IsTrue(scene.HasLivingMonsters());
             Assert.AreEqual(8, scene.GetAllLiveMonsters().Length);
@@ -159,7 +153,7 @@ namespace SimTests
 
             // Ensure only valid, front row, names are returned
             string[] names = new string[] { "Bomb", "Grenade" };
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1000; i++)
                 Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
 
             scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb", null);
@@ -175,7 +169,32 @@ namespace SimTests
             scene.PopulateScene("A;Balloon-Balloon", null);
             for (int i = 0; i < 1000; i++)
                 Assert.IsTrue(String.Equals("Balloon", scene.GetFrontRowTarget().Name));
+        }
 
+        [TestMethod]
+        public void SceneAFlipped_GetFrontRowTargetTest()
+        {
+            // Same as above, only flipped
+            BattleScene scene = new BattleScene(0, 0, 0);
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb-Grenade-Grenade", null);
+            
+            string[] names = new string[] { "Bomb", "Grenade" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine-Bomb-Bomb", null);
+            names = new string[] { "Mine", "Bomb" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("A;Balloon-Balloon-Mine-Mine", null);
+            names = new string[] { "Balloon", "Mine" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("A;Balloon-Balloon", null);
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(String.Equals("Balloon", scene.GetFrontRowTarget().Name));
         }
 
         [TestMethod]
@@ -198,8 +217,28 @@ namespace SimTests
             scene.PopulateScene("B;Molbor-Molbor", null);
             for (int i = 0; i < 1000; i++)
                 Assert.IsTrue(String.Equals("Molbor", (scene.GetFrontRowTarget().Name)));
+        }
 
+        [TestMethod]
+        public void SceneBFlipped_GetFrontRowTargetTest()
+        {
+            // Same as above, only flipped
 
+            BattleScene scene = new BattleScene(0, 0, 0, true);
+            scene.PopulateScene("B;Molbor-Molbor-Soldier-Soldier-Panther-Panther", null);
+            
+            string[] names = new string[] { "Soldier", "Panther" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("B;Molbor-Molbor-Soldier-Soldier", null);
+            names = new string[] { "Molbor", "Soldier" };
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(names.Contains(scene.GetFrontRowTarget().Name));
+
+            scene.PopulateScene("B;Molbor-Molbor", null);
+            for (int i = 0; i < 1000; i++)
+                Assert.IsTrue(String.Equals("Molbor", (scene.GetFrontRowTarget().Name)));
         }
 
         [TestMethod]

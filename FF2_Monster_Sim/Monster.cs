@@ -448,12 +448,6 @@ namespace FF2_Monster_Sim
             // TODO: Animation
         }
 
-        public void Remove()
-        {
-            if (scene != null)
-                scene.RemoveMonster(this);
-        }
-
         public bool IsAlive()
         {
             return HP > 0;

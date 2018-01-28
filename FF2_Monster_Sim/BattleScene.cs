@@ -79,9 +79,10 @@ namespace FF2_Monster_Sim
         private int sceneNum;
         public int X = 0, Y = 0;
         
-        private Dictionary<int, Monster[]> monsterSlots = new Dictionary<int, Monster[]>();
         private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
-
+        
+        private Monster[][] columns = new Monster[4][];
+        
         // TEMP
         public string MonsterNames;
         public string SceneString;
@@ -92,6 +93,7 @@ namespace FF2_Monster_Sim
             X = x;
             Y = y;
             Flipped = flipped;
+            Initialize();
         }
 
         //////////////
@@ -100,7 +102,9 @@ namespace FF2_Monster_Sim
 
         public void Initialize()
         {
-            //
+            // Populate columns with nulls to start
+            for (int i = 0; i < columns.Length; i++)
+                columns[i] = new Monster[] { null, null };
         }
 
         public void LoadContent()
@@ -110,16 +114,11 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots.ToArray())
-            {
-                foreach (Monster m in entry.Value)
-                {
-                    if (m == null || m.IsDead())
-                        continue;
-
-                    m.Draw(spriteBatch);
-                }
-            }
+            foreach (Monster[] col in columns)
+                foreach (Monster mon in col)
+                    if (mon != null)
+                        if (mon.IsAlive())
+                            mon.Draw(spriteBatch);
         }
         
         /////////////
@@ -156,9 +155,10 @@ namespace FF2_Monster_Sim
                 
                 if (content != null)
                     monster.Initialize(content.Load<Texture2D>("Graphics\\Monsters\\" + monster.Name), Flipped);
+
                 monster.scene = this;
-                
-                monsterSlots[col / 2][row % 2] = monster;
+
+                columns[col / 2][row % 2] = monster;
                 monster.Position = slotPositions[col / 2][row % 2];
                 row++;
                 col++;
@@ -181,27 +181,10 @@ namespace FF2_Monster_Sim
         public void ClearScene()
         {
             TextManager.SetSceneText(sceneNum, "");
-
-            // TODO: Ensure this actually cleans up properly
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
-                for (int i = 0; i < entry.Value.Length; i++)
-                    entry.Value[i] = null;
-        }
-
-        /// <summary>
-        /// Remove a single monster from this scene
-        /// TODO: Ensure proper memory cleanup
-        /// </summary>
-        public void RemoveMonster(Monster monster)
-        {
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
-                for (int i = 0; i < entry.Value.Length; i++)
-                    if (entry.Value[i] != null)
-                        if (Object.Equals(monster, entry.Value[i]))
-                        {
-                            entry.Value[i] = null;
-                            return;
-                        }
+            
+            for (int i = 0; i < columns.Length; i++)
+                for (int j = 0; j < columns[i].Length; j++)
+                    columns[i][j] = null;
         }
 
         /// <summary>
@@ -286,9 +269,11 @@ namespace FF2_Monster_Sim
         public Monster[] GetAllLiveMonsters()
         {
             List<Monster> liveMonsters = new List<Monster>();
-            foreach (Monster mon in GetAllMonsters())
-                if (mon.IsAlive())
-                    liveMonsters.Add(mon);
+            foreach (Monster[] col in columns)
+                foreach (Monster mon in col)
+                    if (mon != null)
+                        if (mon.IsAlive())
+                            liveMonsters.Add(mon);
             return liveMonsters.ToArray();
         }
 
@@ -305,9 +290,6 @@ namespace FF2_Monster_Sim
         /// </summary>
         public Monster GetAnySingleTarget()
         {
-            if (monsterSlots.Count == 0)
-                throw new Exception("Monster Slots must be populated before they can return anything");
-
             // Build a list of current monsters, choose one randomly and return it
             Monster[] activeList = GetAllLiveMonsters();
             int slotRoll = Globals.rnd.Next(0, activeList.Length);
@@ -319,51 +301,13 @@ namespace FF2_Monster_Sim
         /// </summary>
         public Monster GetFrontRowTarget()
         {
-            if (monsterSlots.Count == 0)
-                throw new Exception("Monster Slots must be populated before they can return anything");
-
             // Build a list of viable targets based on which two rows are front rows
             List<Monster> monsterList = new List<Monster>();
 
-            switch (SceneType)
-            {
-                case SceneType.A:
-                    // 4 columns, check front two for emptiness
-                    if (!ColumnIsEmpty(3))
-                    {
-                        monsterList.AddRange(GetLiveMonstersFromCol(3));
-                        monsterList.AddRange(GetLiveMonstersFromCol(2));
-                    }
-                    if (!ColumnIsEmpty(2))
-                    {
-                        monsterList.AddRange(GetLiveMonstersFromCol(2));
-                        monsterList.AddRange(GetLiveMonstersFromCol(1));
-                    }
-                    else
-                    {
-                        monsterList.AddRange(GetLiveMonstersFromCol(1));
-                        monsterList.AddRange(GetLiveMonstersFromCol(0));
-                    }
-                    break;
-                case SceneType.B:
-                    // 3 columns, only check front-most for emptiness
-                    if (!ColumnIsEmpty(2))
-                    {
-                        monsterList.AddRange(GetLiveMonstersFromCol(2));
-                        monsterList.AddRange(GetLiveMonstersFromCol(1));
-                    }
-                    else
-                    {
-                        monsterList.AddRange(GetLiveMonstersFromCol(1));
-                        monsterList.AddRange(GetLiveMonstersFromCol(0));
-                    }
-                    break;
-                case SceneType.C:
-                    // Only one column
-                    monsterList.AddRange(GetLiveMonstersFromCol(0));
-                    break;
-            }
-
+            foreach (Monster monst in GetAllLiveMonsters())
+                if (!MonsterIsBackRow(monst))
+                    monsterList.Add(monst);
+            
             // Roll a random monster from the list and return it
             int slotRoll = Globals.rnd.Next(0, monsterList.Count);
             return monsterList[slotRoll];
@@ -401,16 +345,16 @@ namespace FF2_Monster_Sim
         /// </summary>
         private void LoadSceneType(SceneType sceneType)
         {
-            // Set positions and monster slots based on sceneType, and whether the scene is flipped or not
+            // Cleanup before populating the scene
+            ClearScene();
+
+            // Set monster positions based on scene type, then flip them if necessary
             SceneType = sceneType;
             switch (SceneType)
             {
                 case SceneType.A: // 4 x 2 Slots
                     for (int i = 0; i < 4; i++)
                     {
-                        Monster[] monsters = { null, null };
-                        monsterSlots[i] = monsters;
-
                         Vector2[] positions = { new Vector2(X + 75 * i, Y + 0), new Vector2(X + 75 * i, Y + 100) };
                         slotPositions[i] = positions;
                     }
@@ -418,15 +362,11 @@ namespace FF2_Monster_Sim
                 case SceneType.B: // 3 x 2 Slots
                     for (int i = 0; i < 3; i++)
                     {
-                        Monster[] monsters = { null, null };
-                        monsterSlots[i] = monsters;
-
                         Vector2[] positions = { new Vector2(X + 100 * i, Y + 0), new Vector2(X + 100 * i, Y + 100) };
                         slotPositions[i] = positions;
                     }
                     break;
                 case SceneType.C: // Only one slot
-                    monsterSlots[0] = new Monster[] { null };
                     slotPositions[0] = new Vector2[] { new Vector2(X, Y) };
                     return;
                 default:
@@ -444,7 +384,7 @@ namespace FF2_Monster_Sim
         private Monster[] GetLiveMonstersFromCol(int col)
         {
             List<Monster> monList = new List<Monster>();
-            foreach (Monster m in monsterSlots[col])
+            foreach (Monster m in columns[col])
                 if (m != null)
                     if (m.IsAlive())
                         monList.Add(m);
@@ -457,29 +397,21 @@ namespace FF2_Monster_Sim
         private bool MonsterIsBackRow(Monster monster)
         {
             int col = GetMonsterColumn(monster);
-
-            // Col 2 and 3 cannot be back rows
+            
+            // Columns 2 and 3 always front rows
             if (col == 2 || col == 3)
                 return false;
-            
-            // Check columns 2+ ahead of monster for emptiness
-            switch (SceneType)
-            {
-                case SceneType.A:
-                    if (col == 1)
-                        return !ColumnIsEmpty(3);
-                    return !(ColumnIsEmpty(2) && ColumnIsEmpty(3));
-                case SceneType.B:
-                    // Three rows max, only check column 2
-                    if (col == 0)
-                        return !ColumnIsEmpty(2);
-                    return false;
-                case SceneType.C:
-                    // Since there's only one slot, it cannot be a back row
-                    return false;
-                default:
-                    throw new Exception("Uncaught sceneType: " + SceneType);
-            }
+                
+            // If column 3 isn't empty, then 0 and 1 cannot be front rows
+            if (!ColumnIsEmpty(3))
+                if (col == 0 || col == 1)
+                    return true;
+                
+            if (!ColumnIsEmpty(2))
+                if (col == 0)
+                    return true;
+
+            return false;
         }
 
         /// <summary>
@@ -487,10 +419,11 @@ namespace FF2_Monster_Sim
         /// </summary>
         private int GetMonsterColumn(Monster monster)
         {
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots)
-                foreach (Monster m in entry.Value)
-                    if (Object.Equals(m, monster))
-                        return entry.Key;
+            for (int i = 0; i < columns.Length; i++)
+                foreach (Monster mon in columns[i])
+                    if (Object.Equals(mon, monster))
+                        return i;
+            
             return -1;
         }
         
@@ -499,13 +432,9 @@ namespace FF2_Monster_Sim
         /// </summary>
         private bool ColumnIsEmpty(int col)
         {
-            // If col is out of bounds, it's empty
-            if (col < 0 || col >= monsterSlots.Count)
-                return true;
-
-            foreach (Monster m in monsterSlots[col])
-                if (m != null)
-                    if (m.IsAlive())
+            foreach (Monster mon in columns[col])
+                if (mon != null)
+                    if (mon.IsAlive())
                         return false;
 
             return true;
@@ -517,10 +446,10 @@ namespace FF2_Monster_Sim
         private Monster[] GetAllMonsters()
         {
             List<Monster> activeList = new List<Monster>();
-            foreach (KeyValuePair<int, Monster[]> entry in monsterSlots.ToArray())
-                foreach (Monster m in entry.Value)
-                    if (m != null)
-                        activeList.Add(m);
+            foreach (Monster[] col in columns)
+                foreach (Monster mon in col)
+                    if (mon != null)
+                        activeList.Add(mon);
             return activeList.ToArray();
         }
     }
