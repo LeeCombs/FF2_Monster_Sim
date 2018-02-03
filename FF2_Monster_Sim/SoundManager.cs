@@ -91,7 +91,8 @@ namespace FF2_Monster_Sim
 
         public static void PlayPhysicalHitSound()
         {
-            physicalHit.Play();
+            SoundEffectInstance sei = physicalHit.CreateInstance();
+            sei.Play();
         }
 
         /////////////

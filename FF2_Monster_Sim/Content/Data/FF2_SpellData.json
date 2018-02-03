@@ -612,7 +612,7 @@
    "successMessage": "Att. up!"
  },
  {
-   "name": "FIRE_S",
+   "name": "BLAZE",
    "type": "Special",
    "effect": "Damage",
    "power": 20,
@@ -624,7 +624,7 @@
    "successMessage": ""
  },
  {
-   "name": "ICE_S",
+   "name": "BLIZZ",
    "type": "Special",
    "effect": "Damage",
    "power": 20,
@@ -636,7 +636,7 @@
    "successMessage": ""
  },
  {
-   "name": "BOLT_S",
+   "name": "THNDR",
    "type": "Special",
    "effect": "Damage",
    "power": 20,

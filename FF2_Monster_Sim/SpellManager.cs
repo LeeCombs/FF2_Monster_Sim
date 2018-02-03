@@ -119,12 +119,8 @@ namespace FF2_Monster_Sim
         public static SpellResult CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
         {
             // Catch the errors first
-            if (caster == null)
-                throw new ArgumentNullException("Invalid actor provided");
-            if (target == null)
-                throw new ArgumentNullException("Invalid target provided");
-            if (spell == null)
-                throw new ArgumentNullException("Invalid spell provided");
+            if (caster == null || target == null || spell == null)
+                throw new ArgumentNullException("Invalid parameter provided");
             if (level < 0 || level > 16)
                 throw new ArgumentOutOfRangeException("Level out of range. Must be 0-16. Found: " + level);
             

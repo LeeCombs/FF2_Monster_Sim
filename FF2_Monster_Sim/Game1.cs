@@ -254,14 +254,17 @@ namespace FF2_Monster_Sim
 
                                 // Flicker sprite
                                 // TODO: Different sounds and animations need to play based on the attack type
-                                SoundManager.PlayPhysicalHitSound();
-                                for (int i = 0; i < 16; i++)
+                                if (gameTick > 30)
                                 {
-                                    if (i % 2 == 0)
-                                        target.IsVisible = false;
-                                    else
-                                        target.IsVisible = true;
-                                    Thread.Sleep(25);
+                                    SoundManager.PlayPhysicalHitSound();
+                                    for (int i = 0; i < 16; i++)
+                                    {
+                                        if (i % 2 == 0)
+                                            target.IsVisible = false;
+                                        else
+                                            target.IsVisible = true;
+                                        Thread.Sleep(25);
+                                    }
                                 }
 
                                 TextManager.SetHitsText(atkRes.HitsMessage);
@@ -302,21 +305,23 @@ namespace FF2_Monster_Sim
                                 
                                 // Flicker sprite
                                 // TODO: Different sounds and animations need to play based on the attack type
-                                SoundManager.PlayPhysicalHitSound();
-                                for (int i = 0; i < 16; i++)
+                                if (gameTick > 30)
                                 {
-                                    if (i % 2 == 0)
-                                        target.IsVisible = false;
-                                    else
-                                        target.IsVisible = true;
-                                    Thread.Sleep(25);
-                                }
+                                    SoundManager.PlayPhysicalHitSound();
+                                    for (int i = 0; i < 16; i++)
+                                    {
+                                        if (i % 2 == 0)
+                                            target.IsVisible = false;
+                                        else
+                                            target.IsVisible = true;
+                                        Thread.Sleep(25);
+                                    }
 
-                                if (spellRes.Damage >= 0)
-                                {
-                                    TextManager.SetDamageText(spellRes.Damage.ToString());
-                                    Thread.Sleep(gameTick);
-
+                                    if (spellRes.Damage >= 0)
+                                    {
+                                        TextManager.SetDamageText(spellRes.Damage.ToString());
+                                        Thread.Sleep(gameTick);
+                                    }
                                 }
 
                                 // TODO: Monster's death animation and sound needs to occur on this step, if necessary
