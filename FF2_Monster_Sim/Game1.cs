@@ -257,14 +257,7 @@ namespace FF2_Monster_Sim
                                 if (gameTick > 30)
                                 {
                                     SoundManager.PlayPhysicalHitSound();
-                                    for (int i = 0; i < 16; i++)
-                                    {
-                                        if (i % 2 == 0)
-                                            target.IsVisible = false;
-                                        else
-                                            target.IsVisible = true;
-                                        Thread.Sleep(25);
-                                    }
+                                    FlickerMonster(target, 16);
                                 }
 
                                 TextManager.SetHitsText(atkRes.HitsMessage);
@@ -288,14 +281,28 @@ namespace FF2_Monster_Sim
                                     }
                                 }
 
-                                // Testin
-                                sceneOne.UpdateSceneText();
-                                sceneTwo.UpdateSceneText();
-
                                 break;
                             }
                             else
                             {
+                                /* TODO: Spell Casting Animations and You
+                                 * 
+                                 * If animations are ever added to this system, here's what has to happen:
+                                 * - After actor and spell name are displayed, play the animation(s)
+                                 * - Flicker the background color a couple times if necessary
+                                 * 
+                                 * These steps are repeated for each target:
+                                 * - Play the specific sound effect
+                                 * - Play the specific animation on top of the sprites
+                                 * - Play any additionally queued animations
+                                 * - Sleep the thread for the length of all animation's durations
+                                 * -- i.e. Thread.Sleep(AnimationManager.PlayAnimation(AnimationName));
+                                 * - Continue with damage text and cleanup
+                                 * 
+                                 * Ensure appropriate sprite management for everything. You'll probably
+                                 * want to write an AnimationManager, and maybe SpriteManager.
+                                 */
+                                
                                 // Casting a spell
                                 TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
                                 Thread.Sleep(gameTick);
@@ -307,14 +314,12 @@ namespace FF2_Monster_Sim
                                 // TODO: Different sounds and animations need to play based on the attack type
                                 if (gameTick > 30)
                                 {
-                                    SoundManager.PlayPhysicalHitSound();
-                                    for (int i = 0; i < 16; i++)
+                                    // Flicker sprite
+                                    // TODO: Different sounds and animations need to play based on the attack type
+                                    if (gameTick > 30)
                                     {
-                                        if (i % 2 == 0)
-                                            target.IsVisible = false;
-                                        else
-                                            target.IsVisible = true;
-                                        Thread.Sleep(25);
+                                        SoundManager.PlayPhysicalHitSound();
+                                        FlickerMonster(target, 16);
                                     }
 
                                     if (spellRes.Damage >= 0)
@@ -409,6 +414,27 @@ namespace FF2_Monster_Sim
         /////////////
         // Helpers //
         /////////////
+
+        /// <summary>
+        /// Flicker a monster sprite for a given duration
+        /// TODO: This method is fine here for now, but determine if and where it
+        /// should be placed. Should animation considerations be kept within Monster, 
+        /// or moved into MonsterManager, or make a base Sprite class to handle it all?
+        /// </summary>
+        public void FlickerMonster(Monster monster, int cycles)
+        {
+            for (int i = 0; i < cycles; i++)
+            {
+                if (i % 2 == 0)
+                    monster.IsVisible = false;
+                else
+                    monster.IsVisible = true;
+                Thread.Sleep(25);
+            }
+
+            // Ensure the monster always ends up visible
+            monster.IsVisible = true;
+        }
 
         /// <summary>
         /// Setup the two teams and battle scenes for the next battle

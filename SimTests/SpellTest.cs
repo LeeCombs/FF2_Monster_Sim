@@ -9,20 +9,6 @@ namespace SimTests
     [TestClass]
     public class SpellTest
     {
-        /**
-         * Complete:
-         * Spell Creation
-         * Status absorbs, resists, weakness checks
-         * Status
-         * Buff/Debuff
-         * 
-         * TODO:
-         * Result message returns
-         * KO Status
-         * Damage
-         * ANTI, DSPL, Blast
-         * 
-         */
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
