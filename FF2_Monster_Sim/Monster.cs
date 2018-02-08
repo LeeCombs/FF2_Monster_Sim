@@ -41,6 +41,9 @@ namespace FF2_Monster_Sim
 
     public class Monster
     {
+        // Status Sprites
+        private List<StatusSprite> statusSprites;
+
         // Misc vars
 
         public BattleScene scene;
@@ -278,6 +281,8 @@ namespace FF2_Monster_Sim
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new HashSet<TempStatus>();
             PermStatuses = new HashSet<PermStatus>();
+
+            statusSprites = new List<StatusSprite>();
         }
 
         //////////////
@@ -654,9 +659,9 @@ namespace FF2_Monster_Sim
             return Debuffs.ContainsKey(debuff);
         }
 
-        ///////////////////
-        // Temp Statuses //
-        ///////////////////
+        //////////////
+        // Statuses //
+        //////////////
 
         /// <summary>
         /// Attempt to add a temporary status to the monster. 
@@ -683,10 +688,6 @@ namespace FF2_Monster_Sim
             return TempStatuses.Contains(tempStatus);
         }
 
-        ///////////////////
-        // Perm Statuses //
-        ///////////////////
-
         /// <summary>
         /// Attempt to add a permanent status to the monster. 
         /// If the status is KO, Stone, or Toad, the monster is instead killed.
@@ -711,7 +712,11 @@ namespace FF2_Monster_Sim
         {
             return PermStatuses.Contains(permStatus);
         }
-        
+
+        //////////////////
+        // Stat Sprites //
+        //////////////////
+
         /////////////
         // Helpers //
         /////////////
