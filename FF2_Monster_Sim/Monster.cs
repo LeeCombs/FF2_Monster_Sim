@@ -449,6 +449,7 @@ namespace FF2_Monster_Sim
         public void Kill()
         {
             HP = 0;
+            ClearStatusSprites();
             
             // TODO: Animation
         }
@@ -675,11 +676,18 @@ namespace FF2_Monster_Sim
                 // Animation
                 Kill();
             }
+            else
+            {
+                StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
+                SetStatusSprite(statSpr, tempStat: tempStatus);
+                statusSprites.Add(statSpr);
+            }
             return TempStatuses.Add(tempStatus);
         }
         
         public bool RemoveTempStatus(TempStatus tempStatus)
         {
+            // TODO: Removing a status needs to remove and rearrange status sprites
             return TempStatuses.Remove(tempStatus);
         }
 
@@ -700,11 +708,18 @@ namespace FF2_Monster_Sim
                 // Animation
                 Kill();
             }
+            else
+            {
+                StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
+                SetStatusSprite(statSpr, permStat: permStatus);
+                statusSprites.Add(statSpr);
+            }
             return PermStatuses.Add(permStatus);
         }
 
         public bool RemovePermStatus(PermStatus permStatus)
         {
+            // TODO: Removing a status needs to remove and rearrange status sprites
             return PermStatuses.Remove(permStatus);
         }
 
@@ -712,13 +727,69 @@ namespace FF2_Monster_Sim
         {
             return PermStatuses.Contains(permStatus);
         }
-
-        //////////////////
-        // Stat Sprites //
-        //////////////////
-
+        
         /////////////
         // Helpers //
         /////////////
+
+        private void ClearStatusSprites()
+        {
+            foreach (StatusSprite s in statusSprites)
+                s.Visible = false;
+        }
+
+        private void SetStatusSprite(StatusSprite statSpr, PermStatus? permStat = null, TempStatus? tempStat = null)
+        {
+            if (permStat == null && tempStat == null)
+                return;
+
+            if (permStat != null)
+                switch (permStat)
+                {
+                    case PermStatus.Amnesia:
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
+                        break;
+                    case PermStatus.Curse:
+                        // TODO: Amnesia -> Curse once animation exists
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
+                        break;
+                    case PermStatus.Darkness:
+                        // TODO: Amnesia -> Darkness once animation exists
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
+                        break;
+                    case PermStatus.Poison:
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Poison);
+                        break;
+                }
+
+            if (tempStat != null)
+                switch (tempStat)
+                {
+                    case TempStatus.Confuse:
+                        // TODO: Amnesia -> Confuse once animation exists
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
+                        break;
+                    case TempStatus.Mute:
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Mute);
+                        break;
+                    case TempStatus.Paralysis:
+                        // TODO: Amnesia -> Paralysis once animation exists
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
+                        break;
+                    case TempStatus.Sleep:
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Sleep);
+                        break;
+                    case TempStatus.Venom:
+                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Poison);
+                        break;
+                }
+
+
+            float xPos = Position.X + (26 * (statusSprites.Count % 3));
+            float yPos = Position.Y + (16 * (statusSprites.Count / 3));
+
+            statSpr.SetPosition(new Vector2(xPos, yPos));
+            statSpr.Visible = true;
+        }
     }
 }

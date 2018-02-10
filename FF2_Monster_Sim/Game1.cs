@@ -104,6 +104,7 @@ namespace FF2_Monster_Sim
             SpellManager.LoadContent();
             SoundManager.LoadContent(Content);
             TextManager.LoadContent(Content, font);
+            StatusSpriteManager.LoadContent(Content);
 
             // Populate the scenes with random monsters
             PopulateScenes();
@@ -135,6 +136,9 @@ namespace FF2_Monster_Sim
             sceneOne.UpdateSceneText();
             sceneTwo.UpdateSceneText();
 
+            // Update Managers
+            StatusSpriteManager.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -154,6 +158,7 @@ namespace FF2_Monster_Sim
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
             TextManager.Draw(spriteBatch);
+            StatusSpriteManager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

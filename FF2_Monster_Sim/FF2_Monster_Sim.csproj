@@ -54,7 +54,7 @@
     <Compile Include="SoundManager.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="SpellManager.cs" />
-    <Compile Include="SpriteManager.cs" />
+    <Compile Include="StatusSpriteManager.cs" />
     <Compile Include="StatusSprite.cs" />
     <Compile Include="TeamManager.cs" />
     <Compile Include="Textbox.cs" />

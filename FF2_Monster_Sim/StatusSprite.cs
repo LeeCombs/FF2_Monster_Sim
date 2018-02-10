@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FF2_Monster_Sim
 {
-    class StatusSprite
+    public class StatusSprite
     {
         public enum StatusAnimation
         {
@@ -57,6 +57,7 @@ namespace FF2_Monster_Sim
 
         public void LoadContent(ContentManager content)
         {
+
             amnesiaGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Amnesia");
             psnGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Poison");
             muteGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Mute");
@@ -88,7 +89,8 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(activeGraphic, position, sourceRect, Color.White, 0f, origin, 1.0f, SpriteEffects.None, 0);
+            if (Visible)
+                spriteBatch.Draw(activeGraphic, position, sourceRect, Color.White, 0f, origin, 1.0f, SpriteEffects.None, 0);
         }
 
         /////////////
