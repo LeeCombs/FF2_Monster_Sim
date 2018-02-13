@@ -82,7 +82,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Get the result of one monster attacking another
         /// </summary>
-        public static AttackResult AttackMonster(MonoMonster actor, MonoMonster target)
+        public static AttackResult AttackMonster(Monster actor, Monster target)
         {
             // Catch them errors first and foremost
             if (actor == null)
@@ -210,7 +210,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Return the total number of successful hits by the acting monster against a target
         /// </summary>
-        private static int GetTotalHits(MonoMonster actor, MonoMonster target)
+        private static int GetTotalHits(Monster actor, Monster target)
         {
             int totalHits = actor.RollHits() - target.RollBlocks();
             return totalHits > 0 ? totalHits : 0; 

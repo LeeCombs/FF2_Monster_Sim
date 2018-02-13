@@ -28,10 +28,10 @@ namespace SimTests
             // Ensure that a known spell can be created and returned
             Spell spell = SpellManager.GetSpellByName("FIRE");
             Assert.AreEqual("FIRE", spell.Name);
-            Assert.AreEqual(SpellType.Special, spell.SpellType);
+            Assert.AreEqual(SpellType.Black, spell.SpellType);
             Assert.AreEqual("Damage", spell.Effect);
-            Assert.AreEqual(20, spell.Power);
-            Assert.AreEqual(50, spell.Accuracy);
+            Assert.AreEqual(10, spell.Power);
+            Assert.AreEqual(0, spell.Accuracy);
             Assert.AreEqual("", spell.Status);
             Assert.AreEqual(Element.Fire, spell.Element);
             Assert.AreEqual("", spell.SuccessMessage);
