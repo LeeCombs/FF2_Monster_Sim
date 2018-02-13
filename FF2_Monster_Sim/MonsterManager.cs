@@ -21,12 +21,6 @@ namespace FF2_Monster_Sim
         private static List<string> tallMonsterNames;
         private static List<string> largeMonsterNames;
 
-        // Chance per turn to recover for temporary statuses. Mini is ignored as it outright kills
-        private const int VENOM_RECOVERY_CHANCE = 70;
-        private const int SLEEP_RECOVERY_CHANCE = 60;
-        private const int MUTE_RECOVERY_CHANCE = 50; // A guess
-        private const int PARALYSIS_RECOVERY_CHANCE = 30;
-        private const int CONFUSION_RECOVERY_CHANCE = 20;
 
         //////////////
         // Monogame //
@@ -59,12 +53,12 @@ namespace FF2_Monster_Sim
         /////////////
         // Publics //
         /////////////
-
+        
         /// <summary>
-        /// Retrieve a Monster object using the supplied name
+        /// Retrieve a MonoMonster object using the supplied name
         /// </summary>
         /// <param name="name">Any given name of the monster (ignores case)</param>
-        /// <returns>The Monster, if any. Null if there's an error.</returns>
+        /// <returns>The MonoMonster, if any. Null if there's an error.</returns>
         public static Monster GetMonsterByName(string name)
         {
             if (String.IsNullOrEmpty(name))
@@ -75,7 +69,7 @@ namespace FF2_Monster_Sim
             {
                 if (String.Equals(name, (string)data.name, StringComparison.OrdinalIgnoreCase))
                 {
-                    Monster mon = new Monster();
+                    MonoMonster mon = new MonoMonster();
                     mon.size = data.size;
                     
                     // Doing this by hand since generated .json naming isn't consistent, nor formatted 100%
@@ -160,32 +154,6 @@ namespace FF2_Monster_Sim
             }
 
             return nameList;
-        }
-
-        /// <summary>
-        /// Roll to check if a monster recovers from temporary status effects
-        /// </summary>
-        public static void RollTempStatusRecovery(Monster monster)
-        {
-            if (monster.HasTempStatus(TempStatus.Venom))
-                if (Globals.rnd.Next(101) < VENOM_RECOVERY_CHANCE)
-                    monster.RemoveTempStatus(TempStatus.Venom);
-
-            if (monster.HasTempStatus(TempStatus.Sleep))
-                if (Globals.rnd.Next(101) < SLEEP_RECOVERY_CHANCE)
-                    monster.RemoveTempStatus(TempStatus.Sleep);
-
-            if (monster.HasTempStatus(TempStatus.Mute))
-                if (Globals.rnd.Next(101) < MUTE_RECOVERY_CHANCE)
-                    monster.RemoveTempStatus(TempStatus.Mute);
-
-            if (monster.HasTempStatus(TempStatus.Paralysis))
-                if (Globals.rnd.Next(101) < PARALYSIS_RECOVERY_CHANCE)
-                    monster.RemoveTempStatus(TempStatus.Paralysis);
-
-            if (monster.HasTempStatus(TempStatus.Confuse))
-                if (Globals.rnd.Next(101) < CONFUSION_RECOVERY_CHANCE)
-                    monster.RemoveTempStatus(TempStatus.Confuse);
         }
 
         /////////////

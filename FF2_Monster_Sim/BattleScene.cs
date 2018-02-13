@@ -15,17 +15,17 @@ namespace FF2_Monster_Sim
 
     public struct Action
     {
-        public Monster Actor;
-        public List<Monster> Targets;
+        public MonoMonster Actor;
+        public List<MonoMonster> Targets;
         public bool Physical;
         public bool Nothing;
         public Spell Spell;
         public int SpellLevel;
 
-        public Action(Monster actor)
+        public Action(MonoMonster actor)
         {
             Actor = actor;
-            Targets = new List<Monster>();
+            Targets = new List<MonoMonster>();
             Physical = false;
             Nothing = false;
             Spell = null;
@@ -81,7 +81,7 @@ namespace FF2_Monster_Sim
         
         private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
         
-        private Monster[][] columns = new Monster[4][];
+        private MonoMonster[][] columns = new MonoMonster[4][];
         
         // TEMP
         public string MonsterNames;
@@ -104,7 +104,7 @@ namespace FF2_Monster_Sim
         {
             // Populate columns with nulls to start
             for (int i = 0; i < columns.Length; i++)
-                columns[i] = new Monster[] { null, null };
+                columns[i] = new MonoMonster[] { null, null };
         }
 
         public void LoadContent()
@@ -114,8 +114,8 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Monster[] col in columns)
-                foreach (Monster mon in col)
+            foreach (MonoMonster[] col in columns)
+                foreach (MonoMonster mon in col)
                     if (mon != null)
                         if (mon.IsAlive())
                             mon.Draw(spriteBatch);
@@ -149,7 +149,7 @@ namespace FF2_Monster_Sim
             int col = 0, row = 0;
             foreach (string name in monsterNames.Split('-'))
             {
-                Monster monster = MonsterManager.GetMonsterByName(name);
+                MonoMonster monster = MonoMonsterManager.GetMonoMonsterByName(name);
                 if (monster == null)
                     continue;
                 
@@ -196,7 +196,7 @@ namespace FF2_Monster_Sim
             // Get the monster's action at a given position
             List<Action> actList = new List<Action>();
 
-            foreach (Monster mon in GetAllLiveMonsters())
+            foreach (MonoMonster mon in GetAllLiveMonsters())
             {
                 if (mon == null)
                     continue;
@@ -266,11 +266,11 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Retrieve an array of all live monsters
         /// </summary>
-        public Monster[] GetAllLiveMonsters()
+        public MonoMonster[] GetAllLiveMonsters()
         {
-            List<Monster> liveMonsters = new List<Monster>();
-            foreach (Monster[] col in columns)
-                foreach (Monster mon in col)
+            List<MonoMonster> liveMonsters = new List<MonoMonster>();
+            foreach (MonoMonster[] col in columns)
+                foreach (MonoMonster mon in col)
                     if (mon != null)
                         if (mon.IsAlive())
                             liveMonsters.Add(mon);
@@ -286,12 +286,12 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Retrieve a single random Monster from any slot
+        /// Retrieve a single random MonoMonster from any slot
         /// </summary>
-        public Monster GetAnySingleTarget()
+        public MonoMonster GetAnySingleTarget()
         {
             // Build a list of current monsters, choose one randomly and return it
-            Monster[] activeList = GetAllLiveMonsters();
+            MonoMonster[] activeList = GetAllLiveMonsters();
             int slotRoll = Globals.rnd.Next(0, activeList.Length);
             return activeList[slotRoll];
         }
@@ -299,12 +299,12 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Retrieve a single random monster from the front rows
         /// </summary>
-        public Monster GetFrontRowTarget()
+        public MonoMonster GetFrontRowTarget()
         {
             // Build a list of viable targets based on which two rows are front rows
-            List<Monster> monsterList = new List<Monster>();
+            List<MonoMonster> monsterList = new List<MonoMonster>();
 
-            foreach (Monster monst in GetAllLiveMonsters())
+            foreach (MonoMonster monst in GetAllLiveMonsters())
                 if (!MonsterIsBackRow(monst))
                     monsterList.Add(monst);
             
@@ -319,9 +319,9 @@ namespace FF2_Monster_Sim
         public void UpdateSceneText()
         {
             string displayText = "";
-            foreach (Monster monster in GetAllMonsters())
+            foreach (MonoMonster monster in GetAllMonsters())
             {
-                // Set line color based on Monster's current HP. Red = dead, Yellow = half or less.
+                // Set line color based on MonoMonster's current HP. Red = dead, Yellow = half or less.
                 if (monster.IsDead())
                     displayText += "{{Red}}";
                 else if (monster.IsCritical())
@@ -381,10 +381,10 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Retrieve an array of all alive and non-null monsters from a given column
         /// </summary>
-        private Monster[] GetLiveMonstersFromCol(int col)
+        private MonoMonster[] GetLiveMonstersFromCol(int col)
         {
-            List<Monster> monList = new List<Monster>();
-            foreach (Monster m in columns[col])
+            List<MonoMonster> monList = new List<MonoMonster>();
+            foreach (MonoMonster m in columns[col])
                 if (m != null)
                     if (m.IsAlive())
                         monList.Add(m);
@@ -394,7 +394,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Return whether a given monster is considered back-row
         /// </summary>
-        private bool MonsterIsBackRow(Monster monster)
+        private bool MonsterIsBackRow(MonoMonster monster)
         {
             int col = GetMonsterColumn(monster);
             
@@ -417,10 +417,10 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Return the column number a given monster is in
         /// </summary>
-        private int GetMonsterColumn(Monster monster)
+        private int GetMonsterColumn(MonoMonster monster)
         {
             for (int i = 0; i < columns.Length; i++)
-                foreach (Monster mon in columns[i])
+                foreach (MonoMonster mon in columns[i])
                     if (Object.Equals(mon, monster))
                         return i;
             
@@ -432,7 +432,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         private bool ColumnIsEmpty(int col)
         {
-            foreach (Monster mon in columns[col])
+            foreach (MonoMonster mon in columns[col])
                 if (mon != null)
                     if (mon.IsAlive())
                         return false;
@@ -443,11 +443,11 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Return an array of monsters within the scene, including the dead
         /// </summary>
-        private Monster[] GetAllMonsters()
+        private MonoMonster[] GetAllMonsters()
         {
-            List<Monster> activeList = new List<Monster>();
-            foreach (Monster[] col in columns)
-                foreach (Monster mon in col)
+            List<MonoMonster> activeList = new List<MonoMonster>();
+            foreach (MonoMonster[] col in columns)
+                foreach (MonoMonster mon in col)
                     if (mon != null)
                         activeList.Add(mon);
             return activeList.ToArray();

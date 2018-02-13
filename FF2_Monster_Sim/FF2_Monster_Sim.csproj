@@ -45,6 +45,8 @@
     <Compile Include="AttackManager.cs" />
     <Compile Include="BattleScene.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="MonoMonster.cs" />
+    <Compile Include="MonoMonsterManager.cs" />
     <Compile Include="MonsterManager.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Game1.cs" />

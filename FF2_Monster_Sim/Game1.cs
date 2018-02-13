@@ -16,7 +16,7 @@ namespace FF2_Monster_Sim
     /// </summary>
     public class Game1 : Game
     {
-        // Monster stuff
+        // MonoMonster stuff
         BattleScene sceneOne, sceneTwo;
 
         // Turn Logic
@@ -218,7 +218,7 @@ namespace FF2_Monster_Sim
                         if (action.Actor == null || action.Actor.IsDead())
                             continue;
 
-                        foreach (Monster target in action.Targets)
+                        foreach (MonoMonster target in action.Targets)
                         {
                             // Ignore invalid target and spells against the dead
                             if (target == null)
@@ -271,7 +271,7 @@ namespace FF2_Monster_Sim
                                 TextManager.SetDamageText(atkRes.DamageMessage);
                                 Thread.Sleep(gameTick);
 
-                                // TODO: Monster's death animation and sound needs to occur on this step, if necessary
+                                // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
 
                                 // Display each result, tearing down existing results as needed
                                 for (int i = 0; i < atkRes.Results.Count; i++)
@@ -334,7 +334,7 @@ namespace FF2_Monster_Sim
                                     }
                                 }
 
-                                // TODO: Monster's death animation and sound needs to occur on this step, if necessary
+                                // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
 
                                 // Display each result, tearing down existing results as needed
                                 for (int i = 0; i < spellRes.Results.Count; i++)
@@ -375,10 +375,10 @@ namespace FF2_Monster_Sim
                         break;
 
                     // Check if any monster recovers from temporary status effects
-                    foreach (Monster mon in sceneOne.GetAllLiveMonsters())
-                        MonsterManager.RollTempStatusRecovery(mon);
-                    foreach (Monster mon in sceneTwo.GetAllLiveMonsters())
-                        MonsterManager.RollTempStatusRecovery(mon);
+                    foreach (MonoMonster mon in sceneOne.GetAllLiveMonsters())
+                        mon.RollTempStatusRecovery();
+                    foreach (MonoMonster mon in sceneTwo.GetAllLiveMonsters())
+                        mon.RollTempStatusRecovery();
                 }
 
                 // Record the battle info
@@ -423,10 +423,10 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Flicker a monster sprite for a given duration
         /// TODO: This method is fine here for now, but determine if and where it
-        /// should be placed. Should animation considerations be kept within Monster, 
+        /// should be placed. Should animation considerations be kept within MonoMonster, 
         /// or moved into MonsterManager, or make a base Sprite class to handle it all?
         /// </summary>
-        public void FlickerMonster(Monster monster, int cycles)
+        public void FlickerMonster(MonoMonster monster, int cycles)
         {
             for (int i = 0; i < cycles; i++)
             {

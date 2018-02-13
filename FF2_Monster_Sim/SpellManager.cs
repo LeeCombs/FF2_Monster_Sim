@@ -71,7 +71,7 @@ namespace FF2_Monster_Sim
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_SpellData.json");
             spellData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_SpellData.json"));
 
-            Monster monster = MonsterManager.GetMonsterByName("Wizard");
+            MonoMonster monster = MonoMonsterManager.GetMonoMonsterByName("Wizard");
         }
 
         /////////////
@@ -116,7 +116,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         /// <param name="multiTarget">Whether the spell being cast is targeting multiple monsters. Halves accuracy and quarters power.</param>
         /// <returns>Result of casting the spell</returns>
-        public static SpellResult CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
+        public static SpellResult CastSpell(MonoMonster caster, MonoMonster target, Spell spell, int level, bool multiTarget = false)
         {
             // Catch the errors first
             if (caster == null || target == null || spell == null)
@@ -494,7 +494,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Dumb little helper to help readability
         /// </summary>
-        private static int GetHitsAgainstTarget(int level, int accuracy, Monster target)
+        private static int GetHitsAgainstTarget(int level, int accuracy, MonoMonster target)
         {
             return GetSpellSuccesses(level, accuracy) - target.RollMagicBlocks();
         }
@@ -513,7 +513,7 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Deal damage to a target, and build and return the result.
         /// </summary>
-        private static SpellResult HandleDamageSpellResult(Monster target, int damage)
+        private static SpellResult HandleDamageSpellResult(MonoMonster target, int damage)
         {
             SpellResult res = new SpellResult(damage);
             target.DamageHP(damage);

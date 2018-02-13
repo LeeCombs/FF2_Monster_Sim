@@ -41,36 +41,22 @@ namespace FF2_Monster_Sim
 
     public class Monster
     {
-        // Status Sprites
-        private List<StatusSprite> statusSprites;
-
         // Misc vars
-
         public BattleScene scene;
         public string size = "";
-        public bool IsVisible = true;
 
+        // Constants
         private const int FEAR_VALUE = 20;
         private const int BERSERK_VALUE = 5;
         private const int IMBIBE_VALUE = 10;
         private const int PROTECT_VALUE = 0;
-        
-        // Monogame vars
+        private const int VENOM_RECOVERY_CHANCE = 70;
+        private const int SLEEP_RECOVERY_CHANCE = 60;
+        private const int MUTE_RECOVERY_CHANCE = 50; // A guess
+        private const int PARALYSIS_RECOVERY_CHANCE = 30;
+        private const int CONFUSION_RECOVERY_CHANCE = 20;
 
-        private bool flipped;
-        private Texture2D texture;
-        public Vector2 Position;
-        public int Width
-        {
-            get { return texture.Width; }
-        }
-        public int Height
-        {
-            get { return texture.Height; }
-        }
-        
         // Combat vars
-
         public string Name { get; set; }
         public List<string> AlternateNames { get; set; }
 
@@ -110,7 +96,7 @@ namespace FF2_Monster_Sim
                 // TODO: Determine calculation order for Curse and Berserk
                 int totalStrength = strength;
 
-                // Halve strength if afflicted with Curse. Note: Int division
+                // Halve strength if afflicted with Curse.
                 if (PermStatuses.Contains(PermStatus.Curse))
                     totalStrength = totalStrength / 2;
 
@@ -144,7 +130,7 @@ namespace FF2_Monster_Sim
         {
             get
             {
-                // Halve accuracy if afflicted with darkness. Note: Int division
+                // Halve accuracy if afflicted with darkness.
                 int totalAccuracy = accuracy;
                 if (HasPermStatus(PermStatus.Darkness))
                     totalAccuracy = totalAccuracy / 2;
@@ -160,7 +146,7 @@ namespace FF2_Monster_Sim
             {
                 // TODO: Determine calculation order for Curse and Protect
                 // TODO: Adds 1/4 caster's spirit per Protect stack. Spirit doesn't exist on Monsters...
-                // Halve defense if afflicted with Curse. Note: Int division
+                // Halve defense if afflicted with Curse.
                 int totalDefense = defense;
                 if (HasPermStatus(PermStatus.Curse))
                     totalDefense = totalDefense / 2;
@@ -267,7 +253,6 @@ namespace FF2_Monster_Sim
         // Actual Class //
         //////////////////
 
-
         public Monster()
         {
             ActionList = new List<MonsterAction>();
@@ -281,38 +266,6 @@ namespace FF2_Monster_Sim
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new HashSet<TempStatus>();
             PermStatuses = new HashSet<PermStatus>();
-
-            statusSprites = new List<StatusSprite>();
-        }
-
-        //////////////
-        // Monogame //
-        //////////////
-
-        public void Initialize(Texture2D texture, bool flipped = false)
-        {
-            Position = new Vector2();
-            this.flipped = flipped;
-            this.texture = texture;
-        }
-
-        public void LoadContent()
-        {
-            //
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            SpriteEffects s = SpriteEffects.None;
-            if (flipped)
-                s = SpriteEffects.FlipHorizontally;
-            if (IsVisible)
-                spriteBatch.Draw(texture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
-        }
-
-        public void Update()
-        {
-            //
         }
 
         ////////////////////
@@ -356,9 +309,9 @@ namespace FF2_Monster_Sim
         public MonsterAction GetAction()
         {
             /**
-             * Considerations
+             * Considerations:
              * 
-             * Monster will never choose an ability it can't use
+             * A Monster will never choose an ability it can't use
              * If mp == 0 || inflicted by amnesia/mute, won't try to cast a spell
              * if mp > 0, it can attempt to cast a spell that it doesn't have enough mp for
              * if it cannot perform any listed action, it will attack, even if attack doesn't exist in their abilities
@@ -446,12 +399,10 @@ namespace FF2_Monster_Sim
             MP -= amount;
         }
 
-        public void Kill()
+        public virtual void Kill()
         {
             HP = 0;
-            ClearStatusSprites();
-            
-            // TODO: Animation
+            // TODO: Animation?
         }
 
         public bool IsAlive()
@@ -491,11 +442,7 @@ namespace FF2_Monster_Sim
             if (buff == Buff.Spirit || buff == Buff.Intelligence)
                 return false;
 
-            /**
-             * Notes TODO
-             * 
-             * If wall exists and an instant KO spell is used, it succeeds
-             */
+            // TODO: If wall exists and an instant KO spell is used, it succeeds
 
             // There are three types of Buffs: Stacking, Non-stackng, and HighestStack
 
@@ -663,6 +610,32 @@ namespace FF2_Monster_Sim
         //////////////
         // Statuses //
         //////////////
+        
+        /// <summary>
+        /// Roll to check if a monster recovers from temporary status effects
+        /// </summary>
+        public void RollTempStatusRecovery()
+        {
+            if (HasTempStatus(TempStatus.Venom))
+                if (Globals.rnd.Next(101) < VENOM_RECOVERY_CHANCE)
+                    RemoveTempStatus(TempStatus.Venom);
+
+            if (HasTempStatus(TempStatus.Sleep))
+                if (Globals.rnd.Next(101) < SLEEP_RECOVERY_CHANCE)
+                    RemoveTempStatus(TempStatus.Sleep);
+
+            if (HasTempStatus(TempStatus.Mute))
+                if (Globals.rnd.Next(101) < MUTE_RECOVERY_CHANCE)
+                    RemoveTempStatus(TempStatus.Mute);
+
+            if (HasTempStatus(TempStatus.Paralysis))
+                if (Globals.rnd.Next(101) < PARALYSIS_RECOVERY_CHANCE)
+                    RemoveTempStatus(TempStatus.Paralysis);
+
+            if (HasTempStatus(TempStatus.Confuse))
+                if (Globals.rnd.Next(101) < CONFUSION_RECOVERY_CHANCE)
+                    RemoveTempStatus(TempStatus.Confuse);
+        }
 
         /// <summary>
         /// Attempt to add a temporary status to the monster. 
@@ -673,21 +646,14 @@ namespace FF2_Monster_Sim
         {
             if (tempStatus == TempStatus.Mini)
             {
-                // Animation
+                // TODO: Animation?
                 Kill();
-            }
-            else
-            {
-                StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
-                SetStatusSprite(statSpr, tempStat: tempStatus);
-                statusSprites.Add(statSpr);
             }
             return TempStatuses.Add(tempStatus);
         }
         
         public bool RemoveTempStatus(TempStatus tempStatus)
         {
-            // TODO: Removing a status needs to remove and rearrange status sprites
             return TempStatuses.Remove(tempStatus);
         }
 
@@ -705,21 +671,14 @@ namespace FF2_Monster_Sim
         {
             if (permStatus == PermStatus.KO || permStatus == PermStatus.Stone || permStatus == PermStatus.Toad)
             {
-                // Animation
+                // TODO: Animation?
                 Kill();
-            }
-            else
-            {
-                StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
-                SetStatusSprite(statSpr, permStat: permStatus);
-                statusSprites.Add(statSpr);
             }
             return PermStatuses.Add(permStatus);
         }
 
         public bool RemovePermStatus(PermStatus permStatus)
         {
-            // TODO: Removing a status needs to remove and rearrange status sprites
             return PermStatuses.Remove(permStatus);
         }
 
@@ -732,64 +691,5 @@ namespace FF2_Monster_Sim
         // Helpers //
         /////////////
 
-        private void ClearStatusSprites()
-        {
-            foreach (StatusSprite s in statusSprites)
-                s.Visible = false;
-        }
-
-        private void SetStatusSprite(StatusSprite statSpr, PermStatus? permStat = null, TempStatus? tempStat = null)
-        {
-            if (permStat == null && tempStat == null)
-                return;
-
-            if (permStat != null)
-                switch (permStat)
-                {
-                    case PermStatus.Amnesia:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case PermStatus.Curse:
-                        // TODO: Amnesia -> Curse once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case PermStatus.Darkness:
-                        // TODO: Amnesia -> Darkness once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case PermStatus.Poison:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Poison);
-                        break;
-                }
-
-            if (tempStat != null)
-                switch (tempStat)
-                {
-                    case TempStatus.Confuse:
-                        // TODO: Amnesia -> Confuse once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case TempStatus.Mute:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Mute);
-                        break;
-                    case TempStatus.Paralysis:
-                        // TODO: Amnesia -> Paralysis once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case TempStatus.Sleep:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Sleep);
-                        break;
-                    case TempStatus.Venom:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Poison);
-                        break;
-                }
-
-
-            float xPos = Position.X + (26 * (statusSprites.Count % 3));
-            float yPos = Position.Y + (16 * (statusSprites.Count / 3));
-
-            statSpr.SetPosition(new Vector2(xPos, yPos));
-            statSpr.Visible = true;
-        }
     }
 }
