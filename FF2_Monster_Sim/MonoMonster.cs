@@ -10,8 +10,8 @@ namespace FF2_Monster_Sim
 {
     public class MonoMonster : Monster
     {
+        // Graphics
         public bool IsVisible = true;
-        private List<StatusSprite> statusSprites;
         internal bool flipped;
         private Texture2D texture;
         public Vector2 Position;
@@ -24,12 +24,27 @@ namespace FF2_Monster_Sim
             get { return texture.Height; }
         }
 
+        // Status sprites
+        Dictionary<dynamic, StatusSprite> statSprites;
+        // Helper to map animations to specific statuses
+        Dictionary<dynamic, StatusSprite.StatusAnimation> StatSpritAnimMap = new Dictionary<dynamic, StatusSprite.StatusAnimation>() {
+            { PermStatus.Amnesia, StatusSprite.StatusAnimation.Amnesia },
+            { PermStatus.Curse, StatusSprite.StatusAnimation.Amnesia },
+            { PermStatus.Darkness, StatusSprite.StatusAnimation.Amnesia },
+            { PermStatus.Poison, StatusSprite.StatusAnimation.Poison },
+            { TempStatus.Confuse, StatusSprite.StatusAnimation.Amnesia },
+            { TempStatus.Mute, StatusSprite.StatusAnimation.Mute },
+            { TempStatus.Paralysis, StatusSprite.StatusAnimation.Amnesia },
+            { TempStatus.Sleep, StatusSprite.StatusAnimation.Sleep },
+            { TempStatus.Venom, StatusSprite.StatusAnimation.Poison }
+        };
+
+
         public MonoMonster()
         {
-            statusSprites = new List<StatusSprite>();
+            statSprites = new Dictionary<dynamic, StatusSprite>();
         }
-
-
+        
         //////////////
         // Monogame //
         //////////////
@@ -71,39 +86,61 @@ namespace FF2_Monster_Sim
             base.Kill();
         }
 
-        public new bool AddTempStatus(TempStatus tempStatus)
+        public override bool AddTempStatus(TempStatus tempStatus)
         {
+            bool ret = base.AddTempStatus(tempStatus);
+
             // If the status is not an instant kill, add the status sprite
-            if (tempStatus != TempStatus.Mini)
+            if (ret)
             {
-                StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
-                SetStatusSprite(statSpr, tempStat: tempStatus);
+                if (tempStatus != TempStatus.Mini)
+                {
+                    StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
+                    SetStatusSprite(statSpr, tempStat: tempStatus);
+                }
             }
-            return base.AddTempStatus(tempStatus);
+            return ret;
         }
 
-        public new bool RemoveTempStatus(TempStatus tempStatus)
+        public override bool RemoveTempStatus(TempStatus tempStatus)
         {
             // TODO: Remove the appropriate StatusSprite
+            if (statSprites.ContainsKey(tempStatus))
+            {
+                statSprites[tempStatus].Visible = false;
+                statSprites.Remove(tempStatus);
+            }
+
             return base.RemoveTempStatus(tempStatus);
         }
 
-        public new bool AddPermStatus(PermStatus permStatus)
+        public override bool AddPermStatus(PermStatus permStatus)
         {
-            // If the status is not an instant kill, add the status sprite
-            PermStatus[] killStatuses = new PermStatus[] { PermStatus.KO, PermStatus.Stone, PermStatus.Toad };
-            if (!killStatuses.Contains(permStatus))
+            bool ret = base.AddPermStatus(permStatus);
+            if (ret)
             {
-                StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
-                SetStatusSprite(statSpr, permStat: permStatus);
+                // If the status is not an instant kill, add the status sprite
+                PermStatus[] killStatuses = new PermStatus[] { PermStatus.KO, PermStatus.Stone, PermStatus.Toad };
+                if (!killStatuses.Contains(permStatus))
+                {
+                    StatusSprite statSpr = StatusSpriteManager.GetStatusSprite();
+                    SetStatusSprite(statSpr, permStat: permStatus);
+                }
             }
 
-            return base.AddPermStatus(permStatus);
+
+            return ret;
         }
 
-        public new bool RemovePermStatus(PermStatus permStatus)
+        public override bool RemovePermStatus(PermStatus permStatus)
         {
-            // TODO: Remove the appropriate StatusSprite
+            // Remove the appropriate StatusSprite
+            if (statSprites.ContainsKey(permStatus))
+            {
+                statSprites[permStatus].Visible = false;
+                statSprites.Remove(permStatus);
+            }
+
             return base.RemovePermStatus(permStatus);
         }
 
@@ -112,64 +149,29 @@ namespace FF2_Monster_Sim
         /////////////
         private void ClearStatusSprites()
         {
-            foreach (StatusSprite s in statusSprites)
-                s.Visible = false;
+            foreach (KeyValuePair<dynamic, StatusSprite> entry in statSprites)
+                entry.Value.Visible = false;
+            statSprites.Clear();
         }
 
         private void SetStatusSprite(StatusSprite statSpr, PermStatus? permStat = null, TempStatus? tempStat = null)
         {
-            if (permStat == null && tempStat == null)
-                return;
-
+            dynamic stat;
             if (permStat != null)
-                switch (permStat)
-                {
-                    case PermStatus.Amnesia:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case PermStatus.Curse:
-                        // TODO: Amnesia -> Curse once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case PermStatus.Darkness:
-                        // TODO: Amnesia -> Darkness once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case PermStatus.Poison:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Poison);
-                        break;
-                }
-
-            if (tempStat != null)
-                switch (tempStat)
-                {
-                    case TempStatus.Confuse:
-                        // TODO: Amnesia -> Confuse once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case TempStatus.Mute:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Mute);
-                        break;
-                    case TempStatus.Paralysis:
-                        // TODO: Amnesia -> Paralysis once animation exists
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Amnesia);
-                        break;
-                    case TempStatus.Sleep:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Sleep);
-                        break;
-                    case TempStatus.Venom:
-                        statSpr.SetAnimation(StatusSprite.StatusAnimation.Poison);
-                        break;
-                }
-
-
-            float xPos = Position.X + (26 * (statusSprites.Count % 3));
-            float yPos = Position.Y + (16 * (statusSprites.Count / 3));
-
+                stat = permStat;
+            else if (tempStat != null)
+                stat = tempStat;
+            else
+                return;
+            
+            float xPos = Position.X + (26 * (statSprites.Count % 3));
+            float yPos = Position.Y + (16 * (statSprites.Count / 3));
             statSpr.SetPosition(new Vector2(xPos, yPos));
+            statSpr.SetAnimation(StatSpritAnimMap[stat]);
             statSpr.Visible = true;
 
-            statusSprites.Add(statSpr);
+            statSprites.Add(stat, statSpr);
+
         }
     }
 }

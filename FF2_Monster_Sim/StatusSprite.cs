@@ -57,19 +57,23 @@ namespace FF2_Monster_Sim
 
         public void LoadContent(ContentManager content)
         {
+            // Whatever
+            if (content != null)
+            {
+                amnesiaGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Amnesia");
+                psnGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Poison");
+                muteGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Mute");
+                slpGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Sleep");
 
-            amnesiaGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Amnesia");
-            psnGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Poison");
-            muteGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Mute");
-            slpGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Sleep");
+                /*
+                curseGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Curse");
+                darkGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Darkness");
+                confGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Confuse");
+                paraGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Paralysis");
+                venomGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Venom");
+                */
+            }
 
-            /*
-            curseGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Curse");
-            darkGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Darkness");
-            confGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Confuse");
-            paraGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Paralysis");
-            venomGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Venom");
-            */
         }
 
         public void Update(GameTime gameTime)
@@ -108,6 +112,7 @@ namespace FF2_Monster_Sim
         public void SetAnimation(StatusAnimation anim)
         {
             currentFrame = 0;
+            System.Diagnostics.Debug.WriteLine("SetAnim: " + anim.ToString());
 
             switch (anim)
             {

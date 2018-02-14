@@ -642,8 +642,9 @@ namespace FF2_Monster_Sim
         /// If the status is Mini, the monster is instead killed.
         /// </summary>
         /// <returns>Whether or not the status was successfully added</returns>
-        public bool AddTempStatus(TempStatus tempStatus)
+        public virtual bool AddTempStatus(TempStatus tempStatus)
         {
+            Debug.WriteLine("ATS");
             if (tempStatus == TempStatus.Mini)
             {
                 // TODO: Animation?
@@ -652,7 +653,7 @@ namespace FF2_Monster_Sim
             return TempStatuses.Add(tempStatus);
         }
         
-        public bool RemoveTempStatus(TempStatus tempStatus)
+        public virtual bool RemoveTempStatus(TempStatus tempStatus)
         {
             return TempStatuses.Remove(tempStatus);
         }
@@ -667,8 +668,9 @@ namespace FF2_Monster_Sim
         /// If the status is KO, Stone, or Toad, the monster is instead killed.
         /// </summary>
         /// <returns>Whether or not the status was successfully added</returns>
-        public bool AddPermStatus(PermStatus permStatus)
+        public virtual bool AddPermStatus(PermStatus permStatus)
         {
+            Debug.WriteLine("APS");
             if (permStatus == PermStatus.KO || permStatus == PermStatus.Stone || permStatus == PermStatus.Toad)
             {
                 // TODO: Animation?
@@ -677,7 +679,7 @@ namespace FF2_Monster_Sim
             return PermStatuses.Add(permStatus);
         }
 
-        public bool RemovePermStatus(PermStatus permStatus)
+        public virtual bool RemovePermStatus(PermStatus permStatus)
         {
             return PermStatuses.Remove(permStatus);
         }
