@@ -45,6 +45,8 @@
     <Compile Include="AttackManager.cs" />
     <Compile Include="BattleScene.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="MonoMonster.cs" />
+    <Compile Include="MonoMonsterManager.cs" />
     <Compile Include="MonsterManager.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="Game1.cs" />
@@ -54,6 +56,8 @@
     <Compile Include="SoundManager.cs" />
     <Compile Include="Spell.cs" />
     <Compile Include="SpellManager.cs" />
+    <Compile Include="StatusSpriteManager.cs" />
+    <Compile Include="StatusSprite.cs" />
     <Compile Include="TeamManager.cs" />
     <Compile Include="Textbox.cs" />
     <Compile Include="TextManager.cs" />

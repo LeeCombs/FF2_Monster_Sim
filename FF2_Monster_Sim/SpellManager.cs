@@ -70,8 +70,6 @@ namespace FF2_Monster_Sim
             // Read SpellData.json and load it
             var path = Path.Combine(Directory.GetCurrentDirectory(), "\\Content\\Data\\FF2_SpellData.json");
             spellData = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(@"Content\\Data\\FF2_SpellData.json"));
-
-            Monster monster = MonsterManager.GetMonsterByName("Wizard");
         }
 
         /////////////
@@ -118,6 +116,8 @@ namespace FF2_Monster_Sim
         /// <returns>Result of casting the spell</returns>
         public static SpellResult CastSpell(Monster caster, Monster target, Spell spell, int level, bool multiTarget = false)
         {
+            Debug.WriteLine("CastSpell");
+
             // Catch the errors first
             if (caster == null || target == null || spell == null)
                 throw new ArgumentNullException("Invalid parameter provided");

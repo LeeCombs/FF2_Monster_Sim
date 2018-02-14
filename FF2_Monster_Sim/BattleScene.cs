@@ -104,7 +104,7 @@ namespace FF2_Monster_Sim
         {
             // Populate columns with nulls to start
             for (int i = 0; i < columns.Length; i++)
-                columns[i] = new Monster[] { null, null };
+                columns[i] = new MonoMonster[] { null, null };
         }
 
         public void LoadContent()
@@ -114,8 +114,8 @@ namespace FF2_Monster_Sim
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Monster[] col in columns)
-                foreach (Monster mon in col)
+            foreach (MonoMonster[] col in columns)
+                foreach (MonoMonster mon in col)
                     if (mon != null)
                         if (mon.IsAlive())
                             mon.Draw(spriteBatch);
@@ -149,7 +149,7 @@ namespace FF2_Monster_Sim
             int col = 0, row = 0;
             foreach (string name in monsterNames.Split('-'))
             {
-                Monster monster = MonsterManager.GetMonsterByName(name);
+                MonoMonster monster = MonoMonsterManager.GetMonoMonsterByName(name);
                 if (monster == null)
                     continue;
                 

@@ -194,7 +194,7 @@ namespace SimTests
                 float recoverCount = 0.0f;
                 for (int i = 0; i < roundIterations; i++)
                 {
-                    MonsterManager.RollTempStatusRecovery(mon);
+                    mon.RollTempStatusRecovery();
                     if (!mon.HasTempStatus(entry.Key))
                     {
                         recoverCount++;
@@ -219,7 +219,7 @@ namespace SimTests
                 mon.AddTempStatus(TempStatus.Venom);
 
                 int recoverCount = 0;
-                MonsterManager.RollTempStatusRecovery(mon);
+                mon.RollTempStatusRecovery();
                 if (!mon.HasTempStatus(TempStatus.Confuse))
                     recoverCount++;
                 if (!mon.HasTempStatus(TempStatus.Mute))
