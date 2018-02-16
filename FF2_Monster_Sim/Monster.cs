@@ -418,7 +418,7 @@ namespace FF2_Monster_Sim
         public bool IsCritical()
         {
             // HP is at half or less
-            if (HP <= 0)
+            if (HP <= 0 || HPMax <= 0)
                 return false;
             return HPMax / HP <= 2;
         }

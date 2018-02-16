@@ -81,7 +81,7 @@ namespace FF2_Monster_Sim
         
         private Dictionary<int, Vector2[]> slotPositions = new Dictionary<int, Vector2[]>();
         
-        private Monster[][] columns = new Monster[4][];
+        private MonoMonster[][] columns = new MonoMonster[4][];
         
         // TEMP
         public string MonsterNames;
@@ -184,7 +184,11 @@ namespace FF2_Monster_Sim
             
             for (int i = 0; i < columns.Length; i++)
                 for (int j = 0; j < columns[i].Length; j++)
-                    columns[i][j] = null;
+                    if (columns[i][j] != null)
+                    {
+                        columns[i][j].Kill();
+                        columns[i][j] = null;
+                    }
         }
 
         /// <summary>

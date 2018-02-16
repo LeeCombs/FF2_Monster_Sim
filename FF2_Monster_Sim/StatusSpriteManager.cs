@@ -36,8 +36,9 @@ namespace FF2_Monster_Sim
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (StatusSprite s in statusSprites)
-                s.Draw(spriteBatch);
+            for (int i = 0; i < statusSprites.Count; i++)
+                if (statusSprites[i] != null)
+                    statusSprites[i].Draw(spriteBatch);
         }
 
         /////////////
