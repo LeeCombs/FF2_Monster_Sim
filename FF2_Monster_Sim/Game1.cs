@@ -393,7 +393,12 @@ namespace FF2_Monster_Sim
                     SoundManager.PlayVictoryMusic();
 
                 String infoText = "";
-                if (sceneOne.HasLivingMonsters())
+
+                if (sceneOne.HasLivingMonsters() && sceneTwo.HasLivingMonsters())
+                {
+                    infoText = "Tie! Neither team has\ndefeated the other in time.";
+                }
+                else if (sceneOne.HasLivingMonsters())
                 {
                     infoText = "Team " + teamOne.TeamName + "\nwas victorious!!\n\n";
                     infoText += TeamManager.GetTeamInfo(teamOne);
@@ -403,8 +408,6 @@ namespace FF2_Monster_Sim
                     infoText = "Team " + teamTwo.TeamName + "\nwas victorious!!\n\n";
                     infoText += TeamManager.GetTeamInfo(teamTwo);
                 }
-                else
-                    infoText = "Tie! Neither team has\ndefeated the other in time.";
                 
                 TextManager.SetInfoText(infoText);
                 Thread.Sleep(FANFARE_TIMER);

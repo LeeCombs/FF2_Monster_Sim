@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Audio;
+using System.Diagnostics;
 
 
 namespace FF2_Monster_Sim
@@ -91,9 +92,17 @@ namespace FF2_Monster_Sim
 
         public static void PlayPhysicalHitSound()
         {
-            SoundEffectInstance ph = physicalHit.CreateInstance();
-            ph.Volume = volume;
-            ph.Play();
+            // Create and play the physical hit sound. Ignore it if there's an issue creating the instance.
+            try
+            {
+                SoundEffectInstance ph = physicalHit.CreateInstance();
+                ph.Volume = volume;
+                ph.Play();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error creating physical hit sound: " + e);
+            }
         }
 
         /////////////
