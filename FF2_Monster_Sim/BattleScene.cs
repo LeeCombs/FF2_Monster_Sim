@@ -35,45 +35,6 @@ namespace FF2_Monster_Sim
 
     public class BattleScene
     {
-        /**
-         * Notes:
-         * 
-         * Type A: Smalls
-         * 
-         *   0   1   2   3
-         * +---+---+---+---+
-         * | s | s | s | s | 0
-         * +---+---+---+---+
-         * | s | s | s | s | 1
-         * +---+---+---+---+
-         * 
-         * Type B: Mediums/Talls
-         * 
-         *   0      1     2           0     1     2
-         * +-----+-----+-----+     +-----+-----+-----+
-         * |  m  |  m  |  m  | 0   |  t  |  t  |  m  | 0
-         * +-----+-----+-----+     |     |     +-----+
-         * |  m  |  m  |  m  | 1   |     |     |  m  | 1
-         * +-----+-----+-----+     +-----+-----+-----+
-         * 
-         * Type C: Large/Boss
-         * 
-         *         0
-         * +---------------+
-         * |               |
-         * |       L       |
-         * |               |
-         * +---------------+
-         *
-         * For columns (a, b, c, d)
-         * Only front two columns (c,d) can be targetted by and use physical attacks
-         * If column d is removed, then (b,c), etc.
-         * It's the front-most active row, and the one behind it, even if it second one is empty
-         * 
-         * Monsters do not make a special effort to be effective from back row
-         * If they choose to attack, they simply do "Nothing"
-         */
-
         public SceneType SceneType { get; private set; }
         public bool Flipped = false, IsTeam = false;
         private int sceneNum;
@@ -359,14 +320,14 @@ namespace FF2_Monster_Sim
                 case SceneType.A: // 4 x 2 Slots
                     for (int i = 0; i < 4; i++)
                     {
-                        Vector2[] positions = { new Vector2(X + 75 * i, Y + 0), new Vector2(X + 75 * i, Y + 100) };
+                        Vector2[] positions = { new Vector2(X + 75 * i, Y + 0), new Vector2(X + 75 * i, Y + 120) }; // Y + 100 pre-status
                         slotPositions[i] = positions;
                     }
                     break;
                 case SceneType.B: // 3 x 2 Slots
                     for (int i = 0; i < 3; i++)
                     {
-                        Vector2[] positions = { new Vector2(X + 100 * i, Y + 0), new Vector2(X + 100 * i, Y + 100) };
+                        Vector2[] positions = { new Vector2(X + 100 * i, Y + 0), new Vector2(X + 100 * i, Y + 120) }; // Y + 100 pre-status
                         slotPositions[i] = positions;
                     }
                     break;

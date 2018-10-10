@@ -15,7 +15,7 @@ namespace FF2_Monster_Sim
 {
     public class SoundManager
     {
-        private static float volume = 0.1f;
+        private static float volume = 0f; // 0.1f
 
         // Songs
         private static Song battleSong;
@@ -91,7 +91,9 @@ namespace FF2_Monster_Sim
 
         public static void PlayPhysicalHitSound()
         {
-            physicalHit.CreateInstance().Play();
+            SoundEffectInstance ph = physicalHit.CreateInstance();
+            ph.Volume = volume;
+            ph.Play();
         }
 
         /////////////

@@ -1,3 +1,17 @@
+TODO {
+    Spell Animations
+    Scene B's back row is hittable?
+    Team "Arr Mateys" should get Z.Borgan added
+    Status icons for buffs?
+    Status icon for slow
+    I think sound effects crash when null, just figuring out when they return null is a hassle
+}
+
+Look into {
+    Gaining a disabling status mid-round (paralysis) doesn't prevent a monster from taking its turn that round. 
+    I'm pretty sure this is how it works regularly, but it needs confirmation.
+}
+
 Message Building {
     +-------------+----------------+
     |  Actor (1)  | Action/Hit (2) |
@@ -51,6 +65,45 @@ Message Building {
         - Display the results
         - Tear down messages and continue
     
+}
+
+Battle Scenes {
+
+    Type A: Smalls
+
+     0   1   2   3
+    +---+---+---+---+
+    | s | s | s | s | 0
+    +---+---+---+---+
+    | s | s | s | s | 1
+    +---+---+---+---+
+
+    Type B: Mediums/Talls
+    Columns are either 2 mediums or 1 tall in no order
+
+      0      1     2           0     1     2
+    +-----+-----+-----+     +-----+-----+-----+
+    |  m  |  m  |  m  | 0   |  t  |  t  |  m  | 0
+    +-----+-----+-----+     |     |     +-----+
+    |  m  |  m  |  m  | 1   |     |     |  m  | 1
+    +-----+-----+-----+     +-----+-----+-----+
+
+    Type C: Large/Boss
+
+            0
+    +---------------+
+    |               |
+    |       L       |
+    |               |
+    +---------------+
+
+    For columns (a, b, c, d)
+    Only front two columns (c,d) can be targetted by and use physical attacks
+    If column d is removed, then (b,c), etc.
+    It's the front-most active row, and the one behind it, even if it second one is empty
+
+    Monsters do not make a special effort to be effective from back row
+    If they choose to attack, they simply do "Nothing"
 }
 
 Result vs Undead {

@@ -13,30 +13,28 @@ namespace FF2_Monster_Sim
     {
         public enum StatusAnimation
         {
-            Amnesia,
-            Poison,
+            Amnesia, // and Confuse
+            Poison, // and Venom
             Mute,
-            Sleep
-            // Curse
-            // Darkness
-            // Confuse
-            // Paralysis
-            // Venom
+            Sleep,
+            Curse,
+            Blind,
+            Paralysis
             // Ignore instant death statuses: Mini, Toad, KO, Stone
         }
 
         public bool Visible = false;
 
         Texture2D activeGraphic;
-        Texture2D amnesiaGraphic, psnGraphic, muteGraphic, slpGraphic;
-        // Texture2D curseGraphic, darkGraphic, confGraphic, paraGraphic, venomGraphic;
+        Texture2D amnesiaGraphic, psnGraphic, muteGraphic, slpGraphic, curseGraphic, blndGraphic, paraGraphic; // Why is this like this?
+
+        const int SPRITE_WIDTH = 24;
+        const int SPRITE_HEIGHT = 16;
+        const float ANIMATION_INTERVAL = 200f;
 
         float timer = 0f;
-        float interval = 200f;
         int currentFrame = 0;
         int totalFrames = 0;
-        int spriteWidth = 24; // 10 - 24
-        int spriteHeight = 16;
         Vector2 position, origin;
         Rectangle sourceRect;
 
@@ -64,12 +62,12 @@ namespace FF2_Monster_Sim
                 psnGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Poison");
                 muteGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Mute");
                 slpGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Sleep");
+                curseGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Cursed");
+                blndGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Blind");
+                paraGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Paralysis");
 
                 /*
-                curseGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Curse");
-                darkGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Darkness");
                 confGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Confuse");
-                paraGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Paralysis");
                 venomGraphic = content.Load<Texture2D>("Graphics\\Statuses\\Venom");
                 */
             }
@@ -79,15 +77,15 @@ namespace FF2_Monster_Sim
         public void Update(GameTime gameTime)
         {
             timer += gameTime.ElapsedGameTime.Milliseconds;
-            if (timer >= interval)
+            if (timer >= ANIMATION_INTERVAL)
             {
-                timer -= interval;
+                timer -= ANIMATION_INTERVAL;
 
                 currentFrame++;
                 if (currentFrame >= totalFrames)
                     currentFrame = 0;
                 
-                sourceRect = new Rectangle(currentFrame * spriteWidth, 0, spriteWidth, spriteHeight);
+                sourceRect = new Rectangle(currentFrame * SPRITE_WIDTH, 0, SPRITE_WIDTH, SPRITE_HEIGHT);
             }
         }
 
@@ -112,29 +110,33 @@ namespace FF2_Monster_Sim
         public void SetAnimation(StatusAnimation anim)
         {
             currentFrame = 0;
+            totalFrames = 2;
             System.Diagnostics.Debug.WriteLine("SetAnim: " + anim.ToString());
 
+            // awk
             switch (anim)
             {
                 case StatusAnimation.Amnesia:
-                    spriteWidth = 10;
-                    totalFrames = 2;
                     activeGraphic = amnesiaGraphic;
                     break;
                 case StatusAnimation.Mute:
-                    spriteWidth = 24;
-                    totalFrames = 2;
                     activeGraphic = muteGraphic;
                     break;
                 case StatusAnimation.Poison:
-                    spriteWidth = 16;
-                    totalFrames = 2;
                     activeGraphic = psnGraphic;
                     break;
                 case StatusAnimation.Sleep:
-                    spriteWidth = 12;
                     totalFrames = 4;
                     activeGraphic = slpGraphic;
+                    break;
+                case StatusAnimation.Curse:
+                    activeGraphic = curseGraphic;
+                    break;
+                case StatusAnimation.Blind:
+                    activeGraphic = blndGraphic;
+                    break;
+                case StatusAnimation.Paralysis:
+                    activeGraphic = paraGraphic;
                     break;
                 default:
                     System.Diagnostics.Debug.WriteLine("Uncaught status animation: " + anim.ToString());
@@ -148,7 +150,7 @@ namespace FF2_Monster_Sim
 
         private void HandleAnimation(GameTime gameTime)
         {
-            //
+            // 
         }
     }
 }

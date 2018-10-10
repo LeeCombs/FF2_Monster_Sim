@@ -26,15 +26,16 @@ namespace FF2_Monster_Sim
 
         // Status sprites
         Dictionary<dynamic, StatusSprite> statSprites;
+
         // Helper to map animations to specific statuses
         Dictionary<dynamic, StatusSprite.StatusAnimation> StatSpritAnimMap = new Dictionary<dynamic, StatusSprite.StatusAnimation>() {
             { PermStatus.Amnesia, StatusSprite.StatusAnimation.Amnesia },
-            { PermStatus.Curse, StatusSprite.StatusAnimation.Amnesia },
-            { PermStatus.Darkness, StatusSprite.StatusAnimation.Amnesia },
+            { PermStatus.Curse, StatusSprite.StatusAnimation.Curse },
+            { PermStatus.Darkness, StatusSprite.StatusAnimation.Blind },
             { PermStatus.Poison, StatusSprite.StatusAnimation.Poison },
             { TempStatus.Confuse, StatusSprite.StatusAnimation.Amnesia },
             { TempStatus.Mute, StatusSprite.StatusAnimation.Mute },
-            { TempStatus.Paralysis, StatusSprite.StatusAnimation.Amnesia },
+            { TempStatus.Paralysis, StatusSprite.StatusAnimation.Paralysis },
             { TempStatus.Sleep, StatusSprite.StatusAnimation.Sleep },
             { TempStatus.Venom, StatusSprite.StatusAnimation.Poison }
         };
@@ -51,7 +52,6 @@ namespace FF2_Monster_Sim
 
         public void Initialize(Texture2D texture, bool flipped = false)
         {
-            
             Position = new Vector2();
             this.flipped = flipped;
             this.texture = texture;
@@ -156,6 +156,10 @@ namespace FF2_Monster_Sim
 
         private void SetStatusSprite(StatusSprite statSpr, PermStatus? permStat = null, TempStatus? tempStat = null)
         {
+            // Don't bother displaying more than three sprites
+            if (statSprites.Count >= 3)
+                return;
+
             dynamic stat;
             if (permStat != null)
                 stat = permStat;
@@ -165,13 +169,12 @@ namespace FF2_Monster_Sim
                 return;
             
             float xPos = Position.X + (26 * (statSprites.Count % 3));
-            float yPos = Position.Y + (16 * (statSprites.Count / 3));
+            float yPos = Position.Y - 20; // 20 for bubble
             statSpr.SetPosition(new Vector2(xPos, yPos));
             statSpr.SetAnimation(StatSpritAnimMap[stat]);
             statSpr.Visible = true;
 
             statSprites.Add(stat, statSpr);
-
         }
     }
 }

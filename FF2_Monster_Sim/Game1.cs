@@ -73,10 +73,10 @@ namespace FF2_Monster_Sim
             SoundManager.Initialize();
             TextManager.Initialize(360, 413);
 
-            sceneOne = new BattleScene(1, 50, 139);
+            sceneOne = new BattleScene(1, 50, 130); // y was 139
             sceneOne.Initialize();
 
-            sceneTwo = new BattleScene(2, 665, 139, true);
+            sceneTwo = new BattleScene(2, 665, 130, true);
             sceneTwo.Initialize();
 
             combatThread = new Thread(CombatLoop);
