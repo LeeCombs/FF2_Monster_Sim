@@ -371,21 +371,21 @@ namespace FF2_Monster_Sim
         public void HealHP(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Cannot heal a negative amount: " + amount);
+                throw new ArgumentOutOfRangeException("Cannot heal a negative amount: " + amount);
             HP += amount;
         }
 
         public void HealMP(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Cannot heal a negative amount: " + amount);
+                throw new ArgumentOutOfRangeException("Cannot heal a negative amount: " + amount);
             MP += amount;
         }
 
         public void DamageHP(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+                throw new ArgumentOutOfRangeException("Cannot damage a negative amount: " + amount);
             HP -= amount;
 
             if (HP <= 0)
@@ -395,7 +395,7 @@ namespace FF2_Monster_Sim
         public void DamageMP(int amount)
         {
             if (amount < 0)
-                throw new ArgumentException("Cannot damage a negative amount: " + amount);
+                throw new ArgumentOutOfRangeException("Cannot damage a negative amount: " + amount);
             MP -= amount;
         }
 
@@ -501,7 +501,7 @@ namespace FF2_Monster_Sim
                 return true;
             }
 
-            throw new Exception("Invalid buff supplied: " + buff);
+            throw new ArgumentException("Invalid buff supplied: " + buff);
         }
         
         /// <summary>
@@ -577,7 +577,7 @@ namespace FF2_Monster_Sim
                 return true;
             }
             
-            throw new Exception("Invalid debuff supplied: " + debuff);
+            throw new ArgumentException("Invalid debuff supplied: " + debuff);
         }
 
         /// <summary>
@@ -644,7 +644,6 @@ namespace FF2_Monster_Sim
         /// <returns>Whether or not the status was successfully added</returns>
         public virtual bool AddTempStatus(TempStatus tempStatus)
         {
-            Debug.WriteLine("ATS");
             if (tempStatus == TempStatus.Mini)
             {
                 // TODO: Animation?
@@ -670,7 +669,6 @@ namespace FF2_Monster_Sim
         /// <returns>Whether or not the status was successfully added</returns>
         public virtual bool AddPermStatus(PermStatus permStatus)
         {
-            Debug.WriteLine("APS");
             if (permStatus == PermStatus.KO || permStatus == PermStatus.Stone || permStatus == PermStatus.Toad)
             {
                 // TODO: Animation?

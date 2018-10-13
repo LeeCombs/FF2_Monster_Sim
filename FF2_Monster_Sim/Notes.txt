@@ -1,10 +1,14 @@
 TODO {
     Spell Animations
     Scene B's back row is hittable?
+    - Right side (reverseed) back row is left-most instead of right
+    - Are scene b's rows actually flipped? Arr Matey looked wrong
     Team "Arr Mateys" should get Z.Borgan added
     Status icons for buffs?
     Status icon for slow
-    I think sound effects crash when null, just figuring out when they return null is a hassle
+    Poison needs to damage each round
+    Check if G Soul's cure is suppose to target the other team
+
 }
 
 Look into {

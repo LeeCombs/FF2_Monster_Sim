@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -111,7 +112,6 @@ namespace FF2_Monster_Sim
         {
             currentFrame = 0;
             totalFrames = 2;
-            System.Diagnostics.Debug.WriteLine("SetAnim: " + anim.ToString());
 
             // awk
             switch (anim)
@@ -139,7 +139,7 @@ namespace FF2_Monster_Sim
                     activeGraphic = paraGraphic;
                     break;
                 default:
-                    System.Diagnostics.Debug.WriteLine("Uncaught status animation: " + anim.ToString());
+                    Debug.WriteLine("Uncaught status animation: " + anim.ToString());
                     break;
             }
         }

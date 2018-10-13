@@ -517,7 +517,7 @@ namespace FF2_Monster_Sim
                 winner = 0;
             string outstr = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
 
-            Debug.WriteLine(outstr);
+            // Debug.WriteLine("Battle Results string: " + outstr);
             using (StreamWriter file = new StreamWriter(RESULTS_PATH, true))
             {
                 file.WriteLine(outstr);

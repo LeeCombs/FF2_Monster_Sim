@@ -41,7 +41,7 @@ namespace FF2_Monster_Sim
         public static Team TeamFromString(string str)
         {
             // Example input: "12,It's All Ogre,B;WzOgre-WzOgre-GrOgre-GrOgre-Ogre-Ogre,1,4,0,28"
-            System.Diagnostics.Debug.WriteLine("Creating team from: " + str);
+            // System.Diagnostics.Debug.WriteLine("Creating team from: " + str);
             string[] strSplit = str.Split(',');
             return new Team
             {
