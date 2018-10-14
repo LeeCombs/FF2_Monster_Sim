@@ -330,7 +330,7 @@ namespace FF2_Monster_Sim
                                         FlickerMonster(target, 16);
 
                                         // Testing
-                                        MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Attack);
+                                        MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Buff);
                                     }
 
                                     if (spellRes.Damage >= 0)

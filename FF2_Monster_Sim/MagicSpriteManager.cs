@@ -72,14 +72,13 @@ namespace FF2_Monster_Sim
 
             for (int i = 0; i < 6; i++)
             {
-                int xPos = Globals.rnd.Next(x, x + width - MagicSprite.SPRITE_WIDTH);
-                int yPos = Globals.rnd.Next(y, y + height - MagicSprite.SPRITE_HEIGHT);
-                float delay = (float)Globals.rnd.NextDouble() * 100; // 0 - 100 ms
+                int xPos = Globals.rnd.Next(x, x + width);
+                int yPos = Globals.rnd.Next(y, y + height);
 
 
                 MagicSprite mspr = GetMagicSprite();
-                mspr.SetAnimation(anim, delay);
-                mspr.SetPosition(new Vector2(xPos, yPos));
+                mspr.SetAnimation(anim, i * 75f);
+                mspr.SetPosition(new Vector2(xPos - 16, yPos - 16)); // - half sprite width/height
             }
         }
 

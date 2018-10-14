@@ -22,12 +22,12 @@ namespace FF2_Monster_Sim
         Texture2D activeGraphic;
         Texture2D atkGraphic, healGraphic, buffGraphic, debuffGraphic;
 
-        public const int SPRITE_WIDTH = 16, SPRITE_HEIGHT = 16;
-        const float ANIMATION_INTERVAL = 100f;
+        public const int SPRITE_WIDTH = 32, SPRITE_HEIGHT = 32;
+        const float ANIMATION_INTERVAL = 200f;
 
-        float timer = 0f, delaytimer = 0f, lifespan = 1000f;
+        float timer = 0f, delaytimer = 0f, lifespan = 600f;
         int currentFrame = 0;
-        int totalFrames = 0;
+        int totalFrames = 2;
         Vector2 position, origin;
         Rectangle sourceRect;
 
@@ -103,8 +103,9 @@ namespace FF2_Monster_Sim
             Debug.WriteLine("Setanim " + anim.ToString() + ", " + delaytimer);
 
             this.delaytimer = delaytimer;
-            lifespan = 1000f;
+            lifespan = 1000f + delaytimer;
             Visible = true;
+            timer = delaytimer;
 
             // awk
             switch (anim)
