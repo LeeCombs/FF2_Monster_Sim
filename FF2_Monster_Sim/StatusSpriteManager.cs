@@ -12,7 +12,6 @@ namespace FF2_Monster_Sim
     public static class StatusSpriteManager
     {
         static List<StatusSprite> statusSprites = new List<StatusSprite>();
-
         static ContentManager Content;
 
         //////////////
@@ -56,6 +55,7 @@ namespace FF2_Monster_Sim
                 if (!statSpr.Visible)
                     return statSpr;
             }
+
             StatusSprite newStatSpr = new StatusSprite();
             newStatSpr.LoadContent(Content); // Revisit
             statusSprites.Add(newStatSpr);

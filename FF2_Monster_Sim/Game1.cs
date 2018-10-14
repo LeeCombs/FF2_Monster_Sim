@@ -105,6 +105,7 @@ namespace FF2_Monster_Sim
             SoundManager.LoadContent(Content);
             TextManager.LoadContent(Content, font);
             StatusSpriteManager.LoadContent(Content);
+            MagicSpriteManager.LoadContent(Content);
 
             // Populate the scenes with random monsters
             PopulateScenes();
@@ -138,6 +139,7 @@ namespace FF2_Monster_Sim
 
             // Update Managers
             StatusSpriteManager.Update(gameTime);
+            MagicSpriteManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -159,6 +161,7 @@ namespace FF2_Monster_Sim
             sceneTwo.Draw(spriteBatch);
             TextManager.Draw(spriteBatch);
             StatusSpriteManager.Draw(spriteBatch);
+            MagicSpriteManager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -315,7 +318,7 @@ namespace FF2_Monster_Sim
                                 // Cast the spell and display the results
                                 SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
                                 
-                                // Flicker sprite
+                                // If the game isn't running too fast, play animations based on the attack
                                 // TODO: Different sounds and animations need to play based on the attack type
                                 if (gameTick > 30)
                                 {
@@ -325,6 +328,9 @@ namespace FF2_Monster_Sim
                                     {
                                         SoundManager.PlayPhysicalHitSound();
                                         FlickerMonster(target, 16);
+
+                                        // Testing
+                                        MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Attack);
                                     }
 
                                     if (spellRes.Damage >= 0)

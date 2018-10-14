@@ -1946,7 +1946,7 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Statuses/Paralysis.png
 
-#begin Graphics/Magic/AttackMagic.png
+#begin Graphics/Magic/Attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1956,9 +1956,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Magic/AttackMagic.png
+/build:Graphics/Magic/Attack.png
 
-#begin Graphics/Magic/BuffMagic.png
+#begin Graphics/Magic/Buff.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1968,9 +1968,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Magic/BuffMagic.png
+/build:Graphics/Magic/Buff.png
 
-#begin Graphics/Magic/HealMagic.png
+#begin Graphics/Magic/Debuff.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -1980,5 +1980,17 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/Magic/HealMagic.png
+/build:Graphics/Magic/Debuff.png
+
+#begin Graphics/Magic/Heal.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Magic/Heal.png
 
