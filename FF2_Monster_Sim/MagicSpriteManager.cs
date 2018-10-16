@@ -48,8 +48,6 @@ namespace FF2_Monster_Sim
 
         public static MagicSprite GetMagicSprite()
         {
-            Debug.WriteLine("GetMagicSprite");
-
             // Check for an available status sprite. If none are available, 
             // make and return a new one
             for (int i = 0; i < magicSprites.Count; i++)
@@ -68,18 +66,28 @@ namespace FF2_Monster_Sim
         public static void GenerateSpellBurst(int x, int y, int width, int height, MagicSprite.MagicAnimation anim)
         {
             // Create ~6 spell sprites within bounds randomly and play them
-            Debug.WriteLine("Generate burst " + x + ", " + y + ", " + width + ", " + height + ", " + anim.ToString());
+            // Debug.WriteLine("Generate burst " + x + ", " + y + ", " + width + ", " + height + ", " + anim.ToString());
 
-            for (int i = 0; i < 6; i++)
+            List<Vector2> posList = new List<Vector2>();
+
+            for (int i = 0; i < width / 32; i++)
             {
-                int xPos = Globals.rnd.Next(x, x + width);
-                int yPos = Globals.rnd.Next(y, y + height);
-
-
-                MagicSprite mspr = GetMagicSprite();
-                mspr.SetAnimation(anim, i * 75f);
-                mspr.SetPosition(new Vector2(xPos - 16, yPos - 16)); // - half sprite width/height
+                for (int j = 0; j < height / 32; j++)
+                {
+                    int xPos = x + i * 32 + Globals.rnd.Next(4);
+                    int yPos = y + j * 32 + Globals.rnd.Next(4);
+                    posList.Add(new Vector2(xPos, yPos));
+                }
             }
+
+            foreach (Vector2 pos in posList)
+            {
+                float delay = (float)Globals.rnd.NextDouble() * 100f;
+                MagicSprite mspr = GetMagicSprite();
+                mspr.SetAnimation(anim, delay);
+                mspr.SetPosition(pos);
+            }
+            
         }
 
         public static void ClearSprites()

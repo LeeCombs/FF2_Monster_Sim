@@ -1994,3 +1994,27 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Magic/Heal.png
 
+#begin Sounds/Death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Death.wav
+
+#begin Sounds/Attack_Spell.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Attack_Spell.wav
+
+#begin Sounds/Heal.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Heal.wav
+
+#begin Sounds/Buff.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sounds/Buff.wav
+

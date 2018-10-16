@@ -11,7 +11,8 @@ namespace FF2_Monster_Sim
     public class MonoMonster : Monster
     {
         // Graphics
-        public bool IsVisible = true;
+        float alpha = 1f;
+        public bool IsVisible = true, IsFading = false;
         internal bool flipped;
         private Texture2D texture;
         public Vector2 Position;
@@ -68,12 +69,17 @@ namespace FF2_Monster_Sim
             if (flipped)
                 s = SpriteEffects.FlipHorizontally;
             if (IsVisible)
-                spriteBatch.Draw(texture, Position, null, Color.White, 0f, Vector2.Zero, 1f, s, 0f);
+                spriteBatch.Draw(texture, Position, null, Color.White * alpha, 0f, Vector2.Zero, 1f, s, 0f);
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
-            //
+            if (IsFading)
+            {
+                alpha -= 0.05f;
+                if (alpha <= 0f)
+                    IsFading = false;
+            }
         }
 
         /////////////
@@ -85,7 +91,7 @@ namespace FF2_Monster_Sim
             ClearStatusSprites();
             base.Kill();
         }
-
+        
         public override bool AddTempStatus(TempStatus tempStatus)
         {
             bool ret = base.AddTempStatus(tempStatus);

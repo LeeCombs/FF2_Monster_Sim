@@ -261,7 +261,6 @@ namespace FF2_Monster_Sim
             Weaknesses = new HashSet<Element>();
             Resistances = new HashSet<Element>();
             Absorbs = new HashSet<Element>();
-
             Buffs = new Dictionary<Buff, int>();
             Debuffs = new Dictionary<Debuff, int>();
             TempStatuses = new HashSet<TempStatus>();

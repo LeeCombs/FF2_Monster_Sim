@@ -78,10 +78,17 @@ namespace FF2_Monster_Sim
             foreach (MonoMonster[] col in columns)
                 foreach (MonoMonster mon in col)
                     if (mon != null)
-                        if (mon.IsAlive())
-                            mon.Draw(spriteBatch);
+                        mon.Draw(spriteBatch);
         }
-        
+
+        public void Update(GameTime gameTime)
+        {
+            foreach (MonoMonster[] col in columns)
+                foreach (MonoMonster mon in col)
+                    if (mon != null)
+                        mon.Update(gameTime);
+        }
+
         /////////////
         // Publics //
         /////////////

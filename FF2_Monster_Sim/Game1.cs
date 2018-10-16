@@ -25,7 +25,7 @@ namespace FF2_Monster_Sim
         private const int GAME_TICK = 150;
         private const int TEARDOWN_TICK = 100;
         private const int ROUND_LIMIT = 100;
-        private int turn = 0, turnTotal = 0, round = 0;
+        private int turn = 0, turnTotal = 0, round = 0, gameTick = 0, teardownTick = 0;
         private Thread combatThread;
 
         // Graphics
@@ -136,6 +136,8 @@ namespace FF2_Monster_Sim
             // TODO: Add your update logic here
             sceneOne.UpdateSceneText();
             sceneTwo.UpdateSceneText();
+            sceneOne.Update(gameTime);
+            sceneTwo.Update(gameTime);
 
             // Update Managers
             StatusSpriteManager.Update(gameTime);
@@ -175,217 +177,16 @@ namespace FF2_Monster_Sim
         {
             while (true)
             {
-                // Setup
-                int gameTick = GAME_TICK;
-                int teardownTick = TEARDOWN_TICK;
+                // Setup the match
+                SetupMatch();
 
-                // Display pre-game and countdown
-                SoundManager.PlayMenuMusic();
-                TextManager.SetInfoText("Starting in 14...");
-                for (int i = 0; i <= INTERLUDE_TIMER; i += 1000)
-                {
-                    TextManager.SetInfoText("Starting in " + (INTERLUDE_TIMER - i)/1000 + "...");
-                    Thread.Sleep(1000);
-                }
-                while (TextManager.TearDownText());
+                // Execute the rounds
+                while (ExecuteRounds());
+                
 
-                if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
-                    SoundManager.PlayBossMusic();
-                else
-                    SoundManager.PlayBattleMusic();
-
-                while (true)
-                {
-                    // Update and display round number
-                    round++;
-                    TextManager.SetRoundText(round);
-
-                    // Speed up the battle every x rounds
-                    if (round % 1 == 0)
-                    {
-                        if (gameTick >= 10)
-                            gameTick -= 10;
-                        if (teardownTick >= 15)
-                            teardownTick -= 15;
-                    }
-
-                    turn = 0;
-                    foreach (Action action in GetSortedActionArray())
-                    {
-                        // Update and display turn number
-                        turn++;
-                        turnTotal++;
-                        TextManager.SetTurnText(turn);
-
-                        // If an actor was killed before it's turn, ignore the turn
-                        if (action.Actor == null || action.Actor.IsDead())
-                            continue;
-
-                        foreach (MonoMonster target in action.Targets)
-                        {
-                            // Ignore invalid target and spells against the dead
-                            if (target == null)
-                                continue;
-
-                            if (action.Spell != null && target.IsDead())
-                                continue;
-
-                            TextManager.SetActorText(action.Actor.Name);
-                            Thread.Sleep(gameTick);
-
-                            if (action.Nothing)
-                            {
-                                TextManager.SetResultsText("Nothing");
-                                continue;
-                            }
-
-                            TextManager.SetTargetText(target.Name);
-                            Thread.Sleep(gameTick);
-
-                            if (action.Physical)
-                            {
-                                // Physical attacks can target the dead, but are ineffective
-                                if (target.IsDead())
-                                {
-                                    TextManager.SetResultsText("Ineffective");
-                                    continue;
-                                }
-
-                                // Apply the attack and display the results
-                                AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
-
-                                if (string.Equals(atkRes.DamageMessage, "Miss"))
-                                {
-                                    TextManager.SetDamageText("Miss");
-                                    continue;
-                                }
-
-                                // Flicker sprite
-                                // TODO: Different sounds and animations need to play based on the attack type
-                                if (gameTick > 30)
-                                {
-                                    SoundManager.PlayPhysicalHitSound();
-                                    FlickerMonster(target, 16);
-                                }
-
-                                TextManager.SetHitsText(atkRes.HitsMessage);
-                                Thread.Sleep(gameTick);
-
-                                TextManager.SetDamageText(atkRes.DamageMessage);
-                                Thread.Sleep(gameTick);
-
-                                // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
-
-                                // Display each result, tearing down existing results as needed
-                                for (int i = 0; i < atkRes.Results.Count; i++)
-                                {
-                                    string res = atkRes.Results[i];
-                                    TextManager.SetResultsText(res);
-                                    if (i < atkRes.Results.Count - 1)
-                                    {
-                                        Thread.Sleep(gameTick * 2);
-                                        TextManager.TearDownResults();
-                                        Thread.Sleep(teardownTick);
-                                    }
-                                }
-
-                                break;
-                            }
-                            else
-                            {
-                                /* TODO: Spell Casting Animations and You
-                                 * 
-                                 * If animations are ever added to this system, here's what has to happen:
-                                 * - After actor and spell name are displayed, play the animation(s)
-                                 * - Flicker the background color a couple times if necessary
-                                 * 
-                                 * These steps are repeated for each target:
-                                 * - Play the specific sound effect
-                                 * - Play the specific animation on top of the sprites
-                                 * - Play any additionally queued animations
-                                 * - Sleep the thread for the length of all animation's durations
-                                 * -- i.e. Thread.Sleep(AnimationManager.PlayAnimation(AnimationName));
-                                 * - Continue with damage text and cleanup
-                                 * 
-                                 * Ensure appropriate sprite management for everything. You'll probably
-                                 * want to write an AnimationManager, and maybe SpriteManager.
-                                 */
-                                
-                                // Casting a spell
-                                TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
-                                Thread.Sleep(gameTick);
-
-                                // Cast the spell and display the results
-                                SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
-                                
-                                // If the game isn't running too fast, play animations based on the attack
-                                // TODO: Different sounds and animations need to play based on the attack type
-                                if (gameTick > 30)
-                                {
-                                    // Flicker sprite
-                                    // TODO: Different sounds and animations need to play based on the attack type
-                                    if (gameTick > 30)
-                                    {
-                                        SoundManager.PlayPhysicalHitSound();
-                                        FlickerMonster(target, 16);
-
-                                        // Testing
-                                        MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Buff);
-                                    }
-
-                                    if (spellRes.Damage >= 0)
-                                    {
-                                        TextManager.SetDamageText(spellRes.Damage.ToString());
-                                        Thread.Sleep(gameTick);
-                                    }
-                                }
-
-                                // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
-
-                                // Display each result, tearing down existing results as needed
-                                for (int i = 0; i < spellRes.Results.Count; i++)
-                                {
-                                    string res = spellRes.Results[i];
-                                    TextManager.SetResultsText(res);
-                                    if (i < spellRes.Results.Count - 1)
-                                    {
-                                        Thread.Sleep(gameTick * 2);
-                                        TextManager.TearDownResults();
-                                        Thread.Sleep(teardownTick);
-                                    }
-                                }
-
-                                // Tear down between each target
-                                Thread.Sleep(gameTick * 5);
-                                while (TextManager.TearDownText())
-                                    Thread.Sleep(teardownTick);
-                            }
-
-                            // TODO: If both scenes only contain "Soul" enemies, they cannot kill eachother
-                            if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
-                                break;
-                        }
-                        // Turn end, clean up text display
-                        Thread.Sleep(gameTick * 5);
-                        while (TextManager.TearDownText())
-                            Thread.Sleep(teardownTick);
-                        
-                        if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
-                            break;
-                    }
-
-                    // End of round
-                    
-                    // Check for end of battle
-                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
-                        break;
-
-                    // Check if any monster recovers from temporary status effects
-                    foreach (MonoMonster mon in sceneOne.GetAllLiveMonsters())
-                        mon.RollTempStatusRecovery();
-                    foreach (MonoMonster mon in sceneTwo.GetAllLiveMonsters())
-                        mon.RollTempStatusRecovery();
-                }
+                //
+                // Round logic loop
+                //
 
                 // Record the battle info
                 WriteBattleResults();
@@ -402,7 +203,7 @@ namespace FF2_Monster_Sim
 
                 if (sceneOne.HasLivingMonsters() && sceneTwo.HasLivingMonsters())
                 {
-                    infoText = "Tie! Neither team has\ndefeated the other in time.";
+                    infoText = "Tie! Everyone loses.";
                 }
                 else if (sceneOne.HasLivingMonsters())
                 {
@@ -596,6 +397,240 @@ namespace FF2_Monster_Sim
 
             // Sort by actor's Init rolls and return the new array
             return actList.OrderBy(act => act.Actor.Init).ToArray();
+        }
+
+        private void SetupMatch()
+        {
+            // Reset speeds
+            gameTick = GAME_TICK;
+            teardownTick = TEARDOWN_TICK;
+
+            // Display pre-game and countdown
+            SoundManager.PlayMenuMusic();
+            for (int i = 0; i <= INTERLUDE_TIMER; i += 1000)
+            {
+                TextManager.SetInfoText("Starting in " + (INTERLUDE_TIMER - i) / 1000 + "...");
+                Thread.Sleep(1000);
+            }
+
+            // Clean up the text and play some music
+            while (TextManager.TearDownText()) ;
+            if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
+                SoundManager.PlayBossMusic();
+            else
+                SoundManager.PlayBattleMusic();
+        }
+
+        private bool ExecuteRounds()
+        {
+            while (true)
+            {
+                // Update and display round number
+                TextManager.SetRoundText(++round);
+
+                // Speed up the battle every round
+                if (gameTick >= 10)
+                    gameTick -= 10;
+                if (teardownTick >= 15)
+                    teardownTick -= 15;
+
+                // Apply every action
+                while (ExecuteActions());
+                
+                // Check for end of battle
+                if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
+                    break;
+
+                // Check if any monster recovers from temporary status effects
+                foreach (MonoMonster mon in sceneOne.GetAllLiveMonsters())
+                    mon.RollTempStatusRecovery();
+                foreach (MonoMonster mon in sceneTwo.GetAllLiveMonsters())
+                    mon.RollTempStatusRecovery();
+            }
+
+            return false;
+        }
+
+        private bool ExecuteActions()
+        {
+            turn = 0;
+            foreach (Action action in GetSortedActionArray())
+            {
+                // Update and display turn number
+                turn++;
+                turnTotal++;
+                TextManager.SetTurnText(turn);
+
+                // If an actor was killed before its turn, ignore the turn
+                if (action.Actor == null || action.Actor.IsDead())
+                    continue;
+
+                // Apply the action to each target
+                foreach (MonoMonster target in action.Targets)
+                {
+                    // Ignore invalid target and spells against the dead
+                    if (target == null || (action.Spell != null && target.IsDead()))
+                        continue;
+
+                    TextManager.SetActorText(action.Actor.Name);
+                    Thread.Sleep(gameTick);
+
+                    // If the action is nothing, display and bail out
+                    if (action.Nothing)
+                    {
+                        TextManager.SetResultsText("Nothing");
+                        continue;
+                    }
+
+                    TextManager.SetTargetText(target.Name);
+                    Thread.Sleep(gameTick);
+
+                    if (action.Physical)
+                    {
+                        // Physical attacks can target the dead, but are ineffective
+                        if (target.IsDead())
+                        {
+                            TextManager.SetResultsText("Ineffective");
+                            continue;
+                        }
+
+                        // Apply the attack and display the results
+                        AttackResult atkRes = AttackManager.AttackMonster(action.Actor, target);
+
+                        // On a miss, display and bail out
+                        if (string.Equals(atkRes.DamageMessage, "Miss"))
+                        {
+                            TextManager.SetDamageText("Miss");
+                            continue;
+                        }
+
+                        // Flicker sprite
+                        // TODO: Different sounds and animations need to play based on the attack type
+                        if (gameTick > 30)
+                        {
+                            SoundManager.PlayPhysicalHitSound();
+                            FlickerMonster(target, 16);
+                        }
+
+                        TextManager.SetHitsText(atkRes.HitsMessage);
+                        Thread.Sleep(gameTick);
+
+                        TextManager.SetDamageText(atkRes.DamageMessage);
+                        Thread.Sleep(gameTick);
+
+                        // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
+                        if (target.IsDead())
+                        {
+                            SoundManager.PlayDeathSound();
+                            target.IsFading = true;
+                            Thread.Sleep(200);
+                            target.IsVisible = false;
+                        }
+
+                        // Display each result, tearing down existing results as needed
+                        for (int i = 0; i < atkRes.Results.Count; i++)
+                        {
+                            string res = atkRes.Results[i];
+                            TextManager.SetResultsText(res);
+                            if (i < atkRes.Results.Count - 1)
+                            {
+                                Thread.Sleep(gameTick * 2);
+                                TextManager.TearDownResults();
+                                Thread.Sleep(teardownTick);
+                            }
+                        }
+
+                        break;
+                    }
+                    else
+                    {
+                        /* TODO: Spell Casting Animations and You
+                         * 
+                         * If animations are ever added to this system, here's what has to happen:
+                         * - After actor and spell name are displayed, play the animation(s)
+                         * - Flicker the background color a couple times if necessary
+                         * 
+                         * These steps are repeated for each target:
+                         * - Play the specific sound effect
+                         * - Play the specific animation on top of the sprites
+                         * - Play any additionally queued animations
+                         * - Sleep the thread for the length of all animation's durations
+                         * -- i.e. Thread.Sleep(AnimationManager.PlayAnimation(AnimationName));
+                         * - Continue with damage text and cleanup
+                         * 
+                         * Ensure appropriate sprite management for everything. You'll probably
+                         * want to write an AnimationManager, and maybe SpriteManager.
+                         */
+
+                        // Casting a spell
+                        TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
+                        Thread.Sleep(gameTick);
+
+                        // Cast the spell and display the results
+                        SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
+
+                        // If the game isn't running too fast, play animations based on the attack
+                        // TODO: Different sounds and animations need to play based on the attack type
+                        if (gameTick > 30)
+                        {
+                            // Flicker sprite
+                            // TODO: Different sounds and animations need to play based on the attack type
+                            if (gameTick > 30)
+                            {
+                                // Testing
+                                if (target.IsAlive())
+                                    MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Buff);
+                            }
+
+                            if (spellRes.Damage >= 0)
+                            {
+                                TextManager.SetDamageText(spellRes.Damage.ToString());
+                                Thread.Sleep(gameTick);
+                            }
+                        }
+
+                        // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
+                        if (target.IsDead())
+                        {
+                            SoundManager.PlayDeathSound();
+                            target.IsFading = true;
+                            Thread.Sleep(200);
+                            target.IsVisible = false;
+                        }
+
+                        // Display each result, tearing down existing results as needed
+                        for (int i = 0; i < spellRes.Results.Count; i++)
+                        {
+                            string res = spellRes.Results[i];
+                            TextManager.SetResultsText(res);
+                            if (i < spellRes.Results.Count - 1)
+                            {
+                                Thread.Sleep(gameTick * 2);
+                                TextManager.TearDownResults();
+                                Thread.Sleep(teardownTick);
+                            }
+                        }
+
+                        // Tear down between each target
+                        Thread.Sleep(gameTick * 5);
+                        while (TextManager.TearDownText())
+                            Thread.Sleep(teardownTick);
+                    }
+
+                    // TODO: If both scenes only contain "Soul" enemies, they cannot kill eachother
+                    if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
+                        break;
+                }
+                // Turn end, clean up text display
+                Thread.Sleep(gameTick * 5);
+                while (TextManager.TearDownText())
+                    Thread.Sleep(teardownTick);
+
+                if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
+                    break;
+            }
+
+            return false;
         }
     }
 }

@@ -3,12 +3,14 @@ TODO {
     Scene B's back row is hittable?
     - Right side (reverseed) back row is left-most instead of right
     - Are scene b's rows actually flipped? Arr Matey looked wrong
+    - Spell on all seems to happen in a weird order: 1a, 1b, 3a, 2b... When some are dead or always?
     Team "Arr Mateys" should get Z.Borgan added
     Status icons for buffs?
     Status icon for slow
     Poison needs to damage each round
     Check if G Soul's cure is suppose to target the other team
 
+    Animate first, then remove monster
 }
 
 Look into {

@@ -17,14 +17,21 @@ namespace FF2_Monster_Sim
     public class SoundManager
     {
         private static float volume = 0f; // 0.1f
+        public static float SoundVolume = 1f;
 
         // Songs
-        private static Song battleSong;
-        private static Song bossSong;
-        private static Song victorySong;
-        private static Song defeatSong;
-        private static Song menuSong;
-        private static SoundEffect physicalHit;
+        private static Song battleSong, bossSong, victorySong, defeatSong, menuSong;
+        private static SoundEffect physicalHit, death;
+
+        enum Sound
+        {
+            Physical, Death, AttackSpell, Heal, Buff, Debuff
+        }
+
+        enum Music
+        {
+            Battle, Boss, Victory, Defeat, Menu
+        }
 
         // Sound
 
@@ -54,6 +61,7 @@ namespace FF2_Monster_Sim
 
             // Sounds
             physicalHit = content.Load<SoundEffect>("Sounds\\Physical_Hit");
+            death = content.Load<SoundEffect>("Sounds\\Death");
         }
 
         public static void Update(GameTime gameTime)
@@ -96,12 +104,27 @@ namespace FF2_Monster_Sim
             try
             {
                 SoundEffectInstance ph = physicalHit.CreateInstance();
-                ph.Volume = volume;
+                ph.Volume = SoundVolume;
                 ph.Play();
             }
             catch (Exception e)
             {
                 Debug.WriteLine("Error creating physical hit sound: " + e);
+            }
+        }
+
+        public static void PlayDeathSound()
+        {
+            // Create and play the physical hit sound. Ignore it if there's an issue creating the instance.
+            try
+            {
+                SoundEffectInstance dth = death.CreateInstance();
+                dth.Volume = SoundVolume;
+                dth.Play();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error creating death sound: " + e);
             }
         }
 
