@@ -7,6 +7,10 @@ TODO {
     Monster team should walk off stage after the fight
     MagicSprites should handle their own random delays
     MagicSprite burst should be better spaced...
+    DRAN worked on R.Soul, should it?
+    Write the random team to data, but just wins/loss/ties/etc.
+    Gaining a disabling status mid-round (paralysis) doesn't prevent a monster from taking its turn that round. 
+    - I'm pretty sure this is how it works regularly, but it needs confirmation.
 }
 
 Bugs {
@@ -16,17 +20,12 @@ Bugs {
         Scene B's back row is hittable?
         - Right side (reverseed) back row is left-most instead of right
         - Are scene b's rows actually flipped? Arr Matey looked wrong
-        - Spell on all seems to happen in a weird order: 1a, 1b, 3a, 2b... When some are dead or always?
+        - Spell on all seems to happen in a weird order: 1a, 1b, 3a, 2b... Should be 3ab, 2ab, 1ab
 
     Medium:
 
         A haste appeared to miss on a Flower enemy on the same team
         A self-killing enemy won't fade out and stop drawing (e.g. bomb blast)
-}
-
-Look into {
-    Gaining a disabling status mid-round (paralysis) doesn't prevent a monster from taking its turn that round. 
-    I'm pretty sure this is how it works regularly, but it needs confirmation.
 }
 
 Message Building {
@@ -184,16 +183,3 @@ Spell Messages {
     HEAL: Uncursed, Devenomed, Can see, Remembers (amnesia), Regained form (toad), Normal body (stone)
     PEEP: Poison left, Scared (sleep), Can speak, Grew, Can move, Normal (confused)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

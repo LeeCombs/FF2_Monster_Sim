@@ -20,8 +20,9 @@ namespace FF2_Monster_Sim
         BattleScene sceneOne, sceneTwo;
 
         // Turn Logic
+        public bool SpeedUp = false;
         private const int FANFARE_TIMER = 17000; // 17000 for one loop, 30000 for two
-        private const int INTERLUDE_TIMER = 13500; // ~6500 per loop
+        private const int INTERLUDE_TIMER = 1350; // ~6500 per loop
         private const int GAME_TICK = 150;
         private const int TEARDOWN_TICK = 100;
         private const int ROUND_LIMIT = 100;
@@ -183,11 +184,6 @@ namespace FF2_Monster_Sim
                 // Execute the rounds
                 while (ExecuteRounds());
                 
-
-                //
-                // Round logic loop
-                //
-
                 // Record the battle info
                 WriteBattleResults();
 
@@ -310,7 +306,6 @@ namespace FF2_Monster_Sim
             }
             
             // Update team data
-            // TODO: Make this nice
             List<string> teamData = File.ReadAllLines(TEAM_DATA_PATH).ToList();
             
             if (sceneOne.IsTeam)
@@ -335,6 +330,7 @@ namespace FF2_Monster_Sim
                     }
                 }
             }
+
             if (sceneTwo.IsTeam)
             {
                 for (int i = 0; i < teamData.Count; i++)
@@ -381,8 +377,16 @@ namespace FF2_Monster_Sim
         private void SetupMatch()
         {
             // Reset speeds
-            gameTick = GAME_TICK;
-            teardownTick = TEARDOWN_TICK;
+            if (SpeedUp)
+            {
+                gameTick = 10;
+                teardownTick = 10;
+            }
+            else
+            {
+                gameTick = GAME_TICK;
+                teardownTick = TEARDOWN_TICK;
+            }
 
             // Display pre-game and countdown
             SoundManager.PlayMusic(SoundManager.Music.Menu);
