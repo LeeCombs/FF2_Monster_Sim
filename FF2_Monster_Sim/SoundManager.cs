@@ -16,8 +16,8 @@ namespace FF2_Monster_Sim
 {
     public class SoundManager
     {
-        private static float volume = 0.1f; // 0.1f
-        public static float SoundVolume = 1f;
+        private static float volume = 0f; // 0.1f
+        public static float SoundVolume = 0.1f;
 
         // Songs
         private static Song battleSong, bossSong, victorySong, defeatSong, menuSong;
@@ -84,7 +84,7 @@ namespace FF2_Monster_Sim
                 case Sound.AttackSpell:
                     try
                     {
-                        attackSnd.Play();
+                        attackSnd.Play(SoundVolume, 0, 0);
                     }
                     catch (Exception e)
                     {
@@ -94,7 +94,7 @@ namespace FF2_Monster_Sim
                 case Sound.Buff:
                     try
                     {
-                        buffSnd.Play();
+                        buffSnd.Play(SoundVolume, 0, 0);
                     }
                     catch (Exception e)
                     {
@@ -104,7 +104,7 @@ namespace FF2_Monster_Sim
                 case Sound.Death:
                     try
                     {
-                        deathSnd.Play();
+                        deathSnd.Play(SoundVolume, 0, 0);
                     }
                     catch (Exception e)
                     {
@@ -114,7 +114,7 @@ namespace FF2_Monster_Sim
                 case Sound.Debuff:
                     try
                     {
-                        debuffSnd.Play();
+                        debuffSnd.Play(SoundVolume, 0, 0);
                     }
                     catch (Exception e)
                     {
@@ -124,7 +124,7 @@ namespace FF2_Monster_Sim
                 case Sound.Heal:
                     try
                     {
-                        healSnd.Play();
+                        healSnd.Play(SoundVolume, 0, 0);
                     }
                     catch (Exception e)
                     {
@@ -134,7 +134,7 @@ namespace FF2_Monster_Sim
                 case Sound.Physical:
                     try
                     {
-                        physicalSnd.Play();
+                        physicalSnd.Play(SoundVolume, 0, 0);
                     }
                     catch (Exception e)
                     {

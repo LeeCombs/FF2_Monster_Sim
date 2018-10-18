@@ -442,7 +442,7 @@ namespace FF2_Monster_Sim
                                 blastSum += blastRoll > 0 ? blastRoll : 0;
                             }
                             
-                            caster.Kill();
+                            caster.Kill(); // TODO
                             return HandleDamageSpellResult(target, blastSum);
                     }
                     break;

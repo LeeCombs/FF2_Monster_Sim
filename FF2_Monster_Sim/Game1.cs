@@ -489,7 +489,6 @@ namespace FF2_Monster_Sim
                         {
                             SoundManager.PlaySound(SoundManager.Sound.Physical);
                             target.Flicker(16);
-                            // FlickerMonster(target, 16);
                         }
 
                         TextManager.SetHitsText(atkRes.HitsMessage);
@@ -501,10 +500,8 @@ namespace FF2_Monster_Sim
                         // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
                         if (target.IsDead())
                         {
-                            SoundManager.PlaySound(SoundManager.Sound.Death);
-                            target.IsFading = true;
-                            Thread.Sleep(200);
-                            target.IsVisible = false;
+                            target.StartDeath();
+                            Thread.Sleep(300);
                         }
 
                         // Display each result, tearing down existing results as needed
@@ -548,39 +545,42 @@ namespace FF2_Monster_Sim
 
                         // Cast the spell and display the results
                         SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
-
-                        // If the game isn't running too fast, play animations based on the attack
-                        // TODO: Different sounds and animations need to play based on the attack type
-                        if (gameTick > 30)
+                        
+                        // Set the spell animation and sound based on the spell's effect (kinda). This is awkward but fine for now.
+                        MagicSprite.MagicAnimation magicAnim = MagicSprite.MagicAnimation.Attack;
+                        SoundManager.Sound magicSnd = SoundManager.Sound.AttackSpell;
+                        if (action.Spell.Effect == "Buff")
                         {
-                            // Flicker sprite
-                            // TODO: Different sounds and animations need to play based on the attack type
-                            if (gameTick > 30)
-                            {
-                                // Testing
-                                if (target.IsAlive())
-                                {
-                                    MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Buff);
-                                    SoundManager.PlaySound(SoundManager.Sound.AttackSpell);
-                                    // Debug.WriteLine(action.Spell.SpellType);
-                                    Thread.Sleep(400);
-                                }
-                            }
+                            magicAnim = MagicSprite.MagicAnimation.Buff;
+                            magicSnd = SoundManager.Sound.Buff;
+                        }
+                        if (action.Spell.Effect == "Debuff" || action.Spell.Effect == "TempStatus" || action.Spell.Effect == "PermStatus")
+                        {
+                            magicAnim = MagicSprite.MagicAnimation.Debuff;
+                            magicSnd = SoundManager.Sound.Debuff;
 
-                            if (spellRes.Damage >= 0)
-                            {
-                                TextManager.SetDamageText(spellRes.Damage.ToString());
-                                Thread.Sleep(gameTick);
-                            }
+                        }
+                        if (action.Spell.Effect == "Heal" || action.Spell.Effect == "Revive")
+                        {
+                            magicAnim = MagicSprite.MagicAnimation.Heal;
+                            magicSnd = SoundManager.Sound.Heal;
                         }
 
-                        // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
+                        MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, magicAnim);
+                        SoundManager.PlaySound(magicSnd);
+                        Thread.Sleep(700);
+
+                        if (spellRes.Damage >= 0)
+                        {
+                            TextManager.SetDamageText(spellRes.Damage.ToString());
+                            Thread.Sleep(gameTick);
+                        }
+
+                        // Kill the target if it's dead. TODO: This is weird here, should be handled by the monster itself?
                         if (target.IsDead())
                         {
-                            SoundManager.PlaySound(SoundManager.Sound.Death);
-                            target.IsFading = true;
-                            Thread.Sleep(200);
-                            target.IsVisible = false;
+                            target.StartDeath();
+                            Thread.Sleep(300);
                         }
 
                         // Display each result, tearing down existing results as needed
@@ -606,6 +606,7 @@ namespace FF2_Monster_Sim
                     if (!sceneOne.HasLivingMonsters() || !sceneTwo.HasLivingMonsters() || round >= ROUND_LIMIT)
                         break;
                 }
+
                 // Turn end, clean up text display
                 Thread.Sleep(gameTick * 5);
                 while (TextManager.TearDownText())

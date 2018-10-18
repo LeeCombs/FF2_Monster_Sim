@@ -25,7 +25,7 @@ namespace FF2_Monster_Sim
         public const int SPRITE_WIDTH = 32, SPRITE_HEIGHT = 32;
         const float ANIMATION_INTERVAL = 200f;
 
-        float timer = 0f, delaytimer = 0f, lifespan = 600f;
+        float timer = 0f, delaytimer = 0f, lifespan = 400f;
         int currentFrame = 0;
         int totalFrames = 2;
         Vector2 position, origin;

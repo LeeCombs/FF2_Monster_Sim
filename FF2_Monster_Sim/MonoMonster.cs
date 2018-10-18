@@ -107,6 +107,12 @@ namespace FF2_Monster_Sim
             // Ensure the monster always ends up visible
             IsVisible = true;
         }
+
+        public void StartDeath()
+        {
+            SoundManager.PlaySound(SoundManager.Sound.Death);
+            IsFading = true;
+        }
         
         public override bool AddTempStatus(TempStatus tempStatus)
         {
