@@ -191,13 +191,13 @@ namespace FF2_Monster_Sim
                 // Record the battle info
                 WriteBattleResults();
 
-                // Display results info and play some music
+                // Display results info and play some music. If a boss won, play different music.
                 if (sceneOne.SceneType == SceneType.C && sceneOne.HasLivingMonsters())
-                    SoundManager.PlayDefeatMusic();
+                    SoundManager.PlayMusic(SoundManager.Music.Defeat);
                 if (sceneTwo.SceneType == SceneType.C && sceneTwo.HasLivingMonsters())
-                    SoundManager.PlayDefeatMusic();
+                    SoundManager.PlayMusic(SoundManager.Music.Defeat);
                 else
-                    SoundManager.PlayVictoryMusic();
+                    SoundManager.PlayMusic(SoundManager.Music.Victory);
 
                 String infoText = "";
 
@@ -385,7 +385,7 @@ namespace FF2_Monster_Sim
             teardownTick = TEARDOWN_TICK;
 
             // Display pre-game and countdown
-            SoundManager.PlayMenuMusic();
+            SoundManager.PlayMusic(SoundManager.Music.Menu);
             for (int i = 0; i <= INTERLUDE_TIMER; i += 1000)
             {
                 TextManager.SetInfoText("Starting in " + (INTERLUDE_TIMER - i) / 1000 + "...");
@@ -395,9 +395,9 @@ namespace FF2_Monster_Sim
             // Clean up the text and play some music
             while (TextManager.TearDownText()) ;
             if (sceneOne.SceneType == SceneType.C || sceneTwo.SceneType == SceneType.C)
-                SoundManager.PlayBossMusic();
+                SoundManager.PlayMusic(SoundManager.Music.Boss);
             else
-                SoundManager.PlayBattleMusic();
+                SoundManager.PlayMusic(SoundManager.Music.Battle);
         }
 
         private bool ExecuteRounds()
@@ -560,7 +560,7 @@ namespace FF2_Monster_Sim
                             magicSnd = SoundManager.Sound.Debuff;
 
                         }
-                        if (action.Spell.Effect == "Heal" || action.Spell.Effect == "Revive")
+                        if (action.Spell.Effect == "Heal" || action.Spell.Effect == "Revive" || action.Spell.Effect == "ItemFullRestore")
                         {
                             magicAnim = MagicSprite.MagicAnimation.Heal;
                             magicSnd = SoundManager.Sound.Heal;

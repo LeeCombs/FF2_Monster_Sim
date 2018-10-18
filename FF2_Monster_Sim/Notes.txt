@@ -5,6 +5,8 @@ TODO {
     Poison needs to damage each round
     Check if G Soul's cure is suppose to target the other team
     Monster team should walk off stage after the fight
+    MagicSprites should handle their own random delays
+    MagicSprite burst should be better spaced...
 }
 
 Bugs {

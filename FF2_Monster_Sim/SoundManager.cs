@@ -16,7 +16,7 @@ namespace FF2_Monster_Sim
 {
     public class SoundManager
     {
-        private static float volume = 0f; // 0.1f
+        private static float volume = 0.05f; // 0.1f
         public static float SoundVolume = 0.1f;
 
         // Songs
@@ -82,64 +82,22 @@ namespace FF2_Monster_Sim
             switch (sound)
             {
                 case Sound.AttackSpell:
-                    try
-                    {
-                        attackSnd.Play(SoundVolume, 0, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error playing sound: " + e);
-                    }
+                    HandlePlaySound(attackSnd);
                     break;
                 case Sound.Buff:
-                    try
-                    {
-                        buffSnd.Play(SoundVolume, 0, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error playing sound: " + e);
-                    }
+                    HandlePlaySound(buffSnd);
                     break;
                 case Sound.Death:
-                    try
-                    {
-                        deathSnd.Play(SoundVolume, 0, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error playing sound: " + e);
-                    }
+                    HandlePlaySound(deathSnd);
                     break;
                 case Sound.Debuff:
-                    try
-                    {
-                        debuffSnd.Play(SoundVolume, 0, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error playing sound: " + e);
-                    }
+                    HandlePlaySound(debuffSnd);
                     break;
                 case Sound.Heal:
-                    try
-                    {
-                        healSnd.Play(SoundVolume, 0, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error playing sound: " + e);
-                    }
+                    HandlePlaySound(healSnd);
                     break;
                 case Sound.Physical:
-                    try
-                    {
-                        physicalSnd.Play(SoundVolume, 0, 0);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine("Error playing sound: " + e);
-                    }
+                    HandlePlaySound(physicalSnd);
                     break;
                 default:
                     Debug.WriteLine("PlaySound sound not caught: " + sound.ToString());
@@ -172,34 +130,22 @@ namespace FF2_Monster_Sim
             }
         }
         
-
-        public static void PlayBattleMusic()
-        {
-            MediaPlayer.Play(battleSong);
-        }
-        
-        public static void PlayBossMusic()
-        {
-            MediaPlayer.Play(bossSong);
-        }
-        
-        public static void PlayVictoryMusic()
-        {
-            MediaPlayer.Play(victorySong);
-        }
-        
-        public static void PlayDefeatMusic()
-        {
-            MediaPlayer.Play(defeatSong);
-        }
-        
-        public static void PlayMenuMusic()
-        {
-            MediaPlayer.Play(menuSong);
-        }
-        
         /////////////
         // Helpers //
         /////////////
+
+        private static void HandlePlaySound(SoundEffect se)
+        {
+            try
+            {
+                SoundEffectInstance sei = se.CreateInstance();
+                sei.Volume = SoundVolume;
+                sei.Play();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("Error playing sound " + se.ToString() + ": " + e);
+            }
+        }
     }
 }
