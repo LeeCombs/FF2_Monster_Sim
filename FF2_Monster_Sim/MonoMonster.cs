@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -90,6 +91,21 @@ namespace FF2_Monster_Sim
         {
             ClearStatusSprites();
             base.Kill();
+        }
+
+        public void Flicker(int cycles)
+        {
+            for (int i = 0; i < cycles; i++)
+            {
+                if (i % 2 == 0)
+                    IsVisible = false;
+                else
+                    IsVisible = true;
+                Thread.Sleep(25);
+            }
+
+            // Ensure the monster always ends up visible
+            IsVisible = true;
         }
         
         public override bool AddTempStatus(TempStatus tempStatus)

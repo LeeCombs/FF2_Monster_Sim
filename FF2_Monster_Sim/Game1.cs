@@ -231,27 +231,6 @@ namespace FF2_Monster_Sim
         /////////////
 
         /// <summary>
-        /// Flicker a monster sprite for a given duration
-        /// TODO: This method is fine here for now, but determine if and where it
-        /// should be placed. Should animation considerations be kept within MonoMonster, 
-        /// or moved into MonsterManager, or make a base Sprite class to handle it all?
-        /// </summary>
-        public void FlickerMonster(MonoMonster monster, int cycles)
-        {
-            for (int i = 0; i < cycles; i++)
-            {
-                if (i % 2 == 0)
-                    monster.IsVisible = false;
-                else
-                    monster.IsVisible = true;
-                Thread.Sleep(25);
-            }
-
-            // Ensure the monster always ends up visible
-            monster.IsVisible = true;
-        }
-
-        /// <summary>
         /// Setup the two teams and battle scenes for the next battle
         /// </summary>
         private void PopulateScenes()
@@ -508,8 +487,9 @@ namespace FF2_Monster_Sim
                         // TODO: Different sounds and animations need to play based on the attack type
                         if (gameTick > 30)
                         {
-                            SoundManager.PlayPhysicalHitSound();
-                            FlickerMonster(target, 16);
+                            SoundManager.PlaySound(SoundManager.Sound.Physical);
+                            target.Flicker(16);
+                            // FlickerMonster(target, 16);
                         }
 
                         TextManager.SetHitsText(atkRes.HitsMessage);
@@ -521,7 +501,7 @@ namespace FF2_Monster_Sim
                         // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
                         if (target.IsDead())
                         {
-                            SoundManager.PlayDeathSound();
+                            SoundManager.PlaySound(SoundManager.Sound.Death);
                             target.IsFading = true;
                             Thread.Sleep(200);
                             target.IsVisible = false;
@@ -579,7 +559,12 @@ namespace FF2_Monster_Sim
                             {
                                 // Testing
                                 if (target.IsAlive())
+                                {
                                     MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, MagicSprite.MagicAnimation.Buff);
+                                    SoundManager.PlaySound(SoundManager.Sound.AttackSpell);
+                                    // Debug.WriteLine(action.Spell.SpellType);
+                                    Thread.Sleep(400);
+                                }
                             }
 
                             if (spellRes.Damage >= 0)
@@ -592,7 +577,7 @@ namespace FF2_Monster_Sim
                         // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
                         if (target.IsDead())
                         {
-                            SoundManager.PlayDeathSound();
+                            SoundManager.PlaySound(SoundManager.Sound.Death);
                             target.IsFading = true;
                             Thread.Sleep(200);
                             target.IsVisible = false;

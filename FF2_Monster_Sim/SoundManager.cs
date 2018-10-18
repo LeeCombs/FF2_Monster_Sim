@@ -16,19 +16,19 @@ namespace FF2_Monster_Sim
 {
     public class SoundManager
     {
-        private static float volume = 0f; // 0.1f
+        private static float volume = 0.1f; // 0.1f
         public static float SoundVolume = 1f;
 
         // Songs
         private static Song battleSong, bossSong, victorySong, defeatSong, menuSong;
-        private static SoundEffect physicalHit, death;
+        private static SoundEffect physicalSnd, deathSnd, attackSnd, healSnd, buffSnd, debuffSnd;
 
-        enum Sound
+        public enum Sound
         {
             Physical, Death, AttackSpell, Heal, Buff, Debuff
         }
 
-        enum Music
+        public enum Music
         {
             Battle, Boss, Victory, Defeat, Menu
         }
@@ -60,8 +60,12 @@ namespace FF2_Monster_Sim
             menuSong = content.Load<Song>("Music\\Chocobo");
 
             // Sounds
-            physicalHit = content.Load<SoundEffect>("Sounds\\Physical_Hit");
-            death = content.Load<SoundEffect>("Sounds\\Death");
+            physicalSnd = content.Load<SoundEffect>("Sounds\\PhysicalHit");
+            deathSnd = content.Load<SoundEffect>("Sounds\\Death");
+            attackSnd = content.Load<SoundEffect>("Sounds\\AttackSpell");
+            healSnd = content.Load<SoundEffect>("Sounds\\Heal");
+            buffSnd = content.Load<SoundEffect>("Sounds\\Buff");
+            debuffSnd = content.Load<SoundEffect>("Sounds\\Debuff");
         }
 
         public static void Update(GameTime gameTime)
@@ -72,6 +76,102 @@ namespace FF2_Monster_Sim
         /////////////
         // Publics //
         /////////////
+
+        public static void PlaySound(Sound sound)
+        {
+            switch (sound)
+            {
+                case Sound.AttackSpell:
+                    try
+                    {
+                        attackSnd.Play();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error playing sound: " + e);
+                    }
+                    break;
+                case Sound.Buff:
+                    try
+                    {
+                        buffSnd.Play();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error playing sound: " + e);
+                    }
+                    break;
+                case Sound.Death:
+                    try
+                    {
+                        deathSnd.Play();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error playing sound: " + e);
+                    }
+                    break;
+                case Sound.Debuff:
+                    try
+                    {
+                        debuffSnd.Play();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error playing sound: " + e);
+                    }
+                    break;
+                case Sound.Heal:
+                    try
+                    {
+                        healSnd.Play();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error playing sound: " + e);
+                    }
+                    break;
+                case Sound.Physical:
+                    try
+                    {
+                        physicalSnd.Play();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine("Error playing sound: " + e);
+                    }
+                    break;
+                default:
+                    Debug.WriteLine("PlaySound sound not caught: " + sound.ToString());
+                    break;
+            }
+        }
+
+        public static void PlayMusic(Music music)
+        {
+            switch (music)
+            {
+                case Music.Battle:
+                    MediaPlayer.Play(battleSong);
+                    break;
+                case Music.Boss:
+                    MediaPlayer.Play(bossSong);
+                    break;
+                case Music.Defeat:
+                    MediaPlayer.Play(defeatSong);
+                    break;
+                case Music.Menu:
+                    MediaPlayer.Play(menuSong);
+                    break;
+                case Music.Victory:
+                    MediaPlayer.Play(victorySong);
+                    break;
+                default:
+                    Debug.WriteLine("PlayMusic music not caught: " + music.ToString());
+                    break;
+            }
+        }
+        
 
         public static void PlayBattleMusic()
         {
@@ -97,37 +197,7 @@ namespace FF2_Monster_Sim
         {
             MediaPlayer.Play(menuSong);
         }
-
-        public static void PlayPhysicalHitSound()
-        {
-            // Create and play the physical hit sound. Ignore it if there's an issue creating the instance.
-            try
-            {
-                SoundEffectInstance ph = physicalHit.CreateInstance();
-                ph.Volume = SoundVolume;
-                ph.Play();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Error creating physical hit sound: " + e);
-            }
-        }
-
-        public static void PlayDeathSound()
-        {
-            // Create and play the physical hit sound. Ignore it if there's an issue creating the instance.
-            try
-            {
-                SoundEffectInstance dth = death.CreateInstance();
-                dth.Volume = SoundVolume;
-                dth.Play();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Error creating death sound: " + e);
-            }
-        }
-
+        
         /////////////
         // Helpers //
         /////////////

@@ -100,8 +100,6 @@ namespace FF2_Monster_Sim
         /// </summary>
         public void SetAnimation(MagicAnimation anim, float delaytimer = 0f)
         {
-            Debug.WriteLine("Setanim " + anim.ToString() + ", " + delaytimer);
-
             this.delaytimer = delaytimer;
             lifespan = 1000f + delaytimer;
             Visible = true;
