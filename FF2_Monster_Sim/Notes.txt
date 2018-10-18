@@ -1,16 +1,25 @@
 TODO {
-    Spell Animations
-    Scene B's back row is hittable?
-    - Right side (reverseed) back row is left-most instead of right
-    - Are scene b's rows actually flipped? Arr Matey looked wrong
-    - Spell on all seems to happen in a weird order: 1a, 1b, 3a, 2b... When some are dead or always?
     Team "Arr Mateys" should get Z.Borgan added
     Status icons for buffs?
-    Status icon for slow
+    Status icon for slow?
     Poison needs to damage each round
     Check if G Soul's cure is suppose to target the other team
+    Monster team should walk off stage after the fight
+}
 
-    Animate first, then remove monster
+Bugs {
+
+    High:
+
+        Scene B's back row is hittable?
+        - Right side (reverseed) back row is left-most instead of right
+        - Are scene b's rows actually flipped? Arr Matey looked wrong
+        - Spell on all seems to happen in a weird order: 1a, 1b, 3a, 2b... When some are dead or always?
+
+    Medium:
+
+        A haste appeared to miss on a Flower enemy on the same team
+        A self-killing enemy won't fade out and stop drawing (e.g. bomb blast)
 }
 
 Look into {
