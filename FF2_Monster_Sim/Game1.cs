@@ -352,7 +352,7 @@ namespace FF2_Monster_Sim
             for (int i = 0; i <= INTERLUDE_TIMER; i += 1000)
             {
                 TextManager.SetInfoText("Starting in " + (INTERLUDE_TIMER - i) / 1000 + "...");
-                Thread.Sleep(1000);
+                Thread.Sleep(10); // 1000
             }
 
             // Clean up the text and play some music
@@ -462,7 +462,7 @@ namespace FF2_Monster_Sim
                         if (target.IsDead())
                         {
                             target.StartDeath();
-                            Thread.Sleep(300);
+                            Thread.Sleep(30); // 300
                         }
 
                         // Display each result, tearing down existing results as needed
@@ -541,7 +541,7 @@ namespace FF2_Monster_Sim
                         if (target.IsDead())
                         {
                             target.StartDeath();
-                            Thread.Sleep(300);
+                            Thread.Sleep(30); // 300
                         }
 
                         // Display each result, tearing down existing results as needed

@@ -142,6 +142,12 @@ namespace FF2_Monster_Sim
                 if (target.Families.Contains(MonsterFamily.Undead))
                 {
                     actor.DamageHP(dranAmt);
+                    // TODO: This is awkward here
+                    if (actor.IsDead())
+                    {
+                        MonoMonster m = (MonoMonster)actor;
+                        m.IsFading = true;
+                    }
                     target.HealHP(dranAmt);
                 }
                 else

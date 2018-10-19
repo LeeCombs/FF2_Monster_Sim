@@ -367,6 +367,12 @@ namespace FF2_Monster_Sim
                                 if (target.Families.Contains(MonsterFamily.Undead))
                                 {
                                     caster.DamageHP(dranAmt);
+                                    // TODO: This is awkward here
+                                    if (caster.IsDead())
+                                    {
+                                        MonoMonster mm = (MonoMonster)caster;
+                                        mm.IsFading = true;
+                                    }
                                     target.HealHP(dranAmt);
                                 }
                                 else
@@ -442,7 +448,11 @@ namespace FF2_Monster_Sim
                                 blastSum += blastRoll > 0 ? blastRoll : 0;
                             }
                             
-                            caster.Kill(); // TODO
+                            caster.Kill();
+                            // Is this legit?
+                            MonoMonster m = (MonoMonster)caster;
+                            m.IsFading = true;
+                            
                             return HandleDamageSpellResult(target, blastSum);
                     }
                     break;
