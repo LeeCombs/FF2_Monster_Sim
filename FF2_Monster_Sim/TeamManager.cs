@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
 namespace FF2_Monster_Sim
 {
@@ -33,7 +34,7 @@ namespace FF2_Monster_Sim
             //
         }
 
-        public static void Draw()
+        public static void Update(GameTime gameTime)
         {
             //
         }
@@ -68,7 +69,9 @@ namespace FF2_Monster_Sim
         /// <returns></returns>
         public static Team GetTeamByIndex(int index)
         {
-            // TODO: Error checking
+            if (index < 0 || index > teamData.Count)
+                throw new ArgumentOutOfRangeException("index must be between 0 and " + teamData.Count);
+            
             return TeamFromString(teamData[index]);
         }
         
@@ -127,6 +130,11 @@ namespace FF2_Monster_Sim
         /// <param name="winState">The state of 'winning' the team did (TODO: this sucks)</param>
         public static void UpdateTeamData(Team team, int rounds, int winState)
         {
+            if (rounds < 0)
+                throw new ArgumentOutOfRangeException("rounds cannot be negative, got: " + rounds);
+            if (Utils.NumIsWithinRange(winState, 0, 2) == false)
+                throw new ArgumentOutOfRangeException("winstate must be 0, 1, or 2, got: " + winState);
+            
             // winState, 0 = loss, 1 = win, 2 = tie
             if (winState == 0)
                 team.Losses++;

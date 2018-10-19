@@ -145,6 +145,7 @@ namespace FF2_Monster_Sim
             // Update Managers
             StatusSpriteManager.Update(gameTime);
             MagicSpriteManager.Update(gameTime);
+            TeamManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -164,9 +165,11 @@ namespace FF2_Monster_Sim
             spriteBatch.Draw(bg2, new Vector2(512, 0), Color.White);
             sceneOne.Draw(spriteBatch);
             sceneTwo.Draw(spriteBatch);
+
             TextManager.Draw(spriteBatch);
             StatusSpriteManager.Draw(spriteBatch);
             MagicSpriteManager.Draw(spriteBatch);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -180,13 +183,9 @@ namespace FF2_Monster_Sim
         {
             while (true)
             {
-                // Setup the match
+                // Setup the match, execute the rounds, then record the results
                 SetupMatch();
-
-                // Execute the rounds
-                while (ExecuteRounds());
-                
-                // Record the battle info
+                ExecuteRounds();
                 WriteBattleResults();
 
                 // Display results info and play some music. If a boss won, play different music.
@@ -197,8 +196,8 @@ namespace FF2_Monster_Sim
                 else
                     SoundManager.PlayMusic(SoundManager.Music.Victory);
 
+                // Build and display the text of which team won and their stats
                 String infoText = "";
-
                 if (sceneOne.HasLivingMonsters() && sceneTwo.HasLivingMonsters())
                 {
                     infoText = "Tie! Everyone loses.";
@@ -213,8 +212,8 @@ namespace FF2_Monster_Sim
                     infoText = "Team " + teamTwo.TeamName + "\nwas victorious!!\n\n";
                     infoText += TeamManager.GetTeamInfo(teamTwo);
                 }
-                
                 TextManager.SetInfoText(infoText);
+                
 
                 if (SpeedUp)
                     Thread.Sleep(100);
@@ -261,6 +260,7 @@ namespace FF2_Monster_Sim
             }
             else
             {
+                // Grab the "random" team and overwrite its team string
                 teamTwo = TeamManager.GetTeamByIndex(0);
                 teamTwo.TeamString = GenerateRandomSceneString();
             }
@@ -289,6 +289,8 @@ namespace FF2_Monster_Sim
             int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
             if (round >= ROUND_LIMIT)
                 winner = 0;
+
+            // TODO: matchResults will be changed to include other stats
             string matchResults = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
             using (StreamWriter file = new StreamWriter(RESULTS_PATH, true))
                 file.WriteLine(matchResults);
@@ -361,7 +363,7 @@ namespace FF2_Monster_Sim
                 SoundManager.PlayMusic(SoundManager.Music.Battle);
         }
 
-        private bool ExecuteRounds()
+        private void ExecuteRounds()
         {
             while (true)
             {
@@ -387,8 +389,6 @@ namespace FF2_Monster_Sim
                 foreach (MonoMonster mon in sceneTwo.GetAllLiveMonsters())
                     mon.RollTempStatusRecovery();
             }
-
-            return false;
         }
 
         private bool ExecuteActions()

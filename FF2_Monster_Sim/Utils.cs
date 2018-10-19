@@ -11,7 +11,7 @@ namespace FF2_Monster_Sim
     public class Utils
     {
         /// <summary>
-        /// Converts a string-representation of an array, to the List of strings it represents
+        /// Converts a string-representation of an array to the List of strings it represents
         /// </summary>
         /// <param name="str">String formatted as "[item1,item2]"</param>
         /// <returns>Return format ["item1","item2"]</returns>
@@ -51,12 +51,15 @@ namespace FF2_Monster_Sim
         /// <summary>
         /// Returns whether a number is within a given range
         /// </summary>
+        /// <param name="number">Number to check</param>
+        /// <param name="min">Inclusive minimum value</param>
+        /// <param name="max">Inclusive maximum value</param>
         public static bool NumIsWithinRange(int number, int min, int max)
         {
             return (number >= min && number <= max);
         }
 
-        public static  void ReverseNumberedDictValues(ref Dictionary<int, Vector2[]> dict)
+        public static void ReverseNumberedDictValues(ref Dictionary<int, Vector2[]> dict)
         {
             for (int i = 0; i < dict.Count / 2; i++)
             {
