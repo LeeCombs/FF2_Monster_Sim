@@ -16,8 +16,8 @@ namespace FF2_Monster_Sim
 {
     public class SoundManager
     {
-        private static float volume = 0.05f; // 0.1f
-        public static float SoundVolume = 0.1f;
+        private static float volume = 0f; // 0.1f
+        public static float SoundVolume = 0f;
 
         // Songs
         private static Song battleSong, bossSong, victorySong, defeatSong, menuSong;

@@ -31,8 +31,15 @@ namespace FF2_Monster_Sim
 
         public static void Update(GameTime gameTime)
         {
+            // TODO: Error collection modified. Iterate differently
+            /*
             foreach (MagicSprite s in magicSprites)
                 s.Update(gameTime);
+            */
+
+            for (int i = 0; i < magicSprites.Count; i++)
+                if (magicSprites[i] != null)
+                    magicSprites[i].Update(gameTime);
         }
 
         public static void Draw(SpriteBatch spriteBatch)

@@ -20,12 +20,13 @@ namespace FF2_Monster_Sim
         BattleScene sceneOne, sceneTwo;
 
         // Turn Logic
-        public bool SpeedUp = false;
+        public bool SpeedUp = true;
         private const int FANFARE_TIMER = 17000; // 17000 for one loop, 30000 for two
         private const int INTERLUDE_TIMER = 1350; // ~6500 per loop
         private const int GAME_TICK = 150;
         private const int TEARDOWN_TICK = 100;
         private const int ROUND_LIMIT = 100;
+        private const int SPELL_ANIMATION_DELAY = 100; // 700
         private int turn = 0, turnTotal = 0, round = 0, gameTick = 0, teardownTick = 0;
         private Thread combatThread;
 
@@ -47,7 +48,6 @@ namespace FF2_Monster_Sim
 
         // Saving battle results
         private const string RESULTS_PATH = @".\Content\Data\FF2_BattleResults.txt";
-        private const string TEAM_DATA_PATH = @".\Content\Data\FF2_TeamData.csv";
 
         public Game1()
         {
@@ -73,6 +73,7 @@ namespace FF2_Monster_Sim
             AttackManager.Initialize();
             SoundManager.Initialize();
             TextManager.Initialize(360, 413);
+            TeamManager.Initialize();
 
             sceneOne = new BattleScene(1, 50, 130); // y was 139
             sceneOne.Initialize();
@@ -105,6 +106,7 @@ namespace FF2_Monster_Sim
             SpellManager.LoadContent();
             SoundManager.LoadContent(Content);
             TextManager.LoadContent(Content, font);
+            TeamManager.LoadContent();
             StatusSpriteManager.LoadContent(Content);
             MagicSpriteManager.LoadContent(Content);
 
@@ -213,7 +215,11 @@ namespace FF2_Monster_Sim
                 }
                 
                 TextManager.SetInfoText(infoText);
-                Thread.Sleep(FANFARE_TIMER);
+
+                if (SpeedUp)
+                    Thread.Sleep(100);
+                else
+                    Thread.Sleep(FANFARE_TIMER);
 
                 // Cleanup and setup for the next battle
                 round = turn = turnTotal = 0;
@@ -241,31 +247,25 @@ namespace FF2_Monster_Sim
             bg2 = Content.Load<Texture2D>("Graphics\\Backdrops\\" + bgstr);
 
             // Team one is always a pre-defined team
-            teamOne = TeamManager.TeamFromString(PickRandomTeamString());
-            sceneOne.PopulateScene(teamOne.TeamString, Content, true);
+            teamOne = TeamManager.GetRandomTeam();
+            sceneOne.PopulateScene(teamOne.TeamString, Content);
             TextManager.SetTeamName(1, teamOne.TeamName);
 
             // Sometimes pick a pre-defined team for scene two, but usually just generate one
-            bool twoIsTeam = false;
             if (Globals.rnd.Next(100) < 20)
             {
                 // Don't pit a team against itself
                 do
-                    teamTwo = TeamManager.TeamFromString(PickRandomTeamString());
+                    teamTwo = TeamManager.GetRandomTeam();
                 while (teamOne.TeamIndex == teamTwo.TeamIndex);
-
-                twoIsTeam = true;
             }
             else
             {
-                teamTwo = new TeamManager.Team
-                {
-                    TeamName = "Random",
-                    TeamString = GenerateRandomSceneString()
-                };
+                teamTwo = TeamManager.GetTeamByIndex(0);
+                teamTwo.TeamString = GenerateRandomSceneString();
             }
 
-            sceneTwo.PopulateScene(teamTwo.TeamString, Content, twoIsTeam);
+            sceneTwo.PopulateScene(teamTwo.TeamString, Content);
             TextManager.SetTeamName(2, teamTwo.TeamName);
         }
 
@@ -280,81 +280,37 @@ namespace FF2_Monster_Sim
         }
 
         /// <summary>
-        /// Retrieve a random team string from team data
-        /// </summary>
-        private string PickRandomTeamString()
-        {
-            List<string> teamData = File.ReadAllLines(TEAM_DATA_PATH).ToList();
-            return teamData[Globals.rnd.Next(1, teamData.Count)];
-        }
-
-        /// <summary>
         /// Write results of the battle and update team data
         /// </summary>
         private void WriteBattleResults()
         {
-            // Build the output string and save it. 
+            // Build the match results string and save it
+            // Example results string: "1,9,31,C;Emperor_2,B;BigHorn-Mantis-Icicle-VmpGirl-Gigas"
             int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
             if (round >= ROUND_LIMIT)
                 winner = 0;
-            string outstr = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
-
-            // Debug.WriteLine("Battle Results string: " + outstr);
+            string matchResults = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
             using (StreamWriter file = new StreamWriter(RESULTS_PATH, true))
-            {
-                file.WriteLine(outstr);
-            }
+                file.WriteLine(matchResults);
             
             // Update team data
-            List<string> teamData = File.ReadAllLines(TEAM_DATA_PATH).ToList();
-            
-            if (sceneOne.IsTeam)
+            // Wtf is this?
+            int winStateOne, winStateTwo;
+            if (winner == 0)
+                winStateOne = winStateTwo = 2;
+            else if (winner == 1)
             {
-                for (int i = 0; i < teamData.Count; i++)
-                {
-                    string data = teamData[i];
-                    string[] dataSplit = data.Split(',');
-                    if (string.Equals(teamOne.TeamIndex.ToString(), dataSplit[0]))
-                    {
-                        if (sceneOne.HasLivingMonsters())
-                            teamOne.Wins++;
-                        else if (sceneTwo.HasLivingMonsters())
-                            teamOne.Losses++;
-                        else if (round >= ROUND_LIMIT)
-                            teamOne.Ties++;
-                        teamOne.Rounds += round;
-
-                        // Write the new results and finish up
-                        teamData[i] = TeamManager.TeamToString(teamOne);
-                        break;
-                    }
-                }
+                winStateOne = 1;
+                winStateTwo = 0;
             }
-
-            if (sceneTwo.IsTeam)
+            else
             {
-                for (int i = 0; i < teamData.Count; i++)
-                {
-                    string data = teamData[i];
-                    string[] dataSplit = data.Split(',');
-                    if (string.Equals(teamTwo.TeamIndex.ToString(), dataSplit[0]))
-                    {
-                        if (sceneOne.HasLivingMonsters())
-                            teamTwo.Wins++;
-                        else if (sceneTwo.HasLivingMonsters())
-                            teamTwo.Losses++;
-                        else if (round >= ROUND_LIMIT)
-                            teamTwo.Ties++;
-                        teamTwo.Rounds += round;
-
-                        // Write the new results and finish up
-                        teamData[i] = TeamManager.TeamToString(teamTwo);
-                        break;
-                    }
-                }
+                winStateOne = 0;
+                winStateTwo = 1;
             }
-
-            File.WriteAllLines(TEAM_DATA_PATH, teamData);
+            TeamManager.UpdateTeamData(teamOne, round, winStateOne);
+            TeamManager.UpdateTeamData(teamTwo, round, winStateTwo);
+            TeamManager.WriteTeamData();
         }
 
         /// <summary>
@@ -373,6 +329,7 @@ namespace FF2_Monster_Sim
             // Sort by actor's Init rolls and return the new array
             return actList.OrderBy(act => act.Actor.Init).ToArray();
         }
+        
 
         private void SetupMatch()
         {
@@ -572,7 +529,7 @@ namespace FF2_Monster_Sim
 
                         MagicSpriteManager.GenerateSpellBurst((int)target.Position.X, (int)target.Position.Y, target.Width, target.Height, magicAnim);
                         SoundManager.PlaySound(magicSnd);
-                        Thread.Sleep(700);
+                        Thread.Sleep(SPELL_ANIMATION_DELAY);
 
                         if (spellRes.Damage >= 0)
                         {
