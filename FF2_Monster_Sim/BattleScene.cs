@@ -221,7 +221,7 @@ namespace FF2_Monster_Sim
                             action.Targets = sceneRef.GetAllLiveMonsters().ToList();
                             break;
                         case "CasterParty":
-                            action.Targets = this.GetAllLiveMonsters().ToList();
+                            action.Targets = GetAllLiveMonsters().ToList();
                             break;
                         default:
                             throw new Exception("Invalid monAct target: " + monAct.Target);
@@ -317,6 +317,8 @@ namespace FF2_Monster_Sim
         {
             // Cleanup before populating the scene
             ClearScene();
+            slotPositions = null;
+            slotPositions = new Dictionary<int, Vector2[]>();
 
             // Set monster positions based on scene type, then flip them if necessary
             SceneType = sceneType;

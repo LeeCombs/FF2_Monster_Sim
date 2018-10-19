@@ -138,9 +138,17 @@ namespace FF2_Monster_Sim
                         if (Globals.rnd.Next(100) < TALL_CHANCE)
                             nameList.Add(tallMonsterNames[Globals.rnd.Next(tallMonsterNames.Count)]);
                         else
-                        { 
-                            nameList.Add(mediumMonsterNames[Globals.rnd.Next(mediumMonsterNames.Count)]);
-                            nameList.Add(mediumMonsterNames[Globals.rnd.Next(mediumMonsterNames.Count)]);
+                        {
+                            // Allow small and medium monsters into the medium slots
+                            if (Globals.rnd.Next(100) < 25)
+                                nameList.Add(smallMonsterNames[Globals.rnd.Next(smallMonsterNames.Count)]);
+                            else
+                                nameList.Add(mediumMonsterNames[Globals.rnd.Next(mediumMonsterNames.Count)]);
+
+                            if (Globals.rnd.Next(100) < 25)
+                                nameList.Add(smallMonsterNames[Globals.rnd.Next(smallMonsterNames.Count)]);
+                            else
+                                nameList.Add(mediumMonsterNames[Globals.rnd.Next(mediumMonsterNames.Count)]);
                         }
                     }
                     break;
