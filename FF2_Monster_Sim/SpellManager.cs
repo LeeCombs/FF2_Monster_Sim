@@ -6,13 +6,6 @@ using Newtonsoft.Json;
 
 namespace FF2_Monster_Sim
 {
-    /**
-     * TODO:
-     * Functions that returns a list of names for a given type
-     *     i.e. Effect TempStatus would return ["DETH", "Glare", "MINI", "TOAD", "BRAK", "WARP", "EXIT", "Breath"];
-     * 
-     */
-
     public enum SpellType
     {
         White,
@@ -412,7 +405,9 @@ namespace FF2_Monster_Sim
 
                             if (GetHitsAgainstTarget(level, adjustedAccuracy, target) > 0)
                             {
-                                // TODO: Target loses half of MP
+                                // Target loses half of MP
+                                if (target.MP > 0)
+                                    target.MP = target.MP / 2;
                                 // NES_BUG: This only effects the first byte of the MP value
                                 return statusSuccessResult;
                             }
@@ -483,10 +478,25 @@ namespace FF2_Monster_Sim
             return nameSet;
         }
         
+        /// <summary>
+        /// Get a HashSet of all spell names found that have the supplied effect
+        /// i.e. Effect TempStatus would return ["DETH", "Glare", "MINI", "TOAD", "BRAK", "WARP", "EXIT", "Breath"];
+        /// </summary>
+        /// <param name="effect"></param>
+        /// <returns></returns>
+        public static HashSet<string> GetSpellsByEffect(string effect)
+        {
+            HashSet<string> nameSet = new HashSet<string>();
+            foreach (var data in spellData)
+                if ((string)data.effect.ToUpper() == effect.ToUpper())
+                    nameSet.Add((string)data.name);
+            return nameSet;
+        }
+
         /////////////
         // Helpers //
         /////////////
-        
+
         /// <summary>
         /// Calculate how many successes are rolled (e.g. 5 rolls at 50% accuracy chance)
         /// </summary>

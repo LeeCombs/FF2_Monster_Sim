@@ -67,7 +67,6 @@ namespace FF2_Monster_Sim
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
             MonsterManager.Initialize();
             SpellManager.Initialize();
             AttackManager.Initialize();
@@ -94,8 +93,6 @@ namespace FF2_Monster_Sim
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
 
             // Graphics
             gameBackground = Content.Load<Texture2D>("Graphics\\GameArea");
@@ -135,8 +132,7 @@ namespace FF2_Monster_Sim
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
+            
             sceneOne.UpdateSceneText();
             sceneTwo.UpdateSceneText();
             sceneOne.Update(gameTime);
@@ -157,8 +153,7 @@ namespace FF2_Monster_Sim
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            
             spriteBatch.Begin();
             spriteBatch.Draw(gameBackground, new Vector2(), Color.White);
             spriteBatch.Draw(bg1, new Vector2(), Color.White);
@@ -289,8 +284,8 @@ namespace FF2_Monster_Sim
             int winner = sceneOne.HasLivingMonsters() ? 1 : 2;
             if (round >= ROUND_LIMIT)
                 winner = 0;
-
-            // TODO: matchResults will be changed to include other stats
+            
+            // Build and save the match results
             string matchResults = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
             using (StreamWriter file = new StreamWriter(RESULTS_PATH, true))
                 file.WriteLine(matchResults);
@@ -457,8 +452,9 @@ namespace FF2_Monster_Sim
 
                         TextManager.SetDamageText(atkRes.DamageMessage);
                         Thread.Sleep(gameTick);
-
-                        // TODO: MonoMonster's death animation and sound needs to occur on this step, if necessary
+                        
+                        // Fade the monster if dead
+                        // TODO: This is awkward here
                         if (target.IsDead())
                         {
                             target.StartDeath();
@@ -482,30 +478,12 @@ namespace FF2_Monster_Sim
                     }
                     else
                     {
-                        /* TODO: Spell Casting Animations and You
-                         * 
-                         * If animations are ever added to this system, here's what has to happen:
-                         * - After actor and spell name are displayed, play the animation(s)
-                         * - Flicker the background color a couple times if necessary
-                         * 
-                         * These steps are repeated for each target:
-                         * - Play the specific sound effect
-                         * - Play the specific animation on top of the sprites
-                         * - Play any additionally queued animations
-                         * - Sleep the thread for the length of all animation's durations
-                         * -- i.e. Thread.Sleep(AnimationManager.PlayAnimation(AnimationName));
-                         * - Continue with damage text and cleanup
-                         * 
-                         * Ensure appropriate sprite management for everything. You'll probably
-                         * want to write an AnimationManager, and maybe SpriteManager.
-                         */
-
                         // Casting a spell
                         TextManager.SetHitsText(action.Spell.Name + " " + action.SpellLevel);
                         Thread.Sleep(gameTick);
 
                         // Cast the spell and display the results
-                        SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1); // TODO: Multi check
+                        SpellResult spellRes = SpellManager.CastSpell(action.Actor, target, action.Spell, action.SpellLevel, action.Targets.Count > 1);
                         
                         // Set the spell animation and sound based on the spell's effect (kinda). This is awkward but fine for now.
                         MagicSprite.MagicAnimation magicAnim = MagicSprite.MagicAnimation.Attack;
@@ -537,11 +515,12 @@ namespace FF2_Monster_Sim
                             Thread.Sleep(gameTick);
                         }
 
-                        // Kill the target if it's dead. TODO: This is weird here, should be handled by the monster itself?
+                        // Kill the target if it's dead.
+                        // TODO: This is weird here, should be handled by the monster itself?
                         if (target.IsDead())
                         {
                             target.StartDeath();
-                            Thread.Sleep(30); // 300
+                            Thread.Sleep(300);
                         }
 
                         // Display each result, tearing down existing results as needed

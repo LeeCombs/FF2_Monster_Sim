@@ -132,7 +132,6 @@ namespace FF2_Monster_Sim
             }
 
             // Apply HP and MP drain effects based on totalHits
-            // TODO: Figure out about message returns
             if (actor.AttackEffects.Contains("Drain HP"))
             {
                 int hpAmt = target.HPMax / 16;
@@ -142,6 +141,7 @@ namespace FF2_Monster_Sim
                 if (target.Families.Contains(MonsterFamily.Undead))
                 {
                     actor.DamageHP(dranAmt);
+
                     // TODO: This is awkward here
                     if (actor.IsDead())
                     {
@@ -156,8 +156,7 @@ namespace FF2_Monster_Sim
                     target.DamageHP(dranAmt);
                 }
             }
-
-            // TODO: Figure out about message returns
+            
             if (actor.AttackEffects.Contains("Drain MP"))
             {
                 int mpAmt = target.MPMax / 16;
