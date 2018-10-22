@@ -17,7 +17,6 @@ Bugs {
     High:
     Medium:
         A haste appeared to miss on a Flower enemy on the same team
-        A self-killing enemy won't fade out and stop drawing (e.g. bomb blast)
     Low:
 }
 
