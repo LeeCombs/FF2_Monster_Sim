@@ -311,6 +311,8 @@ namespace FF2_Monster_Sim
                 cmd.Parameters.AddWithValue("@entry_date", DateTime.Now);
                 cmd.ExecuteNonQuery();
             }
+            else
+                Debug.Write("Unable to connect to the database. Results written to local text file");
             
             // Update team data
             // Wtf is this?
@@ -330,7 +332,6 @@ namespace FF2_Monster_Sim
             TeamManager.UpdateTeamData(teamOne, round, winStateOne);
             TeamManager.UpdateTeamData(teamTwo, round, winStateTwo);
             TeamManager.WriteTeamData();
-
         }
 
         /// <summary>

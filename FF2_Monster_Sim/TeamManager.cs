@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using MySql.Data.MySqlClient;
 
 namespace FF2_Monster_Sim
 {
@@ -146,6 +147,29 @@ namespace FF2_Monster_Sim
             team.Rounds += rounds;
 
             teamData[team.TeamIndex] = TeamToString(team);
+            
+            // Write battle results to db
+            var db = DBConnection.Instance();
+            db.DatabaseName = "ff2_monster_sim";
+            db.Password = Environment.GetEnvironmentVariable("FFSIM_MYSQL_PASSWORD", EnvironmentVariableTarget.User);
+            if (db.IsConnected())
+            {
+                MySqlConnection conn = db.Connection;
+
+                string sql = "UPDATE teams " + 
+                    "SET wins=@wins, losses=@losses, ties=@ties, rounds_played=@rounds_played " +
+                    "WHERE id=@id";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@wins", team.Wins);
+                cmd.Parameters.AddWithValue("@losses", team.Losses);
+                cmd.Parameters.AddWithValue("@ties", team.Ties);
+                cmd.Parameters.AddWithValue("@rounds_played", team.Rounds);
+                cmd.Parameters.AddWithValue("@id", team.TeamIndex);
+                cmd.ExecuteNonQuery();
+            }
+            else
+                Debug.Write("Unable to connect to the database. Results written to local text file");
         }
 
         /// <summary>
@@ -153,14 +177,7 @@ namespace FF2_Monster_Sim
         /// </summary>
         public static void WriteTeamData()
         {
-            try
-            {
-                File.WriteAllLines(TEAM_DATA_PATH, teamData);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("Error writing team data: " + e);
-            }
+            //
         }
 
         /////////////

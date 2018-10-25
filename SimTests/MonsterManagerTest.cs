@@ -151,6 +151,7 @@ namespace SimTests
 
                 foreach (string name in MonsterManager.GenerateMonsterList("B"))
                     Assert.IsTrue(
+                        String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "SMALL") ||
                         String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "MEDIUM") ||
                         String.Equals(MonsterManager.GetMonsterByName(name).size.ToUpper(), "TALL")
                         );
