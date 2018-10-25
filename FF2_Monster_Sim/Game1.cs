@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using MySql.Data.MySqlClient;
 
 namespace FF2_Monster_Sim
 {
@@ -289,6 +290,27 @@ namespace FF2_Monster_Sim
             string matchResults = winner.ToString() + "," + round.ToString() + "," + turnTotal.ToString() + "," + sceneOne.SceneString + "," + sceneTwo.SceneString;
             using (StreamWriter file = new StreamWriter(RESULTS_PATH, true))
                 file.WriteLine(matchResults);
+
+            // Write battle results to db
+            var db = DBConnection.Instance();
+            db.DatabaseName = "ff2_monster_sim";
+            db.Password = Environment.GetEnvironmentVariable("FFSIM_MYSQL_PASSWORD", EnvironmentVariableTarget.User);
+            if (db.IsConnected())
+            {
+                MySqlConnection conn = db.Connection;
+
+                string sql = "INSERT INTO battle_results (winning_team, num_of_rounds, num_of_turns, team_one_string, team_two_string, entry_date) " +
+                "VALUES (@winning_team, @num_of_rounds, @num_of_turns, @team_one_string, @team_two_string, @entry_date);";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@winning_team", winner);
+                cmd.Parameters.AddWithValue("@num_of_rounds", round);
+                cmd.Parameters.AddWithValue("@num_of_turns", turnTotal);
+                cmd.Parameters.AddWithValue("@team_one_string", sceneOne.SceneString);
+                cmd.Parameters.AddWithValue("@team_two_string", sceneTwo.SceneString);
+                cmd.Parameters.AddWithValue("@entry_date", DateTime.Now);
+                cmd.ExecuteNonQuery();
+            }
             
             // Update team data
             // Wtf is this?
@@ -308,6 +330,7 @@ namespace FF2_Monster_Sim
             TeamManager.UpdateTeamData(teamOne, round, winStateOne);
             TeamManager.UpdateTeamData(teamTwo, round, winStateTwo);
             TeamManager.WriteTeamData();
+
         }
 
         /// <summary>
